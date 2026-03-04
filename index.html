@@ -1387,7 +1387,7 @@ async function beginConsultation() {
 
   // Save to Supabase
   try {
-    await db.from('tso_profile').upsert({ user_id: USER_ID, ...d });
+    await db.from('tso_profile').upsert({ user_id: USER_ID, age: d.age, sex: d.sex, weight: d.weight, height: d.height, body_fat: d.bodyFat, experience: d.experience, training_days: d.trainingDays, session_length: d.sessionLength, equipment: d.equipment, injuries: d.injuries, weak_muscles: d.weakMuscles, diet: d.diet, meals_per_day: d.mealsPerDay, sleep: d.sleep, stress: d.stress, allergies: d.allergies, current_supplements: d.currentSupplements, goal: d.goal, timeline: d.timeline, barriers: d.barriers, influencers: d.influencers, period_date: d.periodDate, cycle_length: d.cycleLength });
   } catch(e) { localStorage.setItem('tso_profile', JSON.stringify(d)); }
 
   // Update UI
