@@ -18,30 +18,36 @@ export default async function handler(req) {
   try {
     const body = await req.json();
 
+    const payload = {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2000,
+      messages: body.messages
+    };
+
+    if (body.system) {
+      payload.system = body.system;
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'messages-2023-12-15'
+        'anthropic-version': '2023-06-01'
       },
-      body: JSON.stringify({
-        model: body.model || 'claude-sonnet-4-20250514',
-        max_tokens: body.max_tokens || 2000,
-        system: body.system,
-        messages: body.messages
-      })
+      body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
-    return new Response(JSON.stringify(data), {
+    const text = await response.text();
+
+    return new Response(text, {
       status: response.status,
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
       }
     });
+
   } catch (err) {
     return new Response(JSON.stringify({ error: err.message }), {
       status: 500,
