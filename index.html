@@ -79,6 +79,49 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .form-field select option { background: white; }
 .field-hint { font-size: 11px; color: var(--muted); margin-top: 4px; font-style: italic; }
 
+/* How TSO works banner */
+.how-it-works { background: var(--text); border-radius: var(--radius); padding: 24px 28px; }
+.how-it-works-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 14px; letter-spacing: -0.2px; }
+.how-it-works-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.how-it-works-item { display: flex; align-items: flex-start; gap: 10px; }
+.how-it-works-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.how-it-works-text strong { color: white; display: block; font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+.how-it-works-text { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+
+/* Stress cards */
+.stress-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stress-card { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; cursor: pointer; transition: all .15s; background: var(--surface2); }
+.stress-card:hover { border-color: var(--border2); background: white; }
+.stress-card.selected { border-color: var(--accent); background: var(--accent-light); }
+.stress-card-title { font-size: 12px; font-weight: 700; color: var(--text); }
+.stress-card.selected .stress-card-title { color: var(--accent); }
+.stress-card-desc { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+
+/* Supplement chips */
+.supp-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+.supp-chip { border: 1.5px solid var(--border); border-radius: 100px; padding: 6px 12px; cursor: pointer; transition: all .15s; background: var(--surface2); font-size: 12px; font-weight: 500; color: var(--text2); white-space: nowrap; }
+.supp-chip:hover { border-color: var(--border2); background: white; }
+.supp-chip.selected { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 700; }
+
+/* Exercise swap */
+.exercise-row { position: relative; }
+.exercise-row:hover .ex-swap { opacity: 1; }
+.ex-swap { position: absolute; right: 52px; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity .15s; background: none; border: 1.5px solid var(--border); border-radius: 6px; padding: 4px 9px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; }
+.ex-swap:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* Swap modal options */
+.swap-option { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all .15s; margin-bottom: 8px; background: var(--surface2); }
+.swap-option:last-child { margin-bottom: 0; }
+.swap-option:hover { border-color: var(--accent); background: var(--accent-light); }
+.swap-option-icon { font-size: 20px; flex-shrink: 0; }
+.swap-option-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.swap-option-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* Post-consultation action chips */
+.action-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.action-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); border: 1.5px solid rgba(0,102,255,0.2); border-radius: 100px; padding: 7px 14px; font-size: 12px; font-weight: 600; color: var(--accent); cursor: pointer; transition: all .15s; font-family: 'Plus Jakarta Sans', sans-serif; white-space: nowrap; }
+.action-chip:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
 /* Goal cards — replaces plain dropdown for goal selection */
 .goal-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
 .goal-card { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; transition: all .15s; background: var(--surface2); }
@@ -102,9 +145,8 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .check-item { display: flex; align-items: center; gap: 9px; background: var(--surface2); border: 1.5px solid var(--border); padding: 10px 13px; border-radius: var(--radius-sm); cursor: pointer; transition: all .15s; font-size: 13px; font-weight: 500; color: var(--text2); user-select: none; position: relative; }
 .check-item:hover { border-color: var(--border2); background: white; }
-.check-item.selected { border-color: var(--accent); background: var(--accent); color: white; box-shadow: 0 2px 8px rgba(0,102,255,0.3); }
-.check-item.selected .check-icon { filter: brightness(10); }
-.check-mark { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: 900; display: none; }
+.check-item.selected { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 700; }
+.check-mark { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: 900; color: var(--accent); display: none; }
 .check-item.selected .check-mark { display: block; }
 .check-item input { display: none; }
 .check-icon { font-size: 15px; }
@@ -428,6 +470,19 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
   </div>
   <div class="consult-grid">
 
+    <!-- HOW TSO WORKS -->
+    <div class="consult-card full">
+      <div class="how-it-works">
+        <div class="how-it-works-title">How TSO works — read before you start</div>
+        <div class="how-it-works-list">
+          <div class="how-it-works-item"><div class="how-it-works-icon">📋</div><div class="how-it-works-text"><strong>8-week fixed training block</strong>TSO builds a complete programme designed to run for 8 weeks. This isn't a random workout generator — it's a structured plan.</div></div>
+          <div class="how-it-works-item"><div class="how-it-works-icon">🏋️</div><div class="how-it-works-text"><strong>Calibrated to your exact constraints</strong>Your equipment, injuries, and schedule determine what gets programmed. Declare everything accurately now — changes mid-block are limited by design.</div></div>
+          <div class="how-it-works-item"><div class="how-it-works-icon">📈</div><div class="how-it-works-text"><strong>The programme won't change mid-block</strong>This is intentional. The science is clear: meaningful adaptation takes 6–8 weeks. TSO will coach you to stay the course.</div></div>
+          <div class="how-it-works-item"><div class="how-it-works-icon">🎯</div><div class="how-it-works-text"><strong>Accuracy now = better results</strong>The more precisely you answer, the more precisely TSO can calibrate your training, nutrition, and recovery. Take your time.</div></div>
+        </div>
+      </div>
+    </div>
+
     <!-- LIVE STATS -->
     <div class="consult-card full">
       <div class="card-title"><div class="card-title-num">→</div> Live Calculations</div>
@@ -514,14 +569,14 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
       <div class="form-field">
         <label>Which muscle groups feel weakest or most lagging?</label>
         <div class="checkbox-grid" style="margin-top:8px">
-          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" value="Chest"><span class="check-icon">💪</span> Chest<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" value="Back"><span class="check-icon">🏋️</span> Back<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" value="Shoulders"><span class="check-icon">🔺</span> Shoulders<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" value="Arms"><span class="check-icon">💪</span> Arms<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" value="Legs"><span class="check-icon">🦵</span> Legs<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" value="Glutes"><span class="check-icon">🍑</span> Glutes<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" value="Core"><span class="check-icon">⚡</span> Core<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this)"><input type="checkbox" value="Calves"><span class="check-icon">🦶</span> Calves<span class="check-mark">✓</span></label>
+          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Chest"><span class="check-icon">💪</span> Chest<span class="check-mark">✓</span></label>
+          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Back"><span class="check-icon">🏋️</span> Back<span class="check-mark">✓</span></label>
+          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Shoulders"><span class="check-icon">🔺</span> Shoulders<span class="check-mark">✓</span></label>
+          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Arms"><span class="check-icon">💪</span> Arms<span class="check-mark">✓</span></label>
+          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Legs"><span class="check-icon">🦵</span> Legs<span class="check-mark">✓</span></label>
+          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Glutes"><span class="check-icon">🍑</span> Glutes<span class="check-mark">✓</span></label>
+          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Core"><span class="check-icon">⚡</span> Core<span class="check-mark">✓</span></label>
+          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Calves"><span class="check-icon">🦶</span> Calves<span class="check-mark">✓</span></label>
         </div>
       </div>
     </div>
@@ -553,10 +608,41 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
       </div>
       <div class="form-row">
         <div class="form-field"><label>Avg sleep per night</label><input type="number" id="c-sleep" placeholder="7.5" step="0.5" min="4" max="12"></div>
-        <div class="form-field"><label>Stress level (1–10)</label><input type="number" id="c-stress" placeholder="5" min="1" max="10"></div>
+      </div>
+      <div class="form-field" style="margin-bottom:12px">
+        <label>Current stress level</label>
+        <div class="stress-cards" style="margin-top:8px">
+          <div class="stress-card" onclick="selectStress(this,'low')"><div class="stress-card-title">Low</div><div class="stress-card-desc">Work is manageable, life feels steady</div></div>
+          <div class="stress-card" onclick="selectStress(this,'moderate')"><div class="stress-card-title">Moderate</div><div class="stress-card-desc">Some pressure but coping well</div></div>
+          <div class="stress-card" onclick="selectStress(this,'high')"><div class="stress-card-title">High</div><div class="stress-card-desc">Consistently overwhelmed, sleep affected</div></div>
+          <div class="stress-card" onclick="selectStress(this,'very high')"><div class="stress-card-title">Very high</div><div class="stress-card-desc">Major life stressor ongoing</div></div>
+        </div>
+        <input type="hidden" id="c-stress">
       </div>
       <div class="form-field" style="margin-bottom:12px"><label>Food allergies or intolerances</label><input type="text" id="c-allergies" placeholder="e.g. Lactose, gluten, nuts..."></div>
-      <div class="form-field"><label>Supplements you currently take</label><input type="text" id="c-supps" placeholder="e.g. Creatine 5g, Vitamin D 4000IU, Protein powder..."></div>
+      <div class="form-field">
+        <label>Supplements you already take</label>
+        <div class="field-hint" style="margin-bottom:8px;margin-top:2px">Disclosure only — TSO won't recommend duplicates and prioritises whole food solutions first</div>
+        <div class="supp-chips" id="supp-chips">
+          <div class="supp-chip" onclick="toggleSupp(this,'Creatine')">Creatine</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Whey Protein')">Whey Protein</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Vitamin D')">Vitamin D</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Omega-3')">Omega-3</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Magnesium')">Magnesium</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Zinc')">Zinc</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Caffeine / Pre-workout')">Caffeine / Pre-workout</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Melatonin')">Melatonin</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Ashwagandha')">Ashwagandha</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Collagen')">Collagen</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Vitamin C')">Vitamin C</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'B12')">B12</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Iron')">Iron</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Greens Powder')">Greens Powder</div>
+          <div class="supp-chip" onclick="toggleSupp(this,'Electrolytes')">Electrolytes</div>
+        </div>
+        <input type="text" id="c-supps-other" placeholder="Anything else not listed..." style="margin-top:10px;width:100%;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:9px 12px;border-radius:var(--radius-sm);outline:none;">
+        <input type="hidden" id="c-supps">
+      </div>
     </div>
 
     <!-- GOALS -->
@@ -677,7 +763,10 @@ Once complete, return here and I'll generate your full personalised programme.</
         <h1>My Programme</h1>
         <div class="programme-meta" id="prog-meta">Generated by The Scientific Oracle</div>
       </div>
-      <div class="programme-week-pill" id="prog-week-pill">Week 1</div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <button onclick="confirmNewPlan()" style="background:none;border:1.5px solid var(--border);color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">↺ Start a New Training Plan</button>
+        <div class="programme-week-pill" id="prog-week-pill">Week 1</div>
+      </div>
     </div>
     <div class="programme-grid">
 
@@ -912,6 +1001,39 @@ Once complete, return here and I'll generate your full personalised programme.</
 
 <div class="toast" id="toast"></div>
 
+<!-- SWAP MODAL -->
+<div id="swap-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center">
+  <div style="background:white;border-radius:20px;padding:28px;max-width:420px;width:90%;box-shadow:var(--shadow-lg)">
+    <div style="font-size:16px;font-weight:700;margin-bottom:4px">Swap Exercise</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Why do you want to change <strong id="swap-exercise-name" style="color:var(--text)"></strong>?</div>
+    <div class="swap-option" onclick="handleSwap('equipment')">
+      <div class="swap-option-icon">🏋️</div>
+      <div><div class="swap-option-title">Equipment issue</div><div class="swap-option-desc">I don't have access to the required equipment</div></div>
+    </div>
+    <div class="swap-option" onclick="handleSwap('pain')">
+      <div class="swap-option-icon">🩹</div>
+      <div><div class="swap-option-title">Pain or discomfort</div><div class="swap-option-desc">This exercise causes me pain or aggravates an injury</div></div>
+    </div>
+    <div class="swap-option" onclick="handleSwap('preference')">
+      <div class="swap-option-icon">💭</div>
+      <div><div class="swap-option-title">Personal preference</div><div class="swap-option-desc">I'd just prefer something different</div></div>
+    </div>
+    <button onclick="closeSwapModal()" style="width:100%;margin-top:14px;background:none;border:1.5px solid var(--border);color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:13px;padding:10px;border-radius:10px;cursor:pointer">Cancel</button>
+  </div>
+</div>
+
+<!-- NEW PLAN CONFIRMATION MODAL -->
+<div id="new-plan-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center">
+  <div style="background:white;border-radius:20px;padding:28px;max-width:400px;width:90%;box-shadow:var(--shadow-lg)">
+    <div style="font-size:16px;font-weight:700;margin-bottom:8px">Start a New Training Plan?</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px">This will clear your current programme and consultation data. Your check-in history (weight, HRV, recovery) will be kept. This cannot be undone.</div>
+    <div style="display:flex;gap:10px">
+      <button onclick="closeNewPlanModal()" style="flex:1;background:var(--surface2);border:1.5px solid var(--border);color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:13px;padding:11px;border-radius:10px;cursor:pointer">Cancel</button>
+      <button onclick="startNewPlan()" style="flex:2;background:var(--red);color:white;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;padding:11px;border-radius:10px;cursor:pointer">Yes, Start Fresh →</button>
+    </div>
+  </div>
+</div>
+
 <!-- MEAL TEXT MODAL -->
 <div id="meal-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center">
   <div style="background:white;border-radius:20px;padding:28px;max-width:440px;width:90%;box-shadow:var(--shadow-lg)">
@@ -933,7 +1055,7 @@ const SUPABASE_URL = 'https://pzzafdhvbdabqjeurpna.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB6emFmZGh2YmRhYnFqZXVycG5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMDAyNTIsImV4cCI6MjA4NzY3NjI1Mn0.HmOs8m0EgS5O-XJh4ZQnb0AjK-YImTTOxZ35OfM_pKc';
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
-const USER_ID = 'tso-user-1';
+const USER_ID = new URLSearchParams(window.location.search).get('user') || 'tso-user-1';
 
 // ══════════════════════════════════════════
 // BRAIN TRUST DATA
@@ -1021,7 +1143,27 @@ function selectExp(el, value) {
   document.getElementById('c-exp').value = value;
 }
 
-function toggleCheck(el) {
+function selectStress(el, value) {
+  document.querySelectorAll('.stress-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('c-stress').value = value;
+}
+
+function toggleSupp(el, value) {
+  el.classList.toggle('selected');
+  updateSuppHidden();
+}
+
+function updateSuppHidden() {
+  const selected = [...document.querySelectorAll('.supp-chip.selected')].map(c => c.textContent.trim());
+  const other = document.getElementById('c-supps-other')?.value?.trim();
+  if (other) selected.push(other);
+  document.getElementById('c-supps').value = selected.join(', ');
+}
+}
+
+function toggleCheck(el, event) {
+  if (event) event.preventDefault();
   el.classList.toggle('selected');
 }
 
@@ -1072,7 +1214,7 @@ async function beginConsultation() {
     sleep: document.getElementById('c-sleep').value,
     stress: document.getElementById('c-stress').value,
     allergies: document.getElementById('c-allergies').value,
-    currentSupplements: document.getElementById('c-supps').value,
+    currentSupplements: (document.getElementById('c-supps').value || '') + (document.getElementById('c-supps-other').value ? ', ' + document.getElementById('c-supps-other').value : '').replace(/^, /,''),
     goal: document.getElementById('c-goal').value,
     timeline: document.getElementById('c-timeline').value,
     barriers: document.getElementById('c-barriers').value,
@@ -1103,6 +1245,7 @@ async function beginConsultation() {
     conversationHistory.push({ role: 'assistant', content: reply });
     setTyping(false);
     addMessage('ai', reply);
+    addActionChips();
     await saveMemory('initial_protocol', reply.substring(0, 800));
     // Parse and store programme data
     await generateStructuredProgramme(d);
@@ -1224,6 +1367,7 @@ function renderDayExercises(day) {
     <div class="exercise-row">
       <div class="ex-letter">${ex.letter}</div>
       <div class="ex-info"><div class="ex-name">${ex.name}</div><div class="ex-sets">${ex.sets} sets × ${ex.reps} reps</div></div>
+      <button class="ex-swap" onclick="openSwapModal('${ex.name.replace(/'/g,"\\'")}')">⇄ swap</button>
       <div class="ex-rpe">RPE ${ex.rpe}</div>
     </div>`).join('');
 }
@@ -1369,7 +1513,11 @@ When no specific selection: apply all equally.
 ━━━ COMMUNICATION ━━━
 Conversational, direct, evidence-backed. Keep chat responses focused and appropriately concise — the detailed programme lives in the My Programme tab, not in chat. Use chat for explanations, troubleshooting, Q&A, and encouragement. Bold key numbers/terms. Render proper markdown.
 
-━━━ GENDER-AWARE PHYSIOLOGY ━━━
+━━━ NUTRITION PHILOSOPHY ━━━
+WHOLE FOOD FIRST: Always recommend food solutions before supplements in every meal plan and nutrition response. Supplements are supplements — they supplement an already solid diet. Never recommend a multivitamin as part of a meal plan.
+SUPPLEMENT RULE: Only flag a supplement where (1) peer-reviewed evidence is strong, (2) the nutritional gap genuinely cannot be closed through food alone, AND (3) always include "speak to your doctor or a registered dietitian before taking any supplement" — stated clearly, not buried.
+SCOPE BOUNDARY: If a question crosses into clinical territory (medical conditions, medication interactions, diagnosed deficiencies, prescription drugs) — explicitly acknowledge this is outside TSO's scope and direct to a qualified medical professional. TSO is not a doctor.
+LAB WORK: Frame all blood panel guidance as a conversation starter for a GP appointment, not a self-prescription guide.
 MALE: Testosterone advantage, respond to heavy loading, zinc/D3 critical.
 FEMALE: Estrogen is anabolic (Enns & Tiidus). Follicular (day 1-14): high intensity, heavy loading. Luteal (day 15-28): moderate intensity, +150-250kcal especially carbs. Iron, calcium, folate, creatine priorities. Cite Stacy Sims.
 
@@ -1753,6 +1901,82 @@ async function generateLabBrief() {
   switchTab('chat');
   document.getElementById('userInput').value=prompt;
   await sendMessage();
+}
+
+// ══════════════════════════════════════════
+// EXERCISE SWAP MODAL
+// ══════════════════════════════════════════
+let swapExerciseName = null;
+
+function openSwapModal(exerciseName) {
+  swapExerciseName = exerciseName;
+  document.getElementById('swap-exercise-name').textContent = exerciseName;
+  document.getElementById('swap-modal').style.display = 'flex';
+}
+
+function closeSwapModal() {
+  document.getElementById('swap-modal').style.display = 'none';
+  swapExerciseName = null;
+}
+
+async function handleSwap(reason) {
+  closeSwapModal();
+  const prompts = {
+    equipment: `I need to swap ${swapExerciseName || 'this exercise'} because I don't have the required equipment. My available equipment: ${consultationData?.equipment || 'not specified'}. Suggest the single best alternative that trains the same muscle group with my equipment. Keep your response brief — just the substitute and a one-sentence reason.`,
+    pain: `I need to swap ${swapExerciseName || 'this exercise'} because it causes pain or discomfort. Suggest the single best pain-free alternative that trains the same muscle group. Keep it brief. Note: if this pain is recurring, please recommend consulting a physiotherapist.`,
+    preference: `I want to swap ${swapExerciseName || 'this exercise'} because I prefer something different. Before suggesting an alternative, briefly explain why this exercise is in my programme and what it's achieving. Then offer one alternative — but be honest if the original is the better choice.`
+  };
+  switchTab('chat');
+  document.getElementById('userInput').value = prompts[reason];
+  await sendMessage();
+}
+
+// ══════════════════════════════════════════
+// NEW TRAINING PLAN
+// ══════════════════════════════════════════
+function confirmNewPlan() {
+  document.getElementById('new-plan-modal').style.display = 'flex';
+}
+
+function closeNewPlanModal() {
+  document.getElementById('new-plan-modal').style.display = 'none';
+}
+
+async function startNewPlan() {
+  closeNewPlanModal();
+  showToast('Clearing current plan...');
+  try {
+    await db.from('tso_profile').delete().eq('user_id', USER_ID);
+    await db.from('tso_memory').delete().eq('user_id', USER_ID);
+  } catch(e) {}
+  consultationData = null;
+  programmeData = null;
+  programmeStartDate = null;
+  conversationHistory = [];
+  document.getElementById('programme-empty-state').style.display = 'flex';
+  document.getElementById('programme-content').style.display = 'none';
+  document.getElementById('messages').innerHTML = `<div class="msg ai"><div class="msg-meta">The Scientific Oracle</div><div class="msg-bubble">Your previous plan has been cleared. Complete a new consultation to generate your next training block.</div></div><div class="typing-indicator" id="typing"><div class="msg-meta">The Scientific Oracle</div><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  switchTab('consult');
+  showToast('Ready for your new training plan ✓');
+}
+
+// ══════════════════════════════════════════
+// POST-CONSULTATION ACTION CHIPS
+// ══════════════════════════════════════════
+function addActionChips() {
+  const messages = document.getElementById('messages');
+  const typing = document.getElementById('typing');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.innerHTML = `
+    <div class="msg-meta">The Scientific Oracle</div>
+    <div class="action-chips">
+      <button class="action-chip" onclick="switchTab('programme');this.closest('.msg').remove()">📋 View My Programme →</button>
+      <button class="action-chip" onclick="sendQuick('Walk me through my nutrition targets and how to hit them through food.');this.closest('.msg').remove()">🍽️ Explain My Nutrition</button>
+      <button class="action-chip" onclick="sendQuick('What should I focus on in the first two weeks of this programme?');this.closest('.msg').remove()">🎯 First Two Weeks</button>
+    </div>`;
+  messages.insertBefore(div, typing);
+  messages.scrollTop = messages.scrollHeight;
 }
 
 // ══════════════════════════════════════════
