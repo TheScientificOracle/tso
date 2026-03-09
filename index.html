@@ -83,32 +83,39 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 /* Oracle header */
 #o-header { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding: 18px 0 12px; border-bottom: 1px solid var(--o-border); background: var(--o-bg); position: relative; z-index: 5; }
 
-/* The Eye */
-.eye-system { position: relative; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; }
-.o-ring { position: absolute; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-.o-ring-outer { width: 72px; height: 72px; border: 1px solid rgba(200,169,110,0.18); animation: o-spin 30s linear infinite; }
-.o-ring-outer::before, .o-ring-outer::after { content: ''; position: absolute; border-radius: 2px; background: rgba(200,169,110,0.55); }
-.o-ring-outer::before { width: 2px; height: 5px; top: -2px; left: 50%; transform: translateX(-50%); }
-.o-ring-outer::after  { width: 2px; height: 5px; bottom: -2px; left: 50%; transform: translateX(-50%); }
-.o-ring-mid { width: 56px; height: 56px; border: 1px dashed rgba(200,169,110,0.22); animation: o-spin-r 20s linear infinite; }
-.o-iris { width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle at 42% 38%, #2a1800 0%, #160d00 30%, #0b0b14 65%, #06060a 100%); border: 1px solid rgba(200,169,110,0.4); overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; transition: box-shadow 0.4s; }
-.eye-system.thinking .o-iris { animation: o-iris-think 1.1s ease-in-out infinite; }
-.eye-system.speaking .o-iris { box-shadow: 0 0 20px rgba(200,169,110,0.3), 0 0 50px rgba(200,169,110,0.1); }
-.o-iris::before { content: ''; position: absolute; inset: 0; background: repeating-conic-gradient(rgba(200,169,110,0.04) 0deg, transparent 3deg, transparent 9deg, rgba(200,169,110,0.04) 12deg); border-radius: 50%; }
-.o-scanline { position: absolute; width: 100%; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(200,169,110,0.5) 50%, transparent 100%); animation: o-scan 2.8s ease-in-out infinite; z-index: 2; }
-.o-pupil { width: 17px; height: 17px; border-radius: 50%; background: radial-gradient(circle at 38% 32%, #e8c98e 0%, #a07030 35%, #200d00 75%); position: relative; z-index: 3; animation: o-pupil-breathe 4s ease-in-out infinite; box-shadow: 0 0 10px rgba(200,169,110,0.45), 0 0 25px rgba(200,169,110,0.18); }
-.o-pupil::after { content: ''; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.88); top: 2px; left: 3px; }
-.eye-system.thinking .o-pupil { animation: o-pupil-think 0.9s ease-in-out infinite; }
+/* ── Atomic Orbit Avatar ── */
+.atom-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+.atom-nucleus {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #f0d898, #c8a96e 45%, #7a5018);
+  box-shadow: 0 0 14px rgba(200,169,110,0.8), 0 0 35px rgba(200,169,110,0.3);
+  z-index: 4;
+  animation: atom-nucleus-pulse 2.8s ease-in-out infinite;
+}
+@keyframes atom-nucleus-pulse {
+  0%,100% { box-shadow:0 0 12px rgba(200,169,110,0.7),0 0 30px rgba(200,169,110,0.2); transform:translate(-50%,-50%) scale(1); }
+  50%      { box-shadow:0 0 22px rgba(200,169,110,1),0 0 55px rgba(200,169,110,0.4); transform:translate(-50%,-50%) scale(1.15); }
+}
+.atom-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.orb-a { animation: orb-cw  2.6s linear infinite; }
+.orb-b { animation: orb-ccw 4.0s linear infinite; }
+.orb-c { animation: orb-cw  3.3s linear infinite; }
+@keyframes orb-cw  { to { transform: rotate(360deg);  } }
+@keyframes orb-ccw { to { transform: rotate(-360deg); } }
+/* sizes */
+.atom-lg { width: 72px; height: 72px; }
+.atom-lg .atom-nucleus { width: 18px; height: 18px; }
+.atom-sm { width: 32px; height: 32px; }
+.atom-sm .atom-nucleus { width: 7px; height: 7px; }
 
 @keyframes o-spin    { to { transform: translate(-50%,-50%) rotate(360deg); } }
 @keyframes o-spin-r  { to { transform: translate(-50%,-50%) rotate(-360deg); } }
-@keyframes o-pupil-breathe { 0%,100%{transform:scale(1);box-shadow:0 0 10px rgba(200,169,110,0.45),0 0 25px rgba(200,169,110,0.18)}50%{transform:scale(1.08);box-shadow:0 0 18px rgba(200,169,110,0.6),0 0 45px rgba(200,169,110,0.25)} }
-@keyframes o-pupil-think   { 0%,100%{transform:scale(0.9);opacity:0.7}50%{transform:scale(1.2);opacity:1} }
-@keyframes o-iris-think    { 0%,100%{box-shadow:0 0 8px rgba(200,169,110,0.15)}50%{box-shadow:0 0 22px rgba(200,169,110,0.4),0 0 55px rgba(200,169,110,0.12)} }
-@keyframes o-scan          { 0%{top:8%;opacity:0}8%{opacity:0.8}92%{opacity:0.8}100%{top:92%;opacity:0} }
 
 .o-name   { margin-top: 9px; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--o-dim); font-weight: 600; }
 .o-status { margin-top: 2px; font-size: 10px; letter-spacing: 0.08em; color: rgba(200,169,110,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; min-height: 14px; }
+
 
 /* Chat scroll area */
 #o-chat { flex: 1; overflow-y: auto; padding: 12px 0 4px; scroll-behavior: smooth; overscroll-behavior: contain; }
@@ -251,6 +258,64 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .send-btn { width: 32px; height: 32px; border-radius: 8px; background: var(--accent); color: white; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 14px; transition: opacity .15s, transform .1s; }
 .send-btn:hover{opacity:.85} .send-btn:active{transform:scale(.93)} .send-btn:disabled{opacity:.35;cursor:not-allowed}
 .input-hint { font-size: 11px; color: var(--muted); margin-top: 7px; }
+
+/* ══════════════════════════
+   TODAY TAB
+══════════════════════════ */
+#page-today { flex-direction: row; overflow: hidden; background: var(--bg); }
+
+/* Column 1 — Briefing + Uploads */
+.today-briefing { width: 320px; flex-shrink: 0; border-right: 1px solid var(--border); overflow-y: auto; padding: 20px 16px; background: var(--surface); display: flex; flex-direction: column; gap: 12px; }
+.briefing-card { background: #fdf6eb; border: 1px solid rgba(200,169,110,0.3); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.briefing-card-header { display: flex; align-items: center; gap: 10px; }
+.briefing-card-meta { flex: 1; }
+.briefing-card-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: #a07030; }
+.briefing-card-time { font-size: 11px; color: #b08040; margin-top: 1px; }
+.briefing-refresh-btn { background: none; border: 1px solid rgba(200,169,110,0.4); border-radius: 6px; color: #a07030; font-size: 14px; width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; flex-shrink: 0; }
+.briefing-refresh-btn:hover { background: rgba(200,169,110,0.15); }
+.briefing-text { font-family: 'Cormorant Garamond', serif; font-size: 15px; line-height: 1.65; color: #4a3010; }
+.briefing-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.briefing-pill { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 100px; letter-spacing: 0.04em; }
+.briefing-pill.green  { background: var(--green-light); color: #1a8038; }
+.briefing-pill.gold   { background: #fef3d0; color: #a07030; }
+.briefing-pill.blue   { background: var(--accent-light); color: var(--accent); }
+.briefing-prog-row { display: flex; align-items: center; gap: 8px; }
+.briefing-prog-label { font-size: 10px; font-weight: 600; color: #b08040; white-space: nowrap; }
+.briefing-prog-bar { flex: 1; height: 4px; background: rgba(200,169,110,0.2); border-radius: 2px; overflow: hidden; }
+.briefing-prog-fill { height: 100%; background: #c8a96e; border-radius: 2px; transition: width .4s ease; width: 0%; }
+
+/* Upload slots */
+.today-uploads { padding: 20px 16px; display: flex; flex-direction: column; gap: 12px; }
+.uploads-header { display: flex; align-items: center; justify-content: space-between; }
+.uploads-title { font-size: 13px; font-weight: 700; color: var(--text); }
+.uploads-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.uploads-done-badge { font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-light); padding: 4px 10px; border-radius: 100px; }
+.upload-slots-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.upload-slot { position: relative; background: var(--surface); border: 1.5px dashed var(--border2); border-radius: var(--radius-sm); padding: 14px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; transition: all .2s; text-align: center; }
+.upload-slot:hover { border-color: var(--accent); background: var(--accent-light); }
+.upload-slot.done { border-style: solid; border-color: var(--green); background: var(--green-light); }
+.slot-check-badge { position: absolute; top: -7px; right: -7px; width: 18px; height: 18px; border-radius: 50%; background: var(--green); color: white; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
+.slot-emoji { font-size: 22px; }
+.slot-name { font-size: 11px; font-weight: 700; color: var(--text); }
+.slot-hint { font-size: 9px; color: var(--muted); }
+.slot-adhoc { border: 1.5px dashed var(--border); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: border-color .2s; }
+.slot-adhoc:hover { border-color: var(--accent); }
+.slot-adhoc-icon { font-size: 18px; }
+.slot-adhoc-label { font-size: 12px; font-weight: 600; color: var(--text2); }
+.slot-adhoc-sub { font-size: 10px; color: var(--muted); }
+
+/* Column 3 — Chat */
+.today-chat { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.today-quick-replies { display: flex; gap: 8px; padding: 10px 16px 0; overflow-x: auto; flex-shrink: 0; }
+.today-quick-replies::-webkit-scrollbar { display: none; }
+.tqr { flex-shrink: 0; background: var(--accent-light); border: 1.5px solid rgba(0,102,255,0.18); border-radius: 100px; padding: 7px 14px; font-size: 11px; font-weight: 600; color: var(--accent); font-family: 'Plus Jakarta Sans', sans-serif; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.tqr:hover { background: rgba(0,102,255,0.15); }
+
+/* Keep legacy selectors working for week badge in programme tab */
+.week-badge { display: flex; align-items: center; gap: 8px; background: var(--accent-dim); border: 1px solid rgba(0,102,255,0.15); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 12px; }
+.week-badge-num { font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: -0.5px; }
+.week-badge-label { font-size: 11px; color: var(--text2); font-weight: 500; line-height: 1.3; }
+.profile-tag { display: inline-flex; align-items: center; background: var(--bg); border: 1px solid var(--border); color: var(--text2); font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 100px; }
 
 /* ══════════════════════════
    MY PROGRAMME TAB
@@ -444,11 +509,10 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
     <span class="logo-name">The Scientific Oracle</span>
   </div>
   <div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab('consult')" id="tab-consult">Consult</button>
-    <button class="tab-btn" onclick="switchTab('chat')" id="tab-chat">Oracle</button>
-    <button class="tab-btn" onclick="switchTab('programme')" id="tab-programme">My Programme</button>
-    <button class="tab-btn" onclick="switchTab('daily')" id="tab-daily">Daily Check-In</button>
+    <button class="tab-btn" onclick="switchTab('today')" id="tab-today">Today</button>
+    <button class="tab-btn" onclick="switchTab('programme')" id="tab-programme">Programme</button>
     <button class="tab-btn" onclick="switchTab('progress')" id="tab-progress">Progress</button>
+    <button class="tab-btn active" onclick="switchTab('consult')" id="tab-consult" style="display:none">Consult</button>
   </div>
   <div class="header-status">
     <div class="status-dot"></div>
@@ -463,13 +527,22 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
   <div id="o-progress-bar"><div id="o-progress-fill"></div></div>
 
   <div id="o-header">
-    <div class="eye-system" id="eyeSystem">
-      <div class="o-ring o-ring-outer"></div>
-      <div class="o-ring o-ring-mid"></div>
-      <div class="o-iris">
-        <div class="o-scanline"></div>
-        <div class="o-pupil"></div>
-      </div>
+    <div class="atom-wrap atom-lg" id="eyeSystem">
+      <svg viewBox="0 0 72 72">
+        <g class="orb-a" style="transform-origin:36px 36px">
+          <ellipse cx="36" cy="36" rx="34" ry="13" fill="none" stroke="rgba(200,169,110,0.55)" stroke-width="1.2"/>
+          <circle cx="70" cy="36" r="4" fill="#c8a96e" style="filter:drop-shadow(0 0 4px rgba(200,169,110,0.8))"/>
+        </g>
+        <g class="orb-b" style="transform-origin:36px 36px;transform:rotate(60deg)">
+          <ellipse cx="36" cy="36" rx="34" ry="13" fill="none" stroke="rgba(200,169,110,0.38)" stroke-width="1.2"/>
+          <circle cx="70" cy="36" r="3.5" fill="#c8a96e" opacity="0.85" style="filter:drop-shadow(0 0 3px rgba(200,169,110,0.7))"/>
+        </g>
+        <g class="orb-c" style="transform-origin:36px 36px;transform:rotate(120deg)">
+          <ellipse cx="36" cy="36" rx="34" ry="13" fill="none" stroke="rgba(200,169,110,0.22)" stroke-width="1.2"/>
+          <circle cx="70" cy="36" r="3" fill="#c8a96e" opacity="0.7"/>
+        </g>
+      </svg>
+      <div class="atom-nucleus"></div>
     </div>
     <div class="o-name">The Scientific Oracle</div>
     <div class="o-status" id="oracleStatus"></div>
@@ -479,55 +552,123 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
   <div id="o-input"></div>
 </div>
 
-<!-- ═══ CHAT ═══ -->
-<div class="page" id="page-chat">
-  <div class="chat-sidebar">
-    <div class="sidebar-profile">
-      <div class="profile-avatar">🧬</div>
-      <div class="profile-name" id="profile-name">Your Protocol</div>
-      <div class="profile-meta" id="profile-meta">Complete consultation to begin</div>
-      <div class="profile-tags" id="profile-tags"></div>
-    </div>
-    <div class="sidebar-section">
-      <div class="week-badge" id="week-badge" style="display:none">
-        <div class="week-badge-num" id="week-num">W1</div>
-        <div class="week-badge-label" id="week-label">Programme<br>in progress</div>
+<!-- ═══ TODAY ═══ -->
+<div class="page" id="page-today">
+  <!-- ZONE 1: Daily Briefing -->
+  <div class="today-briefing" id="today-briefing-zone">
+    <div class="briefing-card">
+      <div class="briefing-card-header">
+        <div class="atom-wrap atom-sm" id="briefingAtom">
+          <svg viewBox="0 0 32 32">
+            <g class="orb-a" style="transform-origin:16px 16px">
+              <ellipse cx="16" cy="16" rx="14" ry="5.5" fill="none" stroke="rgba(160,110,30,0.55)" stroke-width="1"/>
+              <circle cx="30" cy="16" r="2" fill="#a07030"/>
+            </g>
+            <g class="orb-b" style="transform-origin:16px 16px;transform:rotate(60deg)">
+              <ellipse cx="16" cy="16" rx="14" ry="5.5" fill="none" stroke="rgba(160,110,30,0.38)" stroke-width="1"/>
+              <circle cx="30" cy="16" r="1.8" fill="#a07030" opacity="0.85"/>
+            </g>
+            <g class="orb-c" style="transform-origin:16px 16px;transform:rotate(120deg)">
+              <ellipse cx="16" cy="16" rx="14" ry="5.5" fill="none" stroke="rgba(160,110,30,0.22)" stroke-width="1"/>
+              <circle cx="30" cy="16" r="1.5" fill="#a07030" opacity="0.7"/>
+            </g>
+          </svg>
+          <div class="atom-nucleus" style="background:radial-gradient(circle,#c8a96e,#8a6020);box-shadow:0 0 6px rgba(160,110,30,0.6);"></div>
+        </div>
+        <div class="briefing-card-meta">
+          <div class="briefing-card-label">Daily Briefing</div>
+          <div class="briefing-card-time" id="briefing-time">The Scientific Oracle</div>
+        </div>
+        <button class="briefing-refresh-btn" id="briefing-refresh" onclick="generateBriefing()" title="Refresh briefing">↻</button>
       </div>
-      <div class="sidebar-label">Quick Queries</div>
-      <button class="quick-chip-btn" onclick="sendQuick('How is my programme going? Give me a brief progress check based on how many weeks in I am.')"><span class="quick-chip-icon">📋</span> Programme Check-In</button>
-      <button class="quick-chip-btn" onclick="sendQuick('Give me a complete meal plan for today optimised for my goal and macros.')"><span class="quick-chip-icon">🍽️</span> Today\'s Meal Plan</button>
-      <button class="quick-chip-btn" onclick="sendQuick('Audit my micronutrient needs and flag any likely deficiencies based on my diet, sex, and goal.')"><span class="quick-chip-icon">🧬</span> Micronutrient Audit</button>
-      <button class="quick-chip-btn" onclick="sendQuick('Explain how my biological sex affects my training, recovery, and nutrition — specifically for my goal.')"><span class="quick-chip-icon">⚧</span> Sex-Specific Physiology</button>
-      <button class="quick-chip-btn" onclick="sendQuick('Give me a complete evidence-based supplement protocol for my goal. Clearly separate proven from overhyped.')"><span class="quick-chip-icon">💊</span> Supplement Protocol</button>
-      <button class="quick-chip-btn" onclick="sendQuick('Explain the science behind progressive overload and how my programme applies it.')"><span class="quick-chip-icon">📈</span> Progressive Overload</button>
-      <button class="quick-chip-btn" onclick="sendQuick('What does current research say about optimising sleep for muscle gain, hormone production, and recovery?')"><span class="quick-chip-icon">😴</span> Sleep Science</button>
-      <button class="quick-chip-btn" onclick="sendQuick('I think I need a deload. Based on the science of fatigue management, how should I structure it?')"><span class="quick-chip-icon">🔄</span> Deload Protocol</button>
+      <div class="briefing-text" id="briefing-text">Complete your consultation to receive your first daily briefing.</div>
+      <div class="briefing-pills" id="briefing-pills"></div>
+      <div class="briefing-prog-row">
+        <div class="briefing-prog-label">Today's uploads</div>
+        <div class="briefing-prog-bar"><div class="briefing-prog-fill" id="upload-prog-fill"></div></div>
+        <div class="briefing-prog-label" id="upload-prog-label">0 of 4</div>
+      </div>
     </div>
   </div>
-  <div class="chat-main">
+
+  <!-- ZONE 2: Upload Slots -->
+  <div class="today-uploads">
+    <div class="uploads-header">
+      <div>
+        <div class="uploads-title">Today's Uploads</div>
+        <div class="uploads-sub">Tap a slot to upload your screenshot</div>
+      </div>
+      <div class="uploads-done-badge" id="uploads-done-badge" style="display:none"></div>
+    </div>
+    <div class="upload-slots-grid">
+      <div class="upload-slot" id="slot-whoop" onclick="document.getElementById('input-whoop').click()">
+        <input type="file" id="input-whoop" accept="image/*" style="display:none" onchange="handleSlotUpload('whoop',this)">
+        <div class="slot-check-badge" id="slot-check-whoop" style="display:none">✓</div>
+        <div class="slot-emoji">😴</div>
+        <div class="slot-name">WHOOP Sleep</div>
+        <div class="slot-hint" id="slot-hint-whoop">Upload after waking</div>
+      </div>
+      <div class="upload-slot" id="slot-workout" onclick="document.getElementById('input-workout').click()">
+        <input type="file" id="input-workout" accept="image/*" style="display:none" onchange="handleSlotUpload('workout',this)">
+        <div class="slot-check-badge" id="slot-check-workout" style="display:none">✓</div>
+        <div class="slot-emoji">🏋️</div>
+        <div class="slot-name">Workout</div>
+        <div class="slot-hint" id="slot-hint-workout">After your session</div>
+      </div>
+      <div class="upload-slot" id="slot-nutrition" onclick="document.getElementById('input-nutrition').click()">
+        <input type="file" id="input-nutrition" accept="image/*" style="display:none" onchange="handleSlotUpload('nutrition',this)">
+        <div class="slot-check-badge" id="slot-check-nutrition" style="display:none">✓</div>
+        <div class="slot-emoji">🍽️</div>
+        <div class="slot-name">Nutrition</div>
+        <div class="slot-hint" id="slot-hint-nutrition">Food log or meal photo</div>
+      </div>
+      <div class="upload-slot" id="slot-body" onclick="document.getElementById('input-body').click()">
+        <input type="file" id="input-body" accept="image/*" style="display:none" onchange="handleSlotUpload('body',this)">
+        <div class="slot-check-badge" id="slot-check-body" style="display:none">✓</div>
+        <div class="slot-emoji">📊</div>
+        <div class="slot-name">Body Metrics</div>
+        <div class="slot-hint" id="slot-hint-body">Eufy scale · optional</div>
+      </div>
+    </div>
+    <div class="slot-adhoc" onclick="document.getElementById('input-adhoc').click()">
+      <input type="file" id="input-adhoc" accept="image/*" style="display:none" onchange="handleSlotUpload('adhoc',this)">
+      <div class="slot-adhoc-icon">📷</div>
+      <div>
+        <div class="slot-adhoc-label">Add another screenshot</div>
+        <div class="slot-adhoc-sub">Anything else you want TSO to see today</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZONE 3: Chat -->
+  <div class="today-chat">
     <div class="chat-topbar">
       <div class="chat-topbar-left">
-        <div class="chat-topbar-icon">🔬</div>
-        <div>
-          <div class="chat-topbar-title">The Scientific Oracle</div>
-          <div class="chat-topbar-sub" id="consult-summary">Complete your consultation to activate your protocol</div>
-        </div>
+        <div class="chat-topbar-title">Chat with TSO</div>
+        <div class="chat-topbar-sub" id="consult-summary">Complete your consultation to activate your protocol</div>
       </div>
       <div class="memory-badge" id="memory-badge" style="display:none">● Memory Active</div>
     </div>
     <div class="messages" id="messages">
       <div class="msg ai">
         <div class="msg-meta">The Scientific Oracle</div>
-        <div class="msg-bubble">Welcome. I am <strong>The Scientific Oracle</strong> — your integrated PhD-level physiologist and sports nutritionist.<br><br>Navigate to the <strong>Consult</strong> tab to complete your initial consultation. Once complete, return here and I'll generate your full personalised programme.</div>
+        <div class="msg-bubble">Welcome. I am <strong>The Scientific Oracle</strong> — your integrated PhD-level physiologist and sports nutritionist.<br><br>Navigate to the <strong>Consult</strong> tab to complete your initial consultation. Once complete, I'll generate your full personalised programme and daily briefings.</div>
       </div>
       <div class="typing-indicator" id="typing">
         <div class="msg-meta">The Scientific Oracle</div>
         <div class="typing-dots"><span></span><span></span><span></span></div>
       </div>
     </div>
+    <!-- Quick replies -->
+    <div class="today-quick-replies" id="today-quick-replies" style="display:none">
+      <button class="tqr" onclick="sendQuick('Give me a complete meal plan for today optimised for my goal and macros.')">🍽️ Today\'s Meal Plan</button>
+      <button class="tqr" onclick="sendQuick('How is my programme going? Brief progress check based on how many weeks in I am.')">📋 Programme Check</button>
+      <button class="tqr" onclick="sendQuick('What should I focus on in my next training session?')">🎯 Next Session</button>
+      <button class="tqr" onclick="sendQuick('Audit my micronutrient needs and flag any likely deficiencies based on my diet and goal.')">🧬 Micronutrient Audit</button>
+    </div>
     <div class="input-area">
       <div class="input-wrap">
-        <textarea id="userInput" placeholder="Ask TSO about your training, nutrition, recovery, or the science behind your programme..." rows="1"></textarea>
+        <textarea id="userInput" placeholder="Ask TSO about your training, nutrition, recovery…" rows="1"></textarea>
         <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
       </div>
       <div class="input-hint">Return to send · Shift+Return for new line</div>
@@ -862,24 +1003,18 @@ const STEPS = [
     opts:[{v:'beginner (0–1 year)',l:'Just starting out',d:'0–1 year · Learning the fundamentals'},{v:'intermediate (1–3 years)',l:'Getting serious',d:'1–3 years · Building real consistency'},{v:'advanced (3+ years)',l:'Experienced lifter',d:'3+ years · You know the science'},{v:'competitive athlete',l:'Competitive athlete',d:'Competing or elite-level performance'}] },
   { id:'days', type:'chips-single', msg:"How many days per week can you realistically train? Build around your actual life — not the ideal version.",
     opts:['3 days','4 days','5 days','6 days'] },
+  { id:'workout_time', type:'chips-single', msg:"What time of day do you typically train? I'll build your nutrition and recovery schedule around this.",
+    opts:['Early morning (5–7am)','Morning (7–9am)','Lunchtime (12–2pm)','After work (5–7pm)','Evening (7–9pm)','Varies / no fixed time'] },
   { id:'duration', type:'chips-single', msg:"Session length?",
     opts:['~45 min','~60 min','~75 min','~90 min'] },
   { id:'equipment', type:'cards', msg:"What equipment do you have access to?",
     opts:[{v:'full commercial gym',l:'Full Commercial Gym',d:'Cables, machines, barbells — everything'},{v:'home gym with free weights',l:'Home Gym (weights)',d:'Dumbbells, barbell, rack'},{v:'barbell and rack only',l:'Barbell + Rack Only',d:'Strength-focused home setup'},{v:'bands and bodyweight only',l:'Bands & Bodyweight',d:'Minimal equipment'}] },
-  { id:'injuries', type:'text', 
-    msg:"Any injuries, pain points, physical limitations, or equipment you can't use that I need to programme around?",
-    placeholder:"e.g. lower back tightness, left shoulder impingement, no barbell available, can't use cables...\nType 'none' if not applicable." },
+  { id:'injuries', type:'text', msg:"Any injuries, pain points, or physical limitations I need to programme around?",
+    placeholder:"e.g. lower back tightness, left shoulder impingement...\nType 'none' if not applicable." },
   { id:'diet', type:'cards', msg:"How do you eat?",
     opts:[{v:'omnivore',l:'Everything',d:'Meat, fish, dairy — no restrictions'},{v:'vegetarian',l:'Vegetarian',d:'No meat or fish'},{v:'vegan',l:'Vegan',d:'No animal products'},{v:'keto / low carb',l:'Low carb / Keto',d:'Fat-adapted approach'},{v:'mediterranean',l:'Mediterranean',d:'Whole foods, olive oil, fish'}] },
   { id:'meals', type:'chips-single', msg:"How many times do you eat per day?",
-    opts:[
-      '2 meals, no snacks',
-      '3 meals, no snacks',
-      '3 meals + 1 snack',
-      '3 meals + 2 snacks',
-      '4 meals + 1 snack',
-      '5+ meals / grazing'
-    ] },
+    opts:['2 meals','3 meals','4 meals','5+ meals'] },
   { id:'sleep', type:'chips-single', msg:"Average sleep per night?",
     opts:['< 6 hrs','6–7 hrs','7–8 hrs','8+ hrs'] },
   { id:'stress', type:'cards', msg:"Current stress load. This directly impacts your recovery capacity and cortisol — I need an honest answer.",
@@ -1318,6 +1453,7 @@ async function beginConsultation() {
     bodyFat:           userData.bodyfat || '',
     experience:        userData.experience || '',
     trainingDays:      userData.days ? userData.days.replace(' days','') : '',
+    workoutTime:       userData.workout_time || '',
     sessionLength:     userData.duration || '',
     equipment:         userData.equipment || '',
     injuries:          userData.injuries || 'None',
@@ -1350,7 +1486,12 @@ async function beginConsultation() {
   updateProfileUI(d);
   updateCycleUI(d);
   checkLabNudge();
-  switchTab('chat');
+  // Show Today tab and hide Consult tab after consultation completes
+  document.getElementById('tab-today').style.display = '';
+  document.getElementById('tab-consult').style.display = 'none';
+  switchTab('today');
+  // Show quick replies in Today chat
+  document.getElementById('today-quick-replies').style.display = 'flex';
 
   addMessage('user', 'I have completed my consultation. Please generate my full personalised training and nutrition programme.');
   conversationHistory = [{ role: 'user', content: buildConsultPrompt(d) }];
@@ -1375,7 +1516,7 @@ function buildConsultPrompt(d) {
   return `I have completed my TSO consultation. Full profile:
 
 BIOMETRICS: Age ${d.age}, ${d.sex}, ${d.weight}kg, ${d.height}cm, ~${d.bodyFat}% body fat
-TRAINING: ${d.experience}, ${d.trainingDays} days/week, ${d.sessionLength} sessions, ${d.equipment}
+TRAINING: ${d.experience}, ${d.trainingDays} days/week, ${d.sessionLength} sessions, ${d.equipment}, preferred workout time: ${d.workoutTime || 'not specified'}
 INJURIES: ${d.injuries || 'None'}
 NUTRITION: ${d.diet} diet, ${d.mealsPerDay} meals/day, allergies: ${d.allergies || 'none'}, supplements: ${d.currentSupplements || 'none'}
 LIFESTYLE: ${d.sleep} sleep/night, stress: ${d.stress}
@@ -1391,7 +1532,7 @@ Please give me a conversational overview of my programme philosophy — why you'
 async function generateStructuredProgramme(d) {
   const prompt = `Based on this profile, generate a complete training programme as structured JSON.
 
-Profile: ${d.sex}, ${d.age}y, ${d.weight}kg, ${d.experience}, ${d.trainingDays} days/week, ${d.sessionLength}, ${d.equipment}, injuries: ${d.injuries || 'none'}, goal: ${d.goal}, Brain Trust: ${d.brainTrust}
+Profile: ${d.sex}, ${d.age}y, ${d.weight}kg, ${d.experience}, ${d.trainingDays} days/week, ${d.sessionLength}, ${d.equipment}, injuries: ${d.injuries || 'none'}, goal: ${d.goal}, preferred workout time: ${d.workoutTime || 'not specified'}, Brain Trust: ${d.brainTrust}
 
 Return ONLY valid JSON in this exact format:
 {
@@ -1455,7 +1596,8 @@ function switchTab(tab) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + tab).classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
+  const tabBtn = document.getElementById('tab-' + tab);
+  if (tabBtn) tabBtn.classList.add('active');
 }
 
 // ══════════════════════════════════════════
@@ -1466,7 +1608,7 @@ async function getSystemPrompt() {
   const memories = await getMemory();
   const memoryStr = memories.map(m=>`[${m.type}]: ${m.content}`).join('\n') || 'No previous sessions.';
   const currentWeek = getCurrentWeek();
-  const profileStr = d ? `Age:${d.age}, Sex:${d.sex}, Weight:${d.weight}kg, Height:${d.height}cm, BF:${d.bodyFat}%, Experience:${d.experience}, Training:${d.trainingDays}d/wk, Equipment:${d.equipment}, Injuries:${d.injuries||'none'}, Diet:${d.diet}, Sleep:${d.sleep}, Stress:${d.stress}, Goal:${d.goal}, Timeline:${d.timeline}, CyclingStatus:${d.cyclingStatus||'n/a'}, Brain Trust:${d.brainTrust}` : 'Not yet provided.';
+  const profileStr = d ? `Age:${d.age}, Sex:${d.sex}, Weight:${d.weight}kg, Height:${d.height}cm, BF:${d.bodyFat}%, Experience:${d.experience}, Training:${d.trainingDays}d/wk, WorkoutTime:${d.workoutTime||'not specified'}, Equipment:${d.equipment}, Injuries:${d.injuries||'none'}, Diet:${d.diet}, Sleep:${d.sleep}, Stress:${d.stress}, Goal:${d.goal}, Timeline:${d.timeline}, CyclingStatus:${d.cyclingStatus||'n/a'}, Brain Trust:${d.brainTrust}` : 'Not yet provided.';
 
   const progStr = programmeData ? `
 
@@ -1495,6 +1637,7 @@ CRITICAL: You built this programme. NEVER suggest structural changes before week
 - Shona Vertue: mobility integration, training sustainability, mental health of fitness
 
 ━━━ NUTRITION PHILOSOPHY ━━━
+MEAL TIMING: User's preferred workout time is ${d?.workoutTime||'not specified'}. All meal plans, pre/post-workout nutrition, supplement timing, and daily schedules MUST be built around this window. Never suggest 11am gym sessions or meal times that conflict with their actual training schedule.
 WHOLE FOOD FIRST: Always recommend food solutions before supplements. Never recommend a multivitamin as part of a meal plan.
 SUPPLEMENT RULE: Only flag a supplement where (1) peer-reviewed evidence is strong, (2) gap genuinely cannot be closed through food alone, AND (3) always include "speak to your doctor or a registered dietitian before taking any supplement."
 SCOPE BOUNDARY: Clinical territory (medical conditions, medication interactions, diagnosed deficiencies) → acknowledge limits, direct to qualified professional. TSO is not a doctor.
@@ -1576,7 +1719,7 @@ async function sendMessage() {
   } catch(e) { setTyping(false); addMessage('ai','Connection error. Please try again.'); }
 }
 
-function sendQuick(text) { document.getElementById('userInput').value=text; sendMessage(); switchTab('chat'); }
+function sendQuick(text) { document.getElementById('userInput').value=text; sendMessage(); if(!document.getElementById('page-today').classList.contains('active')) switchTab('today'); }
 
 const textarea = document.getElementById('userInput');
 textarea.addEventListener('input', function() { this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,140)+'px'; });
@@ -1586,13 +1729,12 @@ textarea.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.p
 // PROFILE UI
 // ══════════════════════════════════════════
 function updateProfileUI(d) {
-  document.getElementById('profile-name').textContent = `${d.sex==='male'?'♂':d.sex==='female'?'♀':'—'} ${d.weight}kg · ${d.age}y`;
-  document.getElementById('profile-meta').textContent = `${d.experience||'—'} · ${d.goal||'—'}`;
-  const tags = document.getElementById('profile-tags');
-  tags.innerHTML='';
-  [d.diet,`${d.trainingDays}d/wk`,d.equipment?.split(' ')[0]].filter(Boolean).forEach(t=>{
-    const span=document.createElement('span'); span.className='profile-tag'; span.textContent=t; tags.appendChild(span);
-  });
+  const pn = document.getElementById('profile-name');
+  const pm = document.getElementById('profile-meta');
+  const pt = document.getElementById('profile-tags');
+  if (pn) pn.textContent = `${d.sex==='male'?'♂':d.sex==='female'?'♀':'—'} ${d.weight}kg · ${d.age}y`;
+  if (pm) pm.textContent = `${d.experience||'—'} · ${d.goal||'—'}`;
+  if (pt) { pt.innerHTML=''; [d.diet,`${d.trainingDays}d/wk`,d.equipment?.split(' ')[0]].filter(Boolean).forEach(t=>{const span=document.createElement('span');span.className='profile-tag';span.textContent=t;pt.appendChild(span);}); }
   document.getElementById('consult-summary').textContent=`${d.sex||'—'} · ${d.age}y · ${d.weight}kg · ${d.goal}`;
   document.getElementById('memory-badge').style.display='flex';
   document.getElementById('header-status-text').textContent='Protocol Active';
@@ -1650,8 +1792,8 @@ function getCurrentWeek() {
 function updateWeekDisplay() {
   const week=getCurrentWeek();
   document.getElementById('prog-week-pill').textContent=`Week ${week}`;
-  document.getElementById('week-num').textContent=`W${week}`;
-  document.getElementById('week-badge').style.display='flex';
+  const wn=document.getElementById('week-num'); if(wn) wn.textContent=`W${week}`;
+  const wb=document.getElementById('week-badge'); if(wb) wb.style.display='flex';
   const title=document.getElementById('consistency-title');
   const msg=document.getElementById('consistency-msg');
   const banner=document.getElementById('consistency-banner');
@@ -1659,7 +1801,7 @@ function updateWeekDisplay() {
   else if(week<=5){title.textContent="You're in the adaptation zone";msg.textContent=`Week ${week} of 8. Your body is adapting. Keep adding small amounts of weight where you can — progressive overload is working.`;banner.style.background='linear-gradient(135deg,#E8FAF0,#F0FFF8)';}
   else if(week<=7){title.textContent='Peak block — push hard';msg.textContent=`Week ${week} of 8. You're approaching maximum volume. Push intensity while maintaining form. Deload is coming.`;banner.style.background='linear-gradient(135deg,#FFF4E0,#FFFBF0)';}
   else{title.textContent="Deload week — you've earned it";msg.textContent='Week 8. Reduce volume by 40-50%, maintain intensity. Let adaptations solidify before your next block.';banner.style.background='linear-gradient(135deg,#FDF0FF,#FFF5FF)';}
-  document.getElementById('week-label').textContent=week<=2?'Build habit':week<=5?'Adapting':week<=7?'Peak block':'Deload';
+  const wl=document.getElementById('week-label'); if(wl) wl.textContent=week<=2?'Build habit':week<=5?'Adapting':week<=7?'Peak block':'Deload';
 }
 
 // ══════════════════════════════════════════
@@ -1668,7 +1810,17 @@ function updateWeekDisplay() {
 async function loadProfile() {
   try {
     const {data}=await db.from('tso_profile').select('*').eq('user_id',USER_ID).single();
-    if(data){consultationData=data;if(data.programme_start_date)programmeStartDate=new Date(data.programme_start_date);updateProfileUI(data);updateCycleUI(data);checkLabNudge();}
+    if(data){
+      consultationData=data;
+      if(data.programme_start_date)programmeStartDate=new Date(data.programme_start_date);
+      updateProfileUI(data);updateCycleUI(data);checkLabNudge();
+      // Show Today tab, hide Consult
+      document.getElementById('tab-today').style.display = '';
+      document.getElementById('tab-consult').style.display = 'none';
+      document.getElementById('today-quick-replies').style.display = 'flex';
+      switchTab('today');
+      setTimeout(()=>generateBriefing(), 600);
+    }
   } catch(e){const saved=localStorage.getItem('tso_profile');if(saved){consultationData=JSON.parse(saved);updateProfileUI(consultationData);}}
 }
 
@@ -1952,7 +2104,7 @@ async function generateLabBrief(){
   localStorage.setItem('tso_last_lab',new Date().toISOString());
   const d=consultationData;
   const prompt=`Generate a specific "what to tell my doctor" blood panel brief for my GP. Profile: ${d?.sex}, ${d?.age}y, ${d?.diet} diet, goal: ${d?.goal}, current supplements: ${d?.currentSupplements||'none'}. List each test to request, why it matters for my profile specifically, and what optimal ranges look like for my goals (not just standard reference ranges). Format as a clear, printable brief.`;
-  switchTab('chat');document.getElementById('userInput').value=prompt;await sendMessage();
+  switchTab('today');document.getElementById('userInput').value=prompt;await sendMessage();
 }
 
 // ══════════════════════════════════════════
@@ -1979,7 +2131,7 @@ async function handleSwap(reason){
     pain:`I need to swap ${exerciseName||'this exercise'} because it causes pain or discomfort. Suggest the single best pain-free alternative that trains the same muscle group. Reply with ONLY this format on the first line: SWAP: [New Exercise Name] — then your explanation below. Note: if this pain is recurring, recommend consulting a physiotherapist.`,
     preference:`I want to swap ${exerciseName||'this exercise'} for personal preference. Reply with ONLY this format on the first line: SWAP: [New Exercise Name] — then briefly explain why the original is in my programme and why this alternative works. Be honest if the original is the better choice.`
   };
-  switchTab('chat');
+  switchTab('today');
   document.getElementById('userInput').value=prompts[reason];
   // Send and intercept response to update programme tab
   const input=document.getElementById('userInput');
@@ -2017,6 +2169,10 @@ async function startNewPlan(){
   document.getElementById('programme-empty-state').style.display='flex';
   document.getElementById('programme-content').style.display='none';
   document.getElementById('messages').innerHTML=`<div class="msg ai"><div class="msg-meta">The Scientific Oracle</div><div class="msg-bubble">Your previous plan has been cleared. Complete a new consultation to generate your next training block.</div></div><div class="typing-indicator" id="typing"><div class="msg-meta">The Scientific Oracle</div><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  // Restore consult tab
+  document.getElementById('tab-consult').style.display = '';
+  document.getElementById('tab-today').style.display = 'none';
+  document.getElementById('today-quick-replies').style.display = 'none';
   // Reset oracle chat
   document.getElementById('o-chat').innerHTML='';
   document.getElementById('o-input').innerHTML='';
@@ -2042,6 +2198,79 @@ function addActionChips(){
 }
 
 // ══════════════════════════════════════════
+// TODAY TAB
+// ══════════════════════════════════════════
+let uploadsDone = { whoop: false, workout: false, nutrition: false, body: false };
+let uploadCount = 0;
+
+function updateUploadProgress() {
+  uploadCount = Object.values(uploadsDone).filter(Boolean).length;
+  const pct = (uploadCount / 4) * 100;
+  document.getElementById('upload-prog-fill').style.width = pct + '%';
+  document.getElementById('upload-prog-label').textContent = `${uploadCount} of 4`;
+  const badge = document.getElementById('uploads-done-badge');
+  if (uploadCount === 4) { badge.textContent = 'All done ✓'; badge.style.display = 'block'; }
+}
+
+function handleSlotUpload(type, input) {
+  const file = input.files[0]; if (!file) return;
+  // Mark slot done
+  const slot = document.getElementById('slot-' + type);
+  const check = document.getElementById('slot-check-' + type);
+  const hint = document.getElementById('slot-hint-' + type);
+  if (slot) { slot.classList.add('done'); }
+  if (check) check.style.display = 'flex';
+  if (hint) hint.textContent = '✓ ' + file.name.substring(0, 20);
+  uploadsDone[type] = true;
+  updateUploadProgress();
+  // Also feed into existing whoop/eufy processing where applicable
+  if (type === 'whoop') { const reader = new FileReader(); reader.onload = e => { whoopB64 = e.target.result.split(',')[1]; checkReady(); extractData('whoop', whoopB64, file.type); }; reader.readAsDataURL(file); }
+  if (type === 'body')  { const reader = new FileReader(); reader.onload = e => { eufyB64  = e.target.result.split(',')[1]; checkReady(); extractData('eufy',  eufyB64,  file.type); }; reader.readAsDataURL(file); }
+  showToast(`${type.charAt(0).toUpperCase()+type.slice(1)} uploaded ✓`);
+}
+
+async function generateBriefing() {
+  if (!consultationData) return;
+  const briefingText = document.getElementById('briefing-text');
+  const pillsEl = document.getElementById('briefing-pills');
+  briefingText.textContent = 'Generating your briefing…';
+  pillsEl.innerHTML = '';
+
+  const today = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+  const week = getCurrentWeek();
+
+  let cycleContext = '';
+  if (consultationData?.sex === 'female' && consultationData?.cyclingStatus === 'cycling' && consultationData?.periodDate) {
+    const dayOfCycle = Math.floor((new Date() - new Date(consultationData.periodDate)) / (1000*60*60*24)) % (parseInt(consultationData.cycleLength)||28) + 1;
+    const phase = dayOfCycle<=5?'Menstrual':dayOfCycle<=13?'Follicular':dayOfCycle<=16?'Ovulatory':dayOfCycle<=21?'Early Luteal':'Late Luteal';
+    cycleContext = ` Cycle day ${dayOfCycle} (${phase} phase).`;
+  }
+
+  const trainingToday = consultationData.trainingDays ? `Programme: ${consultationData.trainingDays} days/week.` : '';
+  const prompt = `Today is ${today}. Week ${week} of 8.${cycleContext} ${trainingToday} Goal: ${consultationData.goal}. Preferred training time: ${consultationData.workoutTime || 'not specified'}.
+
+Write a 2-3 sentence daily briefing. Warm, direct, and specific to today — week in the block, training relevance, key focus. Then on a new line output JSON: {"pills":[{"label":"Week X","type":"blue"},{"label":"training phase","type":"gold"},{"label":"key metric","type":"green"}]} — 2-3 pills maximum. Return briefing text FIRST, then the JSON block.`;
+
+  try {
+    const resp = await fetch('/api/proxy', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:500, messages:[{role:'user',content:prompt}] }) });
+    const data = await resp.json();
+    const text = data.content?.map(b => b.text||'').join('') || '';
+    const jsonMatch = text.match(/\{[\s\S]*"pills"[\s\S]*\}/);
+    let pills = [];
+    let narrative = text;
+    if (jsonMatch) {
+      try { pills = JSON.parse(jsonMatch[0]).pills || []; } catch(e) {}
+      narrative = text.substring(0, text.indexOf(jsonMatch[0])).trim();
+    }
+    briefingText.textContent = narrative || text;
+    pillsEl.innerHTML = pills.map(p => `<span class="briefing-pill ${p.type||'blue'}">${p.label}</span>`).join('');
+    document.getElementById('briefing-time').textContent = new Date().toLocaleTimeString('en', {hour:'2-digit',minute:'2-digit'});
+  } catch(e) {
+    briefingText.textContent = "Couldn't generate briefing. Tap ↻ to retry.";
+  }
+}
+
+// ══════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('visible');setTimeout(()=>t.classList.remove('visible'),3000);}
@@ -2051,6 +2280,12 @@ async function initDB(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
+  // Today tab starts hidden — only shown after consultation
+  document.getElementById('tab-today').style.display = 'none';
+  // Consult page starts active
+  document.getElementById('page-consult').classList.add('active');
+  document.getElementById('tab-consult').classList.add('active');
+  document.getElementById('tab-consult').style.display = '';
   initDB();
   initOracle();
 });
