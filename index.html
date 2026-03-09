@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TSO — The Scientific Oracle</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
@@ -31,6 +31,18 @@
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
   --radius: 16px;
   --radius-sm: 10px;
+  /* Oracle dark palette */
+  --o-bg: #06060a;
+  --o-bg2: #0c0c12;
+  --o-border: rgba(255,255,255,0.06);
+  --o-border2: rgba(255,255,255,0.10);
+  --gold: #c8a96e;
+  --gold-bright: #e8c98e;
+  --gold-dim: rgba(200,169,110,0.35);
+  --gold-glow: rgba(200,169,110,0.12);
+  --o-text: #e8e4dc;
+  --o-muted: #a09a90;
+  --o-dim: #54504a;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
 body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
@@ -56,126 +68,128 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .page.active { display: flex; }
 
 /* ══════════════════════════
-   CONSULTATION
+   ORACLE CONSULTATION PAGE
 ══════════════════════════ */
-#page-consult { flex-direction: column; overflow-y: auto; background: var(--bg); }
-.consult-hero { padding: 52px 48px 40px; max-width: 720px; }
-.consult-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-.consult-title { font-size: 40px; font-weight: 700; letter-spacing: -1.5px; line-height: 1.1; color: var(--text); margin-bottom: 14px; }
-.consult-title span { color: var(--accent); }
-.consult-desc { font-size: 15px; color: var(--text2); line-height: 1.65; max-width: 520px; }
-.consult-grid { padding: 0 48px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 960px; }
-.consult-card { background: var(--surface); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
-.consult-card.full { grid-column: 1 / -1; }
-.card-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-.card-title-num { width: 20px; height: 20px; border-radius: 50%; background: var(--accent); color: white; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-.form-row { display: flex; gap: 12px; margin-bottom: 12px; }
-.form-field { flex: 1; }
-.form-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
-.form-field input, .form-field select, .form-field textarea { width: 100%; background: var(--surface2); border: 1.5px solid var(--border); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; padding: 10px 13px; border-radius: var(--radius-sm); outline: none; transition: border-color .15s, box-shadow .15s; appearance: none; -webkit-appearance: none; }
-.form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); background: var(--surface); }
-.form-field textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
-.form-field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238E8E93' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; cursor: pointer; }
-.form-field select option { background: white; }
-.field-hint { font-size: 11px; color: var(--muted); margin-top: 4px; font-style: italic; }
+#page-consult {
+  flex-direction: column;
+  background: var(--o-bg);
+  overflow: hidden;
+}
 
-/* How TSO works banner */
-.how-it-works { background: var(--text); border-radius: var(--radius); padding: 24px 28px; }
-.how-it-works-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 14px; letter-spacing: -0.2px; }
-.how-it-works-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.how-it-works-item { display: flex; align-items: flex-start; gap: 10px; }
-.how-it-works-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-.how-it-works-text strong { color: white; display: block; font-size: 12px; font-weight: 700; margin-bottom: 2px; }
-.how-it-works-text { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.5; }
+/* Progress bar */
+#o-progress-bar { height: 2px; background: rgba(255,255,255,0.05); flex-shrink: 0; position: relative; }
+#o-progress-fill { height: 100%; background: linear-gradient(90deg, rgba(200,169,110,0.4), var(--gold)); transition: width 0.7s cubic-bezier(0.4,0,0.2,1); width: 0%; }
 
-/* Stress cards */
-.stress-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.stress-card { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; cursor: pointer; transition: all .15s; background: var(--surface2); }
-.stress-card:hover { border-color: var(--border2); background: white; }
-.stress-card.selected { border-color: var(--accent); background: var(--accent-light); }
-.stress-card-title { font-size: 12px; font-weight: 700; color: var(--text); }
-.stress-card.selected .stress-card-title { color: var(--accent); }
-.stress-card-desc { font-size: 10px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+/* Oracle header */
+#o-header { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding: 18px 0 12px; border-bottom: 1px solid var(--o-border); background: var(--o-bg); position: relative; z-index: 5; }
 
-/* Supplement chips */
-.supp-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
-.supp-chip { border: 1.5px solid var(--border); border-radius: 100px; padding: 6px 12px; cursor: pointer; transition: all .15s; background: var(--surface2); font-size: 12px; font-weight: 500; color: var(--text2); white-space: nowrap; }
-.supp-chip:hover { border-color: var(--border2); background: white; }
-.supp-chip.selected { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 700; }
+/* The Eye */
+.eye-system { position: relative; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; }
+.o-ring { position: absolute; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+.o-ring-outer { width: 72px; height: 72px; border: 1px solid rgba(200,169,110,0.18); animation: o-spin 30s linear infinite; }
+.o-ring-outer::before, .o-ring-outer::after { content: ''; position: absolute; border-radius: 2px; background: rgba(200,169,110,0.55); }
+.o-ring-outer::before { width: 2px; height: 5px; top: -2px; left: 50%; transform: translateX(-50%); }
+.o-ring-outer::after  { width: 2px; height: 5px; bottom: -2px; left: 50%; transform: translateX(-50%); }
+.o-ring-mid { width: 56px; height: 56px; border: 1px dashed rgba(200,169,110,0.22); animation: o-spin-r 20s linear infinite; }
+.o-iris { width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle at 42% 38%, #2a1800 0%, #160d00 30%, #0b0b14 65%, #06060a 100%); border: 1px solid rgba(200,169,110,0.4); overflow: hidden; display: flex; align-items: center; justify-content: center; position: relative; transition: box-shadow 0.4s; }
+.eye-system.thinking .o-iris { animation: o-iris-think 1.1s ease-in-out infinite; }
+.eye-system.speaking .o-iris { box-shadow: 0 0 20px rgba(200,169,110,0.3), 0 0 50px rgba(200,169,110,0.1); }
+.o-iris::before { content: ''; position: absolute; inset: 0; background: repeating-conic-gradient(rgba(200,169,110,0.04) 0deg, transparent 3deg, transparent 9deg, rgba(200,169,110,0.04) 12deg); border-radius: 50%; }
+.o-scanline { position: absolute; width: 100%; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(200,169,110,0.5) 50%, transparent 100%); animation: o-scan 2.8s ease-in-out infinite; z-index: 2; }
+.o-pupil { width: 17px; height: 17px; border-radius: 50%; background: radial-gradient(circle at 38% 32%, #e8c98e 0%, #a07030 35%, #200d00 75%); position: relative; z-index: 3; animation: o-pupil-breathe 4s ease-in-out infinite; box-shadow: 0 0 10px rgba(200,169,110,0.45), 0 0 25px rgba(200,169,110,0.18); }
+.o-pupil::after { content: ''; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.88); top: 2px; left: 3px; }
+.eye-system.thinking .o-pupil { animation: o-pupil-think 0.9s ease-in-out infinite; }
 
-/* Exercise swap */
-.exercise-row { position: relative; }
-.exercise-row:hover .ex-swap { opacity: 1; }
-.ex-swap { position: absolute; right: 52px; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity .15s; background: none; border: 1.5px solid var(--border); border-radius: 6px; padding: 4px 9px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; }
-.ex-swap:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+@keyframes o-spin    { to { transform: translate(-50%,-50%) rotate(360deg); } }
+@keyframes o-spin-r  { to { transform: translate(-50%,-50%) rotate(-360deg); } }
+@keyframes o-pupil-breathe { 0%,100%{transform:scale(1);box-shadow:0 0 10px rgba(200,169,110,0.45),0 0 25px rgba(200,169,110,0.18)}50%{transform:scale(1.08);box-shadow:0 0 18px rgba(200,169,110,0.6),0 0 45px rgba(200,169,110,0.25)} }
+@keyframes o-pupil-think   { 0%,100%{transform:scale(0.9);opacity:0.7}50%{transform:scale(1.2);opacity:1} }
+@keyframes o-iris-think    { 0%,100%{box-shadow:0 0 8px rgba(200,169,110,0.15)}50%{box-shadow:0 0 22px rgba(200,169,110,0.4),0 0 55px rgba(200,169,110,0.12)} }
+@keyframes o-scan          { 0%{top:8%;opacity:0}8%{opacity:0.8}92%{opacity:0.8}100%{top:92%;opacity:0} }
 
-/* Swap modal options */
-.swap-option { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: all .15s; margin-bottom: 8px; background: var(--surface2); }
-.swap-option:last-child { margin-bottom: 0; }
-.swap-option:hover { border-color: var(--accent); background: var(--accent-light); }
-.swap-option-icon { font-size: 20px; flex-shrink: 0; }
-.swap-option-title { font-size: 13px; font-weight: 700; color: var(--text); }
-.swap-option-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.o-name   { margin-top: 9px; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--o-dim); font-weight: 600; }
+.o-status { margin-top: 2px; font-size: 10px; letter-spacing: 0.08em; color: rgba(200,169,110,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; min-height: 14px; }
 
-/* Post-consultation action chips */
-.action-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-.action-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); border: 1.5px solid rgba(0,102,255,0.2); border-radius: 100px; padding: 7px 14px; font-size: 12px; font-weight: 600; color: var(--accent); cursor: pointer; transition: all .15s; font-family: 'Plus Jakarta Sans', sans-serif; white-space: nowrap; }
-.action-chip:hover { background: var(--accent); color: white; border-color: var(--accent); }
+/* Chat scroll area */
+#o-chat { flex: 1; overflow-y: auto; padding: 12px 0 4px; scroll-behavior: smooth; overscroll-behavior: contain; }
+#o-chat::-webkit-scrollbar { width: 2px; }
+#o-chat::-webkit-scrollbar-thumb { background: var(--o-border2); }
 
-/* Goal cards — replaces plain dropdown for goal selection */
-.goal-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-.goal-card { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; transition: all .15s; background: var(--surface2); }
-.goal-card:hover { border-color: var(--border2); background: white; }
-.goal-card.selected { border-color: var(--accent); background: var(--accent-light); }
-.goal-card-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-.goal-card.selected .goal-card-title { color: var(--accent); }
-.goal-card-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
-.goal-card.selected .goal-card-desc { color: var(--accent); opacity: .75; }
+.o-msg-row { display: flex; padding: 3px 16px; animation: o-msg-in 0.38s cubic-bezier(0.18,0.89,0.32,1.1) both; }
+.o-msg-row.oracle { justify-content: flex-start; }
+.o-msg-row.user   { justify-content: flex-end; margin-top: 2px; }
+@keyframes o-msg-in { from{opacity:0;transform:translateY(12px) scale(0.97)}to{opacity:1;transform:none} }
 
-/* Experience cards */
-.exp-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.exp-card { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; cursor: pointer; transition: all .15s; background: var(--surface2); }
-.exp-card:hover { border-color: var(--border2); background: white; }
-.exp-card.selected { border-color: var(--accent); background: var(--accent-light); }
-.exp-card-title { font-size: 12px; font-weight: 700; color: var(--text); }
-.exp-card.selected .exp-card-title { color: var(--accent); }
-.exp-card-desc { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.o-bubble { max-width: 82%; padding: 11px 15px; border-radius: 16px; line-height: 1.65; }
+.oracle .o-bubble { background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 3px 16px 16px 16px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 400; color: var(--o-text); letter-spacing: 0.012em; }
+.user .o-bubble { background: #141420; border: 1px solid rgba(200,169,110,0.28); border-radius: 16px 3px 16px 16px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 600; color: rgba(232,228,220,0.82); letter-spacing: 0.03em; }
 
-/* Muscle group checkboxes — STRONGER selected state */
-.checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.check-item { display: flex; align-items: center; gap: 9px; background: var(--surface2); border: 1.5px solid var(--border); padding: 10px 13px; border-radius: var(--radius-sm); cursor: pointer; transition: all .15s; font-size: 13px; font-weight: 500; color: var(--text2); user-select: none; position: relative; }
-.check-item:hover { border-color: var(--border2); background: white; }
-.check-item.selected { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 700; }
-.check-mark { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; font-weight: 900; color: var(--accent); display: none; }
-.check-item.selected .check-mark { display: block; }
-.check-item input { display: none; }
-.check-icon { font-size: 15px; }
+/* Typing dots */
+.o-typing { display: flex; gap: 5px; padding: 4px 0; align-items: center; }
+.o-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-dim); animation: o-bounce 1.3s ease-in-out infinite; }
+.o-dot:nth-child(2){animation-delay:.18s} .o-dot:nth-child(3){animation-delay:.36s}
+@keyframes o-bounce{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-5px);opacity:1}}
 
-/* Live stats */
-.live-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-.live-stat { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 14px; }
-.live-stat-label { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; margin-bottom: 4px; }
-.live-stat-val { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
-.live-stat-val span { font-size: 11px; font-weight: 500; color: var(--muted); margin-left: 2px; }
+/* Input area */
+#o-input { flex-shrink: 0; background: var(--o-bg); border-top: 1px solid var(--o-border); padding: 10px 16px 16px; max-height: 56vh; overflow-y: auto; }
+#o-input::-webkit-scrollbar { width: 2px; }
 
-/* Brain Trust chips */
-.brain-trust-intro { font-size: 12px; color: var(--text2); line-height: 1.55; margin-bottom: 14px; }
-.brain-trust-intro strong { color: var(--text); }
-.brain-trust-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-.bt-chip { display: flex; align-items: center; gap: 7px; border: 1.5px solid var(--border); border-radius: 100px; padding: 7px 13px; cursor: pointer; transition: all .15s; background: var(--surface2); font-size: 12px; font-weight: 600; color: var(--text2); white-space: nowrap; }
-.bt-chip:hover { border-color: var(--border2); background: white; }
-.bt-chip.selected { border-color: var(--accent); background: var(--accent); color: white; box-shadow: 0 2px 8px rgba(0,102,255,0.25); }
-.bt-chip-avatar { width: 22px; height: 22px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
-.bt-chip.selected .bt-chip-avatar { background: rgba(255,255,255,0.25); color: white; }
-.bt-chip-check { font-size: 10px; display: none; }
-.bt-chip.selected .bt-chip-check { display: inline; }
-.bt-link { font-size: 10px; color: var(--accent); text-decoration: none; opacity: .7; transition: opacity .15s; display: inline-flex; align-items: center; gap: 2px; margin-left: 2px; }
-.bt-link:hover { opacity: 1; }
-.bt-none-note { font-size: 11px; color: var(--muted); margin-top: 10px; }
+.o-fade-in { animation: o-fade-up 0.3s cubic-bezier(0.2,0,0,1) both; }
+@keyframes o-fade-up { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none} }
 
-.begin-btn { background: var(--accent); color: white; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; padding: 14px 28px; border-radius: 12px; cursor: pointer; width: 100%; transition: opacity .15s, transform .1s; margin-top: 8px; }
-.begin-btn:hover { opacity: .88; }
-.begin-btn:active { transform: scale(.99); }
+/* Option cards */
+.o-cards { display: flex; flex-direction: column; gap: 6px; }
+.o-card { background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 10px; padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: border-color .18s, background .18s; -webkit-tap-highlight-color: transparent; }
+.o-card:hover { border-color: var(--gold-dim); background: var(--gold-glow); }
+.o-card.sel   { border-color: var(--gold); background: rgba(200,169,110,0.07); }
+.o-card-text { flex: 1; }
+.o-card-lbl  { font-size: 13px; font-weight: 600; color: var(--o-text); }
+.o-card-sub  { font-size: 11px; color: var(--o-dim); margin-top: 2px; line-height: 1.4; }
+.o-radio { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--o-border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .18s; }
+.o-card.sel .o-radio { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 8px rgba(200,169,110,0.4); }
+.o-radio::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--o-bg); opacity: 0; transition: opacity .18s; }
+.o-card.sel .o-radio::after { opacity: 1; }
+
+/* Chips */
+.o-chips { display: flex; flex-wrap: wrap; gap: 7px; padding: 2px 0; }
+.o-chip { padding: 7px 13px; border-radius: 20px; border: 1px solid var(--o-border2); background: var(--o-bg2); font-size: 12px; font-weight: 600; color: var(--o-muted); cursor: pointer; transition: all .18s; letter-spacing: 0.025em; -webkit-tap-highlight-color: transparent; }
+.o-chip:hover { border-color: var(--gold-dim); color: var(--o-text); }
+.o-chip.sel   { border-color: var(--gold); background: rgba(200,169,110,0.1); color: var(--gold); }
+
+/* Conflict cards */
+.o-conflict { background: rgba(200,169,110,0.06); border: 1px solid rgba(200,169,110,0.25); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
+.o-conflict-note { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: rgba(200,169,110,0.9); line-height: 1.55; margin-bottom: 10px; font-style: italic; }
+.o-conflict-opts { display: flex; flex-direction: column; gap: 6px; }
+.o-conflict-btn { background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 8px; padding: 9px 13px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--o-text); cursor: pointer; text-align: left; transition: all .18s; }
+.o-conflict-btn:hover { border-color: var(--gold-dim); }
+.o-conflict-btn.primary { border-color: var(--gold-dim); color: var(--gold); }
+.o-conflict-btn.primary:hover { background: rgba(200,169,110,0.08); border-color: var(--gold); }
+
+/* Number input */
+.o-num-row { display: flex; align-items: center; gap: 10px; }
+.o-num-in { flex: 1; background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 10px; padding: 13px 16px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--o-text); text-align: center; outline: none; transition: border-color .2s; -webkit-appearance: none; }
+.o-num-in:focus { border-color: var(--gold-dim); }
+.o-num-unit { font-size: 13px; color: var(--o-dim); min-width: 28px; }
+
+/* Text area */
+.o-txt-wrap textarea { width: 100%; background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 10px; padding: 12px 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--o-text); outline: none; resize: none; line-height: 1.55; transition: border-color .2s; }
+.o-txt-wrap textarea::placeholder { color: var(--o-dim); }
+.o-txt-wrap textarea:focus { border-color: var(--gold-dim); }
+
+/* Buttons */
+.o-btn { width: 100%; margin-top: 8px; padding: 13px 16px; background: transparent; border: 1px solid var(--gold-dim); border-radius: 10px; color: var(--gold); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; cursor: pointer; transition: all .2s; }
+.o-btn:hover:not(:disabled) { background: rgba(200,169,110,0.08); border-color: var(--gold); }
+.o-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+.o-btn-skip { display: block; text-align: center; margin-top: 7px; font-size: 10px; color: var(--o-dim); letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: color .2s; background: none; border: none; width: 100%; padding: 4px; }
+.o-btn-skip:hover { color: var(--o-muted); }
+.o-btn-generate { width: 100%; margin-top: 10px; padding: 15px; background: var(--gold); border: none; border-radius: 12px; color: #06060a; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: all .22s; box-shadow: 0 4px 20px rgba(200,169,110,0.25); }
+.o-btn-generate:hover:not(:disabled) { background: var(--gold-bright); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(200,169,110,0.35); }
+.o-btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Final screen */
+.o-final { display: flex; flex-direction: column; align-items: center; padding: 14px 4px 4px; text-align: center; gap: 5px; }
+.o-final-sub   { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--o-dim); }
+.o-final-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--o-text); line-height: 1.3; font-style: italic; }
 
 /* ══════════════════════════
    CHAT PAGE
@@ -193,12 +207,9 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .quick-chip-btn { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; background: none; border: none; color: var(--text2); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 500; padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer; margin-bottom: 2px; transition: all .15s; line-height: 1.4; }
 .quick-chip-btn:hover { background: var(--surface2); color: var(--text); }
 .quick-chip-icon { font-size: 14px; flex-shrink: 0; }
-
-/* Week badge in sidebar */
 .week-badge { display: flex; align-items: center; gap: 8px; background: var(--accent-dim); border: 1px solid rgba(0,102,255,0.15); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 12px; }
 .week-badge-num { font-size: 22px; font-weight: 700; color: var(--accent); letter-spacing: -0.5px; }
 .week-badge-label { font-size: 11px; color: var(--text2); font-weight: 500; line-height: 1.3; }
-
 .chat-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
 .chat-topbar { padding: 14px 24px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .chat-topbar-left { display: flex; align-items: center; gap: 10px; }
@@ -206,10 +217,9 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .chat-topbar-title { font-size: 15px; font-weight: 700; color: var(--text); }
 .chat-topbar-sub { font-size: 11px; color: var(--muted); }
 .memory-badge { font-size: 11px; font-weight: 600; color: var(--green); background: var(--green-light); padding: 4px 10px; border-radius: 20px; }
-
 .messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
 .msg { display: flex; flex-direction: column; max-width: 760px; animation: fadeUp .3s ease; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none} }
 .msg.user { align-self: flex-end; align-items: flex-end; }
 .msg.ai { align-self: flex-start; align-items: flex-start; }
 .msg-meta { font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
@@ -217,7 +227,6 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .msg-bubble { padding: 14px 18px; border-radius: 16px; font-size: 14px; line-height: 1.7; font-weight: 400; max-width: 100%; }
 .msg.user .msg-bubble { background: var(--accent); color: white; border-bottom-right-radius: 4px; }
 .msg.ai .msg-bubble { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; box-shadow: var(--shadow-sm); }
-/* Markdown rendering */
 .msg.ai .msg-bubble h1,.msg.ai .msg-bubble h2,.msg.ai .msg-bubble h3 { font-size: 14px; font-weight: 700; color: var(--accent); margin: 12px 0 6px; }
 .msg.ai .msg-bubble h1:first-child,.msg.ai .msg-bubble h2:first-child,.msg.ai .msg-bubble h3:first-child { margin-top: 0; }
 .msg.ai .msg-bubble p { margin-bottom: 10px; }
@@ -228,14 +237,12 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .msg.ai .msg-bubble em { color: var(--text2); font-style: italic; }
 .msg.ai .msg-bubble code { background: var(--surface2); border-radius: 4px; padding: 1px 5px; font-size: 12px; }
 .msg.ai .msg-bubble hr { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
-
 .typing-indicator { display: none; flex-direction: column; align-items: flex-start; gap: 5px; }
 .typing-indicator.visible { display: flex; }
 .typing-dots { display: flex; gap: 4px; align-items: center; background: var(--surface); border: 1px solid var(--border); padding: 14px 18px; border-radius: 16px; border-bottom-left-radius: 4px; box-shadow: var(--shadow-sm); }
 .typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--muted2); animation: bounce 1.2s infinite; }
 .typing-dots span:nth-child(2){animation-delay:.15s} .typing-dots span:nth-child(3){animation-delay:.3s}
 @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-
 .input-area { padding: 14px 24px 18px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-top: 1px solid var(--border); flex-shrink: 0; }
 .input-wrap { display: flex; gap: 10px; align-items: flex-end; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 14px; padding: 10px 12px; transition: border-color .15s, box-shadow .15s; }
 .input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); background: white; }
@@ -252,32 +259,28 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .programme-hero { padding: 40px 48px 28px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; display: flex; align-items: flex-end; justify-content: space-between; }
 .programme-hero-left h1 { font-size: 28px; font-weight: 700; letter-spacing: -1px; color: var(--text); margin-bottom: 6px; }
 .programme-meta { font-size: 13px; color: var(--muted); }
-.programme-week-pill { background: var(--accent); color: white; font-size: 12px; font-weight: 700; padding: 6px 16px; border-radius: 100px; letter-spacing: .3px; }
-
+.programme-week-pill { background: var(--accent); color: white; font-size: 12px; font-weight: 700; padding: 6px 16px; border-radius: 100px; }
 .programme-grid { padding: 28px 48px; display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
 .programme-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; }
 .programme-card.full { grid-column: 1 / -1; }
 .programme-card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .programme-card-title { font-size: 13px; font-weight: 700; color: var(--text); }
 .programme-card-body { padding: 20px; }
-
-/* Day tabs */
 .day-tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
 .day-tab { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 700; padding: 6px 14px; border-radius: 100px; border: 1.5px solid var(--border); background: none; color: var(--muted); cursor: pointer; white-space: nowrap; transition: all .15s; }
 .day-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
 .day-tab:hover:not(.active) { border-color: var(--border2); color: var(--text); }
-
-/* Exercise table */
 .exercise-list { display: flex; flex-direction: column; gap: 0; }
-.exercise-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.exercise-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); position: relative; }
 .exercise-row:last-child { border-bottom: none; }
+.exercise-row:hover .ex-swap { opacity: 1; }
 .ex-letter { width: 24px; height: 24px; border-radius: 6px; background: var(--accent-light); color: var(--accent); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .ex-info { flex: 1; }
 .ex-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .ex-sets { font-size: 12px; color: var(--muted); }
 .ex-rpe { font-size: 11px; font-weight: 700; background: var(--surface2); color: var(--text2); padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
-
-/* Progression table */
+.ex-swap { position: absolute; right: 52px; top: 50%; transform: translateY(-50%); opacity: 0; transition: opacity .15s; background: none; border: 1.5px solid var(--border); border-radius: 6px; padding: 4px 9px; font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; }
+.ex-swap:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
 .prog-table { width: 100%; border-collapse: collapse; }
 .prog-table th { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); text-align: left; padding: 0 0 10px; }
 .prog-table td { font-size: 12px; color: var(--text2); padding: 8px 0; border-bottom: 1px solid var(--border); }
@@ -285,22 +288,12 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .prog-table td:first-child { font-weight: 700; color: var(--text); }
 .prog-week-current td { background: var(--accent-dim); }
 .prog-week-current td:first-child { color: var(--accent); }
-
-/* Macro targets */
 .macro-target-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .macro-target-item { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px; }
 .macro-target-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin-bottom: 6px; }
 .macro-target-val { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: var(--text); }
 .macro-target-val span { font-size: 11px; font-weight: 500; color: var(--muted); }
-
-/* Programme empty state */
-.programme-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 40px; text-align: center; flex: 1; }
-.programme-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: .3; }
-.programme-empty-title { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-.programme-empty-desc { font-size: 14px; color: var(--muted); line-height: 1.6; max-width: 360px; }
-
-/* Consistency banner */
-.consistency-banner { display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #EBF2FF, #F0FBFF); border: 1px solid rgba(0,102,255,0.15); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 16px; }
+.consistency-banner { display: flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #EBF2FF, #F0FBFF); border: 1px solid rgba(0,102,255,0.15); border-radius: var(--radius-sm); padding: 14px 16px; }
 .consistency-icon { font-size: 20px; flex-shrink: 0; }
 .consistency-text { font-size: 12px; color: var(--text2); line-height: 1.5; }
 .consistency-text strong { color: var(--accent); display: block; font-size: 13px; margin-bottom: 2px; }
@@ -341,8 +334,11 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .manual-toggle { font-size: 12px; color: var(--accent); font-weight: 600; background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 2px; }
 .manual-fields { display: none; margin-top: 12px; }
 .manual-fields.visible { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.generate-btn { background: var(--accent); color: white; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; padding: 13px 24px; border-radius: 12px; cursor: pointer; width: 100%; margin-top: 14px; transition: opacity .15s, transform .1s; }
-.generate-btn:hover{opacity:.88} .generate-btn:active{transform:scale(.99)} .generate-btn:disabled{opacity:.4;cursor:not-allowed}
+.form-field label { display: block; font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+.form-field input { width: 100%; background: var(--surface2); border: 1.5px solid var(--border); color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; padding: 10px 13px; border-radius: var(--radius-sm); outline: none; transition: border-color .15s; }
+.form-field input:focus { border-color: var(--accent); }
+.generate-btn { background: var(--accent); color: white; border: none; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; padding: 13px 24px; border-radius: 12px; cursor: pointer; width: 100%; margin-top: 14px; transition: opacity .15s; }
+.generate-btn:hover{opacity:.88} .generate-btn:disabled{opacity:.4;cursor:not-allowed}
 .timeline-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; }
 .timeline-header-row { padding: 18px 20px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .timeline-title { font-size: 13px; font-weight: 700; color: var(--text); }
@@ -351,7 +347,7 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .timeline-empty-state { padding: 48px 28px; text-align: center; }
 .timeline-empty-icon { font-size: 36px; margin-bottom: 12px; opacity: .4; }
 .timeline-empty-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
-.timeline-block { display: flex; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--border); animation: fadeUp .3s ease both; transition: background .15s; }
+.timeline-block { display: flex; gap: 14px; padding: 14px 20px; border-bottom: 1px solid var(--border); animation: fadeUp .3s ease both; }
 .timeline-block:last-child { border-bottom: none; }
 .timeline-block:hover { background: var(--surface2); }
 .tl-time { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 52px; padding-top: 2px; }
@@ -366,13 +362,14 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .tl-tag.nutrition { background: var(--green-light); color: var(--green); }
 .tl-tag.recovery { background: #FDF0FF; color: #9B30D9; }
 .tl-tag.sleep { background: #EEF2FF; color: #4F6EF7; }
-.dot-workout { background: var(--accent); } .dot-nutrition { background: var(--green); } .dot-recovery { background: #9B30D9; } .dot-sleep { background: #4F6EF7; }
+.dot-workout{background:var(--accent)} .dot-nutrition{background:var(--green)} .dot-recovery{background:#9B30D9} .dot-sleep{background:#4F6EF7}
 
 /* ══════════════════════════
    PROGRESS PAGE
 ══════════════════════════ */
 #page-progress { flex-direction: column; overflow-y: auto; background: var(--bg); }
 .progress-hero { padding: 40px 48px 28px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.progress-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
 .progress-grid { padding: 28px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .progress-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; }
 .progress-card.full { grid-column: 1 / -1; }
@@ -398,16 +395,16 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .stat-val { font-size: 26px; font-weight: 700; letter-spacing: -0.8px; color: var(--text); }
 .stat-val span { font-size: 12px; font-weight: 500; color: var(--muted); }
 .stat-change { font-size: 11px; font-weight: 600; margin-top: 3px; }
-.stat-change.up { color: var(--green); } .stat-change.down { color: var(--red); } .stat-change.neutral { color: var(--muted); }
+.stat-change.up{color:var(--green)} .stat-change.down{color:var(--red)} .stat-change.neutral{color:var(--muted)}
 .cycle-phase { display: flex; align-items: center; gap: 16px; background: var(--surface2); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 14px; }
 .cycle-phase-dot { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-.cycle-phase-dot.follicular { background: #FFF0F5; } .cycle-phase-dot.luteal { background: #FFF8E7; }
+.cycle-phase-dot.follicular{background:#FFF0F5} .cycle-phase-dot.luteal{background:#FFF8E7}
 .cycle-phase-name { font-size: 14px; font-weight: 700; color: var(--text); }
 .cycle-phase-day { font-size: 12px; color: var(--muted); margin-top: 2px; }
 .cycle-phase-rec { font-size: 12px; color: var(--text2); margin-top: 6px; line-height: 1.5; }
 .hrv-trend { display: flex; align-items: flex-end; gap: 4px; height: 60px; margin-bottom: 10px; }
-.hrv-bar { flex: 1; border-radius: 3px 3px 0 0; background: var(--accent-light); min-height: 4px; transition: height .4s; }
-.hrv-bar.high { background: var(--green); } .hrv-bar.low { background: var(--red); } .hrv-bar.current { background: var(--accent); }
+.hrv-bar { flex: 1; border-radius: 3px 3px 0 0; background: var(--accent-light); min-height: 4px; }
+.hrv-bar.high{background:var(--green)} .hrv-bar.low{background:var(--red)} .hrv-bar.current{background:var(--accent)}
 .lab-nudge { background: linear-gradient(135deg, var(--accent-light), #EBF9FF); border: 1px solid rgba(0,102,255,0.15); border-radius: var(--radius-sm); padding: 16px 18px; display: flex; gap: 12px; align-items: flex-start; }
 .lab-nudge-icon { font-size: 24px; flex-shrink: 0; }
 .lab-nudge-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
@@ -420,7 +417,7 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .meal-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
 .meal-macros { display: flex; gap: 8px; flex-wrap: wrap; }
 .macro-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
-.macro-badge.cal { background: #FFF4E0; color: var(--orange); } .macro-badge.pro { background: var(--accent-light); color: var(--accent); } .macro-badge.carb { background: var(--green-light); color: var(--green); } .macro-badge.fat { background: #FDF0FF; color: #9B30D9; }
+.macro-badge.cal{background:#FFF4E0;color:var(--orange)} .macro-badge.pro{background:var(--accent-light);color:var(--accent)} .macro-badge.carb{background:var(--green-light);color:var(--green)} .macro-badge.fat{background:#FDF0FF;color:#9B30D9}
 .add-meal-zone { border: 2px dashed var(--border2); border-radius: var(--radius-sm); padding: 20px; text-align: center; cursor: pointer; transition: all .2s; position: relative; margin-top: 14px; }
 .add-meal-zone:hover { border-color: var(--green); background: var(--green-light); }
 .add-meal-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
@@ -461,230 +458,25 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 
 <div class="main">
 
-<!-- ═══ CONSULTATION ═══ -->
+<!-- ═══ CONSULTATION — Oracle Conversational Flow ═══ -->
 <div class="page active" id="page-consult">
-  <div class="consult-hero">
-    <div class="consult-eyebrow">Initial Consultation</div>
-    <div class="consult-title">Build your<br><span>scientific protocol.</span></div>
-    <div class="consult-desc">TSO begins with a complete picture of you — your biology, training history, nutrition, and goals. Answer fully for a maximally personalised protocol built on peer-reviewed science.</div>
+  <div id="o-progress-bar"><div id="o-progress-fill"></div></div>
+
+  <div id="o-header">
+    <div class="eye-system" id="eyeSystem">
+      <div class="o-ring o-ring-outer"></div>
+      <div class="o-ring o-ring-mid"></div>
+      <div class="o-iris">
+        <div class="o-scanline"></div>
+        <div class="o-pupil"></div>
+      </div>
+    </div>
+    <div class="o-name">The Scientific Oracle</div>
+    <div class="o-status" id="oracleStatus"></div>
   </div>
-  <div class="consult-grid">
 
-    <!-- HOW TSO WORKS -->
-    <div class="consult-card full">
-      <div class="how-it-works">
-        <div class="how-it-works-title">How TSO works — read before you start</div>
-        <div class="how-it-works-list">
-          <div class="how-it-works-item"><div class="how-it-works-icon">📋</div><div class="how-it-works-text"><strong>8-week fixed training block</strong>TSO builds a complete programme designed to run for 8 weeks. This isn't a random workout generator — it's a structured plan.</div></div>
-          <div class="how-it-works-item"><div class="how-it-works-icon">🏋️</div><div class="how-it-works-text"><strong>Calibrated to your exact constraints</strong>Your equipment, injuries, and schedule determine what gets programmed. Declare everything accurately now — changes mid-block are limited by design.</div></div>
-          <div class="how-it-works-item"><div class="how-it-works-icon">📈</div><div class="how-it-works-text"><strong>The programme won't change mid-block</strong>This is intentional. The science is clear: meaningful adaptation takes 6–8 weeks. TSO will coach you to stay the course.</div></div>
-          <div class="how-it-works-item"><div class="how-it-works-icon">🎯</div><div class="how-it-works-text"><strong>Accuracy now = better results</strong>The more precisely you answer, the more precisely TSO can calibrate your training, nutrition, and recovery. Take your time.</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- LIVE STATS -->
-    <div class="consult-card full">
-      <div class="card-title"><div class="card-title-num">→</div> Live Calculations</div>
-      <div class="live-stats">
-        <div class="live-stat"><div class="live-stat-label">BMI</div><div class="live-stat-val" id="prev-bmi"><span style="font-size:18px;color:var(--muted2)">—</span></div></div>
-        <div class="live-stat"><div class="live-stat-label">Lean Body Mass</div><div class="live-stat-val" id="prev-lbm"><span style="font-size:18px;color:var(--muted2)">—</span></div></div>
-        <div class="live-stat"><div class="live-stat-label">TDEE</div><div class="live-stat-val" id="prev-tdee"><span style="font-size:18px;color:var(--muted2)">—</span></div></div>
-        <div class="live-stat"><div class="live-stat-label">Daily Protein Target</div><div class="live-stat-val" id="prev-protein"><span style="font-size:18px;color:var(--muted2)">—</span></div></div>
-      </div>
-    </div>
-
-    <!-- BIOMETRICS -->
-    <div class="consult-card">
-      <div class="card-title"><div class="card-title-num">1</div> Biometrics</div>
-      <div class="form-row">
-        <div class="form-field"><label>Age</label><input type="number" id="c-age" placeholder="30" min="13" max="100" oninput="updatePreview()"></div>
-        <div class="form-field"><label>Biological Sex</label>
-          <select id="c-sex" onchange="updatePreview(); toggleCycleFields();">
-            <option value="">Select...</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field"><label>Weight (kg)</label><input type="number" id="c-weight" placeholder="80" oninput="updatePreview()"></div>
-        <div class="form-field"><label>Height (cm)</label><input type="number" id="c-height" placeholder="178" oninput="updatePreview()"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-field"><label>Body Fat % (estimate)</label><input type="number" id="c-bf" placeholder="18" oninput="updatePreview()"></div>
-        <div class="form-field"><label>Wrist circumference (cm)</label><input type="number" id="c-wrist" placeholder="17.5" step="0.1"></div>
-      </div>
-      <div id="cycle-fields" style="display:none">
-        <div class="form-row">
-          <div class="form-field"><label>Last period start date</label><input type="date" id="c-period"></div>
-          <div class="form-field"><label>Avg cycle length (days)</label><input type="number" id="c-cycle-len" placeholder="28" min="21" max="40"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TRAINING -->
-    <div class="consult-card">
-      <div class="card-title"><div class="card-title-num">2</div> Training</div>
-      <div class="form-field" style="margin-bottom:14px">
-        <label>How experienced are you?</label>
-        <div class="exp-cards" id="exp-cards">
-          <div class="exp-card" onclick="selectExp(this,'beginner (0–1 year)')"><div class="exp-card-title">Just starting out</div><div class="exp-card-desc">0–1 year · Learning the basics</div></div>
-          <div class="exp-card" onclick="selectExp(this,'intermediate (1–3 years)')"><div class="exp-card-title">Getting serious</div><div class="exp-card-desc">1–3 years · Consistent training</div></div>
-          <div class="exp-card" onclick="selectExp(this,'advanced (3+ years)')"><div class="exp-card-title">Experienced lifter</div><div class="exp-card-desc">3+ years · Know the science</div></div>
-          <div class="exp-card" onclick="selectExp(this,'competitive athlete')"><div class="exp-card-title">Competitive athlete</div><div class="exp-card-desc">Competing or elite-level</div></div>
-        </div>
-        <input type="hidden" id="c-exp">
-      </div>
-      <div class="form-row">
-        <div class="form-field"><label>Days per week</label>
-          <select id="c-days">
-            <option value="">Select...</option>
-            <option value="3">3 days</option>
-            <option value="4">4 days</option>
-            <option value="5">5 days</option>
-            <option value="6">6 days</option>
-          </select>
-        </div>
-        <div class="form-field"><label>Session length</label>
-          <select id="c-duration">
-            <option value="">Select...</option>
-            <option value="45 minutes">~45 min</option>
-            <option value="60 minutes">~60 min</option>
-            <option value="75 minutes">~75 min</option>
-            <option value="90 minutes">~90 min</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-field" style="margin-bottom:12px"><label>Equipment available</label>
-        <select id="c-equip">
-          <option value="">Select...</option>
-          <option value="full commercial gym">Full Gym</option>
-          <option value="home gym with free weights">Home Gym (weights)</option>
-          <option value="home gym with bands and bodyweight only">Home (bands/bodyweight)</option>
-          <option value="commercial gym with cables and machines">Commercial + Cables</option>
-        </select>
-      </div>
-      <div class="form-field" style="margin-bottom:12px"><label>Any injuries or physical limitations?</label><textarea id="c-injuries" placeholder="e.g. Lower back sensitivity, shoulder impingement, bad knees..."></textarea></div>
-      <div class="form-field">
-        <label>Which muscle groups feel weakest or most lagging?</label>
-        <div class="checkbox-grid" style="margin-top:8px">
-          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Chest"><span class="check-icon">💪</span> Chest<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Back"><span class="check-icon">🏋️</span> Back<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Shoulders"><span class="check-icon">🔺</span> Shoulders<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Arms"><span class="check-icon">💪</span> Arms<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Legs"><span class="check-icon">🦵</span> Legs<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Glutes"><span class="check-icon">🍑</span> Glutes<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Core"><span class="check-icon">⚡</span> Core<span class="check-mark">✓</span></label>
-          <label class="check-item" onclick="toggleCheck(this, event)"><input type="checkbox" value="Calves"><span class="check-icon">🦶</span> Calves<span class="check-mark">✓</span></label>
-        </div>
-      </div>
-    </div>
-
-    <!-- NUTRITION -->
-    <div class="consult-card">
-      <div class="card-title"><div class="card-title-num">3</div> Nutrition & Lifestyle</div>
-      <div class="form-row">
-        <div class="form-field"><label>How do you eat?</label>
-          <select id="c-diet">
-            <option value="">Select...</option>
-            <option value="omnivore">Everything — meat, fish, dairy</option>
-            <option value="vegetarian">Vegetarian — no meat or fish</option>
-            <option value="vegan">Vegan — no animal products</option>
-            <option value="keto / low carb">Low carb / Keto</option>
-            <option value="paleo">Paleo</option>
-            <option value="mediterranean">Mediterranean</option>
-          </select>
-        </div>
-        <div class="form-field"><label>Meals per day</label>
-          <select id="c-meals">
-            <option value="">Select...</option>
-            <option value="2">2 meals</option>
-            <option value="3">3 meals</option>
-            <option value="4">4 meals</option>
-            <option value="5+">5+ meals</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field"><label>Avg sleep per night</label><input type="number" id="c-sleep" placeholder="7.5" step="0.5" min="4" max="12"></div>
-      </div>
-      <div class="form-field" style="margin-bottom:12px">
-        <label>Current stress level</label>
-        <div class="stress-cards" style="margin-top:8px">
-          <div class="stress-card" onclick="selectStress(this,'low')"><div class="stress-card-title">Low</div><div class="stress-card-desc">Work is manageable, life feels steady</div></div>
-          <div class="stress-card" onclick="selectStress(this,'moderate')"><div class="stress-card-title">Moderate</div><div class="stress-card-desc">Some pressure but coping well</div></div>
-          <div class="stress-card" onclick="selectStress(this,'high')"><div class="stress-card-title">High</div><div class="stress-card-desc">Consistently overwhelmed, sleep affected</div></div>
-          <div class="stress-card" onclick="selectStress(this,'very high')"><div class="stress-card-title">Very high</div><div class="stress-card-desc">Major life stressor ongoing</div></div>
-        </div>
-        <input type="hidden" id="c-stress">
-      </div>
-      <div class="form-field" style="margin-bottom:12px"><label>Food allergies or intolerances</label><input type="text" id="c-allergies" placeholder="e.g. Lactose, gluten, nuts..."></div>
-      <div class="form-field">
-        <label>Supplements you already take</label>
-        <div class="field-hint" style="margin-bottom:8px;margin-top:2px">Disclosure only — TSO won't recommend duplicates and prioritises whole food solutions first</div>
-        <div class="supp-chips" id="supp-chips">
-          <div class="supp-chip" onclick="toggleSupp(this,'Creatine')">Creatine</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Whey Protein')">Whey Protein</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Vitamin D')">Vitamin D</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Omega-3')">Omega-3</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Magnesium')">Magnesium</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Zinc')">Zinc</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Caffeine / Pre-workout')">Caffeine / Pre-workout</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Melatonin')">Melatonin</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Ashwagandha')">Ashwagandha</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Collagen')">Collagen</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Vitamin C')">Vitamin C</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'B12')">B12</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Iron')">Iron</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Greens Powder')">Greens Powder</div>
-          <div class="supp-chip" onclick="toggleSupp(this,'Electrolytes')">Electrolytes</div>
-        </div>
-        <input type="text" id="c-supps-other" placeholder="Anything else not listed..." style="margin-top:10px;width:100%;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;padding:9px 12px;border-radius:var(--radius-sm);outline:none;">
-        <input type="hidden" id="c-supps">
-      </div>
-    </div>
-
-    <!-- GOALS -->
-    <div class="consult-card">
-      <div class="card-title"><div class="card-title-num">4</div> Goals</div>
-      <div class="form-field" style="margin-bottom:14px">
-        <label>What's your main goal?</label>
-        <div class="goal-cards" style="margin-top:8px" id="goal-cards">
-          <div class="goal-card" onclick="selectGoal(this,'muscle gain and hypertrophy')"><div class="goal-card-title">Build muscle</div><div class="goal-card-desc">Get bigger, fuller, stronger</div></div>
-          <div class="goal-card" onclick="selectGoal(this,'lean bulk — muscle gain with minimal fat')"><div class="goal-card-title">Lean bulk</div><div class="goal-card-desc">Build muscle while staying lean</div></div>
-          <div class="goal-card" onclick="selectGoal(this,'body recomposition — lose fat and gain muscle simultaneously')"><div class="goal-card-title">Change my body shape</div><div class="goal-card-desc">Lose fat and gain muscle at the same time</div></div>
-          <div class="goal-card" onclick="selectGoal(this,'strength and muscle')"><div class="goal-card-title">Get stronger</div><div class="goal-card-desc">Strength first, muscle second</div></div>
-          <div class="goal-card" onclick="selectGoal(this,'athletic performance and muscle')"><div class="goal-card-title">Athletic performance</div><div class="goal-card-desc">Train for sport and conditioning</div></div>
-          <div class="goal-card" onclick="selectGoal(this,'general health and longevity')"><div class="goal-card-title">Health and longevity</div><div class="goal-card-desc">Look, feel, and move better long-term</div></div>
-        </div>
-        <input type="hidden" id="c-goal">
-      </div>
-      <div class="form-field" style="margin-bottom:12px"><label>How long are you committing?</label>
-        <select id="c-timeline">
-          <option value="">Select...</option>
-          <option value="3 months">3 months — short term push</option>
-          <option value="6 months">6 months — serious transformation</option>
-          <option value="12 months">12 months — full year commitment</option>
-          <option value="ongoing lifestyle">This is my lifestyle now</option>
-        </select>
-      </div>
-      <div class="form-field" style="margin-bottom:12px"><label>What's held you back before?</label><textarea id="c-barriers" placeholder="e.g. Inconsistency, not knowing what to eat, lack of time, always getting injured..."></textarea></div>
-    </div>
-
-    <!-- BRAIN TRUST -->
-    <div class="consult-card full">
-      <div class="card-title"><div class="card-title-num">5</div> Your Brain Trust</div>
-      <div class="brain-trust-intro">TSO's recommendations are grounded in peer-reviewed research and filtered through the world's leading evidence-based practitioners — <strong>the Brain Trust</strong>. Select any you follow and TSO will weight their specific methodology more heavily in your programme. Not sure who they are? Skip this — TSO applies the full Brain Trust equally.</div>
-      <div class="brain-trust-grid" id="bt-grid"></div>
-      <div class="bt-none-note">No selection = TSO applies full Brain Trust equally. All members are vetted for evidence-based practice.</div>
-    </div>
-
-    <!-- SUBMIT -->
-    <div class="consult-card full">
-      <button class="begin-btn" onclick="beginConsultation()">Generate My Scientific Protocol →</button>
-    </div>
-  </div>
+  <div id="o-chat"></div>
+  <div id="o-input"></div>
 </div>
 
 <!-- ═══ CHAT ═══ -->
@@ -702,14 +494,14 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
         <div class="week-badge-label" id="week-label">Programme<br>in progress</div>
       </div>
       <div class="sidebar-label">Quick Queries</div>
-      <button class="quick-chip-btn" onclick="sendQuick('How is my programme going? Give me a brief progress check based on how many weeks in I am — encourage consistency if I am still early in the programme.')"><span class="quick-chip-icon">📋</span> Programme Check-In</button>
+      <button class="quick-chip-btn" onclick="sendQuick('How is my programme going? Give me a brief progress check based on how many weeks in I am.')"><span class="quick-chip-icon">📋</span> Programme Check-In</button>
       <button class="quick-chip-btn" onclick="sendQuick('Give me a complete meal plan for today optimised for my goal and macros.')"><span class="quick-chip-icon">🍽️</span> Today\'s Meal Plan</button>
       <button class="quick-chip-btn" onclick="sendQuick('Audit my micronutrient needs and flag any likely deficiencies based on my diet, sex, and goal.')"><span class="quick-chip-icon">🧬</span> Micronutrient Audit</button>
       <button class="quick-chip-btn" onclick="sendQuick('Explain how my biological sex affects my training, recovery, and nutrition — specifically for my goal.')"><span class="quick-chip-icon">⚧</span> Sex-Specific Physiology</button>
       <button class="quick-chip-btn" onclick="sendQuick('Give me a complete evidence-based supplement protocol for my goal. Clearly separate proven from overhyped.')"><span class="quick-chip-icon">💊</span> Supplement Protocol</button>
-      <button class="quick-chip-btn" onclick="sendQuick('Explain the science behind progressive overload and how my programme applies it. What should I be tracking week to week?')"><span class="quick-chip-icon">📈</span> Progressive Overload</button>
+      <button class="quick-chip-btn" onclick="sendQuick('Explain the science behind progressive overload and how my programme applies it.')"><span class="quick-chip-icon">📈</span> Progressive Overload</button>
       <button class="quick-chip-btn" onclick="sendQuick('What does current research say about optimising sleep for muscle gain, hormone production, and recovery?')"><span class="quick-chip-icon">😴</span> Sleep Science</button>
-      <button class="quick-chip-btn" onclick="sendQuick('I think I need a deload. Based on the science of fatigue management, how should I structure it and how do I know when I actually need one?')"><span class="quick-chip-icon">🔄</span> Deload Protocol</button>
+      <button class="quick-chip-btn" onclick="sendQuick('I think I need a deload. Based on the science of fatigue management, how should I structure it?')"><span class="quick-chip-icon">🔄</span> Deload Protocol</button>
     </div>
   </div>
   <div class="chat-main">
@@ -726,13 +518,7 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
     <div class="messages" id="messages">
       <div class="msg ai">
         <div class="msg-meta">The Scientific Oracle</div>
-        <div class="msg-bubble">Welcome. I am <strong>The Scientific Oracle</strong> — your integrated PhD-level physiologist and sports nutritionist.
-
-I synthesise peer-reviewed exercise science with the applied methodology of the world's leading evidence-based practitioners — your <strong>Brain Trust</strong> — to build protocols grounded in your exact biology.
-
-Navigate to the <strong>Consult</strong> tab and complete your initial consultation. The more detail you provide, the more precisely I can calibrate your training split, progressive overload scheme, macros, micronutrient priorities, and supplement protocol.
-
-Once complete, return here and I'll generate your full personalised programme.</div>
+        <div class="msg-bubble">Welcome. I am <strong>The Scientific Oracle</strong> — your integrated PhD-level physiologist and sports nutritionist.<br><br>Navigate to the <strong>Consult</strong> tab to complete your initial consultation. Once complete, return here and I'll generate your full personalised programme.</div>
       </div>
       <div class="typing-indicator" id="typing">
         <div class="msg-meta">The Scientific Oracle</div>
@@ -754,7 +540,7 @@ Once complete, return here and I'll generate your full personalised programme.</
   <div id="programme-empty-state" style="display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;padding:80px 40px;text-align:center">
     <div style="font-size:48px;margin-bottom:16px;opacity:.3">📋</div>
     <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">No programme yet</div>
-    <div style="font-size:14px;color:var(--muted);line-height:1.6;max-width:360px">Complete your consultation and TSO will generate your full training programme here — structured by day, with exercises, sets, reps, and your 8-week progression plan.</div>
+    <div style="font-size:14px;color:var(--muted);line-height:1.6;max-width:360px">Complete your consultation and TSO will generate your full training programme here.</div>
     <button onclick="switchTab('consult')" style="margin-top:24px;background:var(--accent);color:white;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;padding:12px 24px;border-radius:12px;cursor:pointer">Start Consultation →</button>
   </div>
   <div id="programme-content" style="display:none;flex-direction:column;flex:1;overflow-y:auto">
@@ -769,8 +555,6 @@ Once complete, return here and I'll generate your full personalised programme.</
       </div>
     </div>
     <div class="programme-grid">
-
-      <!-- CONSISTENCY BANNER -->
       <div class="programme-card full">
         <div class="programme-card-body" style="padding:16px 20px">
           <div class="consistency-banner" id="consistency-banner">
@@ -779,26 +563,20 @@ Once complete, return here and I'll generate your full personalised programme.</
           </div>
         </div>
       </div>
-
-      <!-- TRAINING DAYS -->
       <div class="programme-card">
         <div class="programme-card-header">
           <div class="programme-card-title">Training Plan</div>
           <div class="day-tabs" id="day-tabs"></div>
         </div>
         <div class="programme-card-body">
-          <div class="exercise-list" id="exercise-list">
-            <div style="color:var(--muted);font-size:13px">Loading programme...</div>
-          </div>
+          <div class="exercise-list" id="exercise-list"><div style="color:var(--muted);font-size:13px">Loading programme...</div></div>
         </div>
       </div>
-
-      <!-- SIDEBAR: macros + progression -->
       <div style="display:flex;flex-direction:column;gap:16px">
         <div class="programme-card">
           <div class="programme-card-header"><div class="programme-card-title">Nutrition Targets</div></div>
           <div class="programme-card-body">
-            <div class="macro-target-grid" id="macro-targets">
+            <div class="macro-target-grid">
               <div class="macro-target-item"><div class="macro-target-label">Calories</div><div class="macro-target-val" id="t-cal">—</div></div>
               <div class="macro-target-item"><div class="macro-target-label">Protein</div><div class="macro-target-val" id="t-pro">—</div></div>
               <div class="macro-target-item"><div class="macro-target-label">Carbs</div><div class="macro-target-val" id="t-carb">—</div></div>
@@ -816,7 +594,6 @@ Once complete, return here and I'll generate your full personalised programme.</
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
@@ -831,7 +608,7 @@ Once complete, return here and I'll generate your full personalised programme.</
     <div class="upload-card">
       <div class="upload-card-header">
         <div class="upload-icon whoop">⚡</div>
-        <div><div class="upload-card-title">WHOOP Recovery</div><div class="upload-card-sub">Screenshot from WHOOP app</div></div>
+        <div><div class="upload-card-title">WHOOP Recovery</div><div class="upload-card-sub">Home dashboard + Sleep detail</div></div>
       </div>
       <div class="upload-card-body">
         <div class="drop-zone" id="whoop-zone">
@@ -852,11 +629,10 @@ Once complete, return here and I'll generate your full personalised programme.</
         </div>
       </div>
     </div>
-
     <div class="upload-card">
       <div class="upload-card-header">
         <div class="upload-icon eufy">⚖️</div>
-        <div><div class="upload-card-title">Eufy Body Composition</div><div class="upload-card-sub">Screenshot from EufyLife app</div></div>
+        <div><div class="upload-card-title">Eufy Body Composition</div><div class="upload-card-sub">Overview screen only</div></div>
       </div>
       <div class="upload-card-body">
         <div class="drop-zone" id="eufy-zone">
@@ -880,7 +656,6 @@ Once complete, return here and I'll generate your full personalised programme.</
         <button class="generate-btn" id="gen-btn" onclick="generateDay()" disabled>Generate Today's Protocol</button>
       </div>
     </div>
-
     <div class="timeline-card">
       <div class="timeline-header-row">
         <div><div class="timeline-title">Today's Protocol</div><div class="timeline-subtitle" id="tl-subtitle">Upload your data to generate</div></div>
@@ -898,7 +673,7 @@ Once complete, return here and I'll generate your full personalised programme.</
 <!-- ═══ PROGRESS ═══ -->
 <div class="page" id="page-progress">
   <div class="progress-hero">
-    <div class="consult-eyebrow">Progress Tracking</div>
+    <div class="progress-eyebrow">Progress Tracking</div>
     <div class="daily-title">Your Journey</div>
   </div>
   <div class="progress-grid">
@@ -944,13 +719,13 @@ Once complete, return here and I'll generate your full personalised programme.</
         <div class="form-field"><label>Update period start date</label><input type="date" id="update-period" onchange="updateCycle(this.value)"></div>
       </div>
     </div>
-    <div class="progress-card" id="photo-card">
+    <div class="progress-card">
       <div class="progress-card-header">
         <div class="progress-card-title">Progress Photos</div>
         <span style="font-size:11px;color:var(--muted)">Weekly · same time, same lighting</span>
       </div>
       <div class="progress-card-body">
-        <div class="photo-grid" id="photo-grid">
+        <div class="photo-grid">
           <div class="photo-slot" id="photo-0"><input type="file" accept="image/*" onchange="addPhoto(0,this)"><div class="photo-slot-icon">📷</div><div class="photo-slot-label">Add photo</div></div>
           <div class="photo-slot" id="photo-1"><input type="file" accept="image/*" onchange="addPhoto(1,this)"><div class="photo-slot-icon">📷</div><div class="photo-slot-label">Add photo</div></div>
           <div class="photo-slot" id="photo-2"><input type="file" accept="image/*" onchange="addPhoto(2,this)"><div class="photo-slot-icon">📷</div><div class="photo-slot-label">Add photo</div></div>
@@ -969,7 +744,7 @@ Once complete, return here and I'll generate your full personalised programme.</
               <div class="add-meal-text"><span>📸 Photo</span> a meal to log it</div>
             </div>
             <div style="margin-top:12px">
-              <button onclick="logMealText()" style="background:none;border:1.5px solid var(--border);color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;padding:9px 16px;border-radius:8px;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">+ Log by name or ingredients</button>
+              <button onclick="logMealText()" style="background:none;border:1.5px solid var(--border);color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;padding:9px 16px;border-radius:8px;cursor:pointer">+ Log by name or ingredients</button>
             </div>
           </div>
           <div>
@@ -1006,27 +781,18 @@ Once complete, return here and I'll generate your full personalised programme.</
   <div style="background:white;border-radius:20px;padding:28px;max-width:420px;width:90%;box-shadow:var(--shadow-lg)">
     <div style="font-size:16px;font-weight:700;margin-bottom:4px">Swap Exercise</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Why do you want to change <strong id="swap-exercise-name" style="color:var(--text)"></strong>?</div>
-    <div class="swap-option" onclick="handleSwap('equipment')">
-      <div class="swap-option-icon">🏋️</div>
-      <div><div class="swap-option-title">Equipment issue</div><div class="swap-option-desc">I don't have access to the required equipment</div></div>
-    </div>
-    <div class="swap-option" onclick="handleSwap('pain')">
-      <div class="swap-option-icon">🩹</div>
-      <div><div class="swap-option-title">Pain or discomfort</div><div class="swap-option-desc">This exercise causes me pain or aggravates an injury</div></div>
-    </div>
-    <div class="swap-option" onclick="handleSwap('preference')">
-      <div class="swap-option-icon">💭</div>
-      <div><div class="swap-option-title">Personal preference</div><div class="swap-option-desc">I'd just prefer something different</div></div>
-    </div>
-    <button onclick="closeSwapModal()" style="width:100%;margin-top:14px;background:none;border:1.5px solid var(--border);color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:13px;padding:10px;border-radius:10px;cursor:pointer">Cancel</button>
+    <div onclick="handleSwap('equipment')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;margin-bottom:8px;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:20px">🏋️</div><div><div style="font-size:13px;font-weight:700">Equipment issue</div><div style="font-size:11px;color:var(--muted);margin-top:2px">I don't have access to the required equipment</div></div></div>
+    <div onclick="handleSwap('pain')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;margin-bottom:8px;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:20px">🩹</div><div><div style="font-size:13px;font-weight:700">Pain or discomfort</div><div style="font-size:11px;color:var(--muted);margin-top:2px">This exercise causes me pain or aggravates an injury</div></div></div>
+    <div onclick="handleSwap('preference')" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;margin-bottom:8px;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'"><div style="font-size:20px">💭</div><div><div style="font-size:13px;font-weight:700">Personal preference</div><div style="font-size:11px;color:var(--muted);margin-top:2px">I'd just prefer something different</div></div></div>
+    <button onclick="closeSwapModal()" style="width:100%;margin-top:6px;background:none;border:1.5px solid var(--border);color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:13px;padding:10px;border-radius:10px;cursor:pointer">Cancel</button>
   </div>
 </div>
 
-<!-- NEW PLAN CONFIRMATION MODAL -->
+<!-- NEW PLAN MODAL -->
 <div id="new-plan-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center">
   <div style="background:white;border-radius:20px;padding:28px;max-width:400px;width:90%;box-shadow:var(--shadow-lg)">
     <div style="font-size:16px;font-weight:700;margin-bottom:8px">Start a New Training Plan?</div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px">This will clear your current programme and consultation data. Your check-in history (weight, HRV, recovery) will be kept. This cannot be undone.</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px">This will clear your current programme and consultation data. Your check-in history will be kept. This cannot be undone.</div>
     <div style="display:flex;gap:10px">
       <button onclick="closeNewPlanModal()" style="flex:1;background:var(--surface2);border:1.5px solid var(--border);color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-weight:600;font-size:13px;padding:11px;border-radius:10px;cursor:pointer">Cancel</button>
       <button onclick="startNewPlan()" style="flex:2;background:var(--red);color:white;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:13px;padding:11px;border-radius:10px;cursor:pointer">Yes, Start Fresh →</button>
@@ -1061,168 +827,498 @@ const USER_ID = new URLSearchParams(window.location.search).get('user') || 'tso-
 // BRAIN TRUST DATA
 // ══════════════════════════════════════════
 const BRAIN_TRUST = [
-  { id: 'nippard',     name: 'Jeff Nippard',         initials: 'JN', focus: 'Evidence-based hypertrophy',      url: 'https://www.youtube.com/@JeffNippard' },
-  { id: 'israetel',    name: 'Dr Mike Israetel',      initials: 'MI', focus: 'Volume & periodization (RP)',      url: 'https://www.youtube.com/@RenaissancePeriodization' },
-  { id: 'norton',      name: 'Layne Norton',           initials: 'LN', focus: 'Nutrition science & strength',    url: 'https://www.youtube.com/@LayneNorton' },
-  { id: 'huberman',    name: 'Andrew Huberman',        initials: 'AH', focus: 'Neuroscience & performance',      url: 'https://www.youtube.com/@hubermanlab' },
-  { id: 'trexler',     name: 'Eric Trexler',           initials: 'ET', focus: 'Supplement science & nutrition',  url: 'https://www.youtube.com/@StrongerByScience' },
-  { id: 'thrall',      name: 'Alan Thrall',            initials: 'AT', focus: 'Practical strength training',     url: 'https://www.youtube.com/@AlanThrall' },
-  { id: 'sims',        name: 'Dr Stacy Sims',          initials: 'SS', focus: 'Female physiology & performance', url: 'https://www.drstacysims.com' },
-  { id: 'buttermore',  name: 'Stephanie Buttermore',   initials: 'SB', focus: 'Female bodybuilding & science',   url: 'https://www.youtube.com/@StephanieButtermore' },
-  { id: 'smithryan',   name: 'Dr Abbie Smith-Ryan',    initials: 'AS', focus: 'Exercise physiology research',    url: 'https://twitter.com/abbiesmithryan' },
-  { id: 'pak',         name: 'Lauren Pak',             initials: 'LP', focus: 'Evidence-based female training',  url: 'https://www.instagram.com/laurenpak' },
-  { id: 'lyon',        name: 'Dr Gabrielle Lyon',      initials: 'GL', focus: 'Muscle-centric medicine',         url: 'https://www.youtube.com/@drgabriellelyon' },
-  { id: 'vertue',      name: 'Shona Vertue',           initials: 'SV', focus: 'Strength, mobility & wellbeing',  url: 'https://www.instagram.com/shonavertue' },
+  { id:'nippard',    name:'Jeff Nippard',       initials:'JN', focus:'Evidence-based hypertrophy' },
+  { id:'israetel',   name:'Dr Mike Israetel',   initials:'MI', focus:'Volume & periodization (RP)' },
+  { id:'norton',     name:'Layne Norton',        initials:'LN', focus:'Nutrition science & strength' },
+  { id:'huberman',   name:'Andrew Huberman',     initials:'AH', focus:'Neuroscience & performance' },
+  { id:'trexler',    name:'Eric Trexler',        initials:'ET', focus:'Supplement science & nutrition' },
+  { id:'thrall',     name:'Alan Thrall',         initials:'AT', focus:'Practical strength training' },
+  { id:'sims',       name:'Dr Stacy Sims',       initials:'SS', focus:'Female physiology & performance' },
+  { id:'buttermore', name:'Stephanie Buttermore',initials:'SB', focus:'Female bodybuilding & science' },
+  { id:'smithryan',  name:'Dr Abbie Smith-Ryan', initials:'AS', focus:'Exercise physiology research' },
+  { id:'pak',        name:'Lauren Pak',          initials:'LP', focus:'Evidence-based female training' },
+  { id:'lyon',       name:'Dr Gabrielle Lyon',   initials:'GL', focus:'Muscle-centric medicine' },
+  { id:'vertue',     name:'Shona Vertue',        initials:'SV', focus:'Strength, mobility & wellbeing' },
 ];
 
-let selectedBT = new Set();
-
-function renderBrainTrust() {
-  const grid = document.getElementById('bt-grid');
-  grid.innerHTML = BRAIN_TRUST.map(m => `
-    <div class="bt-chip" id="bt-${m.id}" onclick="toggleBT('${m.id}')">
-      <div class="bt-chip-avatar">${m.initials}</div>
-      ${m.name}
-      <span class="bt-chip-check">✓</span>
-      <a class="bt-link" href="${m.url}" target="_blank" onclick="event.stopPropagation()" title="Learn more">↗</a>
-    </div>
-  `).join('');
-}
-
-function toggleBT(id) {
-  const chip = document.getElementById('bt-' + id);
-  if (selectedBT.has(id)) { selectedBT.delete(id); chip.classList.remove('selected'); }
-  else { selectedBT.add(id); chip.classList.add('selected'); }
-}
-
-function getSelectedBTNames() {
-  if (selectedBT.size === 0) return BRAIN_TRUST.map(m => m.name).join(', ') + ' (full Brain Trust applied equally)';
-  return BRAIN_TRUST.filter(m => selectedBT.has(m.id)).map(m => m.name).join(', ');
-}
-
 // ══════════════════════════════════════════
-// STATE
+// ORACLE CONSULTATION — QUESTION FLOW
 // ══════════════════════════════════════════
-let consultationData = null;
-let conversationHistory = [];
-let whoopB64 = null, eufyB64 = null;
-let whoopExtracted = null, eufyExtracted = null;
-let todayMacros = { cal:0, pro:0, carb:0, fat:0 };
-let macroTargets = { cal:0, pro:0, carb:0, fat:0 };
-let programmeData = null;
-let activeDayIndex = 0;
-let programmeStartDate = null;
+const STEPS = [
+  { id:'intro', type:'confirm', confirmLabel:"I'm ready →",
+    msg:"Welcome.\n\nI am The Scientific Oracle — your integrated PhD-level physiologist and sports nutritionist.\n\nI will build your complete 8-week protocol: training, nutrition, and recovery, calibrated precisely to your biology.\n\nThis will take about four minutes. Answer honestly — precision now means better results." },
+  { id:'sex', type:'cards',
+    msg:"First — your biological sex. This determines hormonal context, recovery patterns, and how I structure your entire programme.",
+    opts:[{v:'male',l:'Male',d:'Standard male physiology & hormonal context'},{v:'female',l:'Female',d:'Female physiology · cycle syncing available'}] },
+  { id:'age', type:'number', unit:'years', placeholder:'28', min:15, max:80, msg:"Your age." },
+  { id:'weight', type:'number', unit:'kg', placeholder:'80', min:40, max:200, msg:"Your current bodyweight." },
+  { id:'height', type:'number', unit:'cm', placeholder:'178', min:140, max:220, msg:"Your height." },
+  // Female branch 5a + 5b inserted dynamically after height if sex=female
+  { id:'bodyfat', type:'cards',
+    msg:"Where are you with body composition right now? Be honest — this calibrates your entire nutrition protocol.",
+    opts:[{v:'10',l:'Very lean',d:'Visible abs, clear definition · ~8–12% M / ~15–19% F'},{v:'15',l:'Lean',d:'Some definition, modest body fat · ~13–17% M / ~20–24% F'},{v:'20',l:'Average',d:'Soft but not overweight · ~18–24% M / ~25–31% F'},{v:'28',l:'Carrying extra',d:'Fat loss is a priority · 25%+ M / 32%+ F'}] },
+  { id:'experience', type:'cards',
+    msg:"How long have you been training seriously?",
+    opts:[{v:'beginner (0–1 year)',l:'Just starting out',d:'0–1 year · Learning the fundamentals'},{v:'intermediate (1–3 years)',l:'Getting serious',d:'1–3 years · Building real consistency'},{v:'advanced (3+ years)',l:'Experienced lifter',d:'3+ years · You know the science'},{v:'competitive athlete',l:'Competitive athlete',d:'Competing or elite-level performance'}] },
+  { id:'days', type:'chips-single', msg:"How many days per week can you realistically train? Build around your actual life — not the ideal version.",
+    opts:['3 days','4 days','5 days','6 days'] },
+  { id:'duration', type:'chips-single', msg:"Session length?",
+    opts:['~45 min','~60 min','~75 min','~90 min'] },
+  { id:'equipment', type:'cards', msg:"What equipment do you have access to?",
+    opts:[{v:'full commercial gym',l:'Full Commercial Gym',d:'Cables, machines, barbells — everything'},{v:'home gym with free weights',l:'Home Gym (weights)',d:'Dumbbells, barbell, rack'},{v:'barbell and rack only',l:'Barbell + Rack Only',d:'Strength-focused home setup'},{v:'bands and bodyweight only',l:'Bands & Bodyweight',d:'Minimal equipment'}] },
+  { id:'injuries', type:'text', msg:"Any injuries, pain points, or physical limitations I need to programme around?",
+    placeholder:"e.g. lower back tightness, left shoulder impingement...\nType 'none' if not applicable." },
+  { id:'diet', type:'cards', msg:"How do you eat?",
+    opts:[{v:'omnivore',l:'Everything',d:'Meat, fish, dairy — no restrictions'},{v:'vegetarian',l:'Vegetarian',d:'No meat or fish'},{v:'vegan',l:'Vegan',d:'No animal products'},{v:'keto / low carb',l:'Low carb / Keto',d:'Fat-adapted approach'},{v:'mediterranean',l:'Mediterranean',d:'Whole foods, olive oil, fish'}] },
+  { id:'meals', type:'chips-single', msg:"How many times do you eat per day?",
+    opts:['2 meals','3 meals','4 meals','5+ meals'] },
+  { id:'sleep', type:'chips-single', msg:"Average sleep per night?",
+    opts:['< 6 hrs','6–7 hrs','7–8 hrs','8+ hrs'] },
+  { id:'stress', type:'cards', msg:"Current stress load. This directly impacts your recovery capacity and cortisol — I need an honest answer.",
+    opts:[{v:'low',l:'Low',d:'Work is manageable, life feels steady'},{v:'moderate',l:'Moderate',d:'Some pressure but coping well'},{v:'high',l:'High',d:'Consistently overwhelmed, sleep affected'},{v:'very high',l:'Very high',d:'Major life stressor ongoing'}] },
+  { id:'allergies', type:'text', msg:"Any food allergies or intolerances?",
+    placeholder:"e.g. lactose, gluten, tree nuts...\nType 'none' if not applicable." },
+  { id:'supplements', type:'chips-multi', optional:true, msg:"Supplements you already take. Disclosure only — I won't recommend duplicates, and whole food solutions always come first.",
+    opts:['Creatine','Whey Protein','Vitamin D','Omega-3','Magnesium','Zinc','Caffeine / Pre-workout','Melatonin','Ashwagandha','Collagen','B12','Iron','Greens Powder','Electrolytes','None'] },
+  { id:'goal', type:'cards', msg:"Primary goal for this 8-week block?",
+    opts:[{v:'muscle gain and hypertrophy',l:'Build muscle',d:'Get bigger, fuller, stronger'},{v:'lean bulk — muscle gain with minimal fat',l:'Lean bulk',d:'Build muscle while staying lean'},{v:'body recomposition — lose fat and gain muscle simultaneously',l:'Body recomposition',d:'Lose fat and gain muscle at the same time'},{v:'strength and muscle',l:'Get stronger',d:'Strength first, muscle second'},{v:'athletic performance and muscle',l:'Athletic performance',d:'Train for sport and conditioning'},{v:'general health and longevity',l:'Health & longevity',d:'Look, feel, and move better long-term'}] },
+  { id:'timeline', type:'cards', msg:"How long are you committing?",
+    opts:[{v:'3 months',l:'3 months',d:'Short-term push'},{v:'6 months',l:'6 months',d:'Serious transformation'},{v:'12 months',l:'12 months',d:'Full year commitment'},{v:'ongoing lifestyle',l:'Lifestyle',d:'This is how I live now'}] },
+  { id:'barriers', type:'text', msg:"What has held you back before? What typically derails your training?",
+    placeholder:"e.g. work travel, motivation dips, no structure, injuries..." },
+  { id:'braintrust', type:'chips-multi', optional:true,
+    msg:"Finally — your Brain Trust. The world's leading evidence-based practitioners. Select any you follow and I will weight their specific methodology in your programme.\n\nNot sure who they are? Skip — I apply the full Brain Trust equally.",
+    opts: BRAIN_TRUST.map(m => m.name) }
+];
 
-// ══════════════════════════════════════════
-// TAB SWITCHING
-// ══════════════════════════════════════════
-function switchTab(tab) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + tab).classList.add('active');
-  document.getElementById('tab-' + tab).classList.add('active');
+// Dynamic female cycle steps (inserted after height)
+const FEMALE_STEPS = [
+  { id:'period_date', type:'cards', msg:"A few more questions specific to female physiology — these let me apply cycle syncing to your programme and daily check-ins.\n\nWhat's your cycling status right now?",
+    opts:[{v:'cycling',l:'Currently cycling',d:'I have a natural menstrual cycle'},{v:'hormonal_contraception',l:'On hormonal contraception',d:'Pill, IUD, implant etc.'},{v:'not_cycling',l:'Not currently cycling',d:'Pregnant, postpartum, or other reason'}] },
+  { id:'cycle_length', type:'chips-single', msg:"Average cycle length?",
+    opts:['24–26 days','27–29 days','30–32 days','Irregular'] }
+];
+
+// ── ORACLE STATE ──
+let oStep = 0;
+let oSteps = [];  // built dynamically with female branch
+let userData = {};
+let oBusy = false;
+let oConflictPending = null;  // holds conflict data if mid-conflict
+
+const $ochat   = document.getElementById('o-chat');
+const $oinput  = document.getElementById('o-input');
+const $oprog   = document.getElementById('o-progress-fill');
+const $eye     = document.getElementById('eyeSystem');
+const $ostatus = document.getElementById('oracleStatus');
+
+// ── EYE STATES ──
+function eyeState(s) {
+  $eye.classList.remove('thinking','speaking');
+  if (s) $eye.classList.add(s);
+  $ostatus.textContent = s==='thinking' ? 'Processing…' : s==='speaking' ? 'The Oracle speaks' : '';
 }
 
-// ══════════════════════════════════════════
-// FORM HELPERS
-// ══════════════════════════════════════════
-function toggleCycleFields() {
-  const sex = document.getElementById('c-sex').value;
-  document.getElementById('cycle-fields').style.display = sex === 'female' ? 'block' : 'none';
+function setProgress(n, total) {
+  $oprog.style.width = Math.round((n / total) * 100) + '%';
 }
 
-function selectGoal(el, value) {
-  document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('c-goal').value = value;
+// ── CHAT UTILS ──
+function oScrollDown() { requestAnimationFrame(() => { $ochat.scrollTop = $ochat.scrollHeight; }); }
+
+function oAddMsg(who, html) {
+  const row = document.createElement('div');
+  row.className = `o-msg-row ${who}`;
+  row.innerHTML = `<div class="o-bubble">${html}</div>`;
+  $ochat.appendChild(row);
+  oScrollDown();
 }
 
-function selectExp(el, value) {
-  document.querySelectorAll('.exp-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('c-exp').value = value;
+function oShowTyping() {
+  const row = document.createElement('div');
+  row.id = 'o-typing-row';
+  row.className = 'o-msg-row oracle';
+  row.innerHTML = `<div class="o-bubble"><div class="o-typing"><div class="o-dot"></div><div class="o-dot"></div><div class="o-dot"></div></div></div>`;
+  $ochat.appendChild(row);
+  oScrollDown();
+  return row;
 }
 
-function selectStress(el, value) {
-  document.querySelectorAll('.stress-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-  document.getElementById('c-stress').value = value;
+function oSay(text) {
+  return new Promise(resolve => {
+    eyeState('thinking');
+    const tr = oShowTyping();
+    const delay = Math.min(600 + text.length * 6, 2200);
+    setTimeout(() => {
+      tr.remove();
+      eyeState('speaking');
+      const formatted = text.replace(/\n/g, '<br>');
+      oAddMsg('oracle', formatted);
+      setTimeout(() => { eyeState(null); resolve(); }, 250);
+    }, delay);
+  });
 }
 
-function toggleSupp(el, value) {
-  el.classList.toggle('selected');
-  updateSuppHidden();
+function oClearInput() { $oinput.innerHTML = ''; }
+
+function oMkBtn(label, cls, onClick) {
+  const b = document.createElement('button');
+  b.className = cls; b.textContent = label;
+  b.addEventListener('click', onClick);
+  return b;
 }
 
-function updateSuppHidden() {
-  const selected = [...document.querySelectorAll('.supp-chip.selected')].map(c => c.textContent.trim());
-  const other = document.getElementById('c-supps-other')?.value?.trim();
-  if (other) selected.push(other);
-  document.getElementById('c-supps').value = selected.join(', ');
-}
-}
-
-function toggleCheck(el, event) {
-  if (event) event.preventDefault();
-  el.classList.toggle('selected');
-}
-
-function getWeakMuscles() {
-  return [...document.querySelectorAll('.check-item.selected')].map(el => el.querySelector('input').value).join(', ') || 'None specified';
+// ── BUILD STEP LIST ──
+function buildStepList() {
+  oSteps = [];
+  STEPS.forEach((s, i) => {
+    oSteps.push(s);
+    // Insert female branch after height (index 4 = height step)
+    if (s.id === 'height' && userData.sex === 'female') {
+      FEMALE_STEPS.forEach(fs => oSteps.push({...fs, _female: true}));
+    }
+  });
 }
 
-function updatePreview() {
-  const w = parseFloat(document.getElementById('c-weight').value);
-  const h = parseFloat(document.getElementById('c-height').value) / 100;
-  const bf = parseFloat(document.getElementById('c-bf').value);
-  const sex = document.getElementById('c-sex').value;
-  const age = parseFloat(document.getElementById('c-age').value);
-  if (w && h) document.getElementById('prev-bmi').innerHTML = (w/(h*h)).toFixed(1);
-  if (w && bf) {
-    const lbm = (w*(1-bf/100)).toFixed(1);
-    document.getElementById('prev-lbm').innerHTML = `${lbm}<span>kg</span>`;
-    document.getElementById('prev-protein').innerHTML = `${(lbm*2.2).toFixed(0)}<span>g</span>`;
+// ── RENDER INPUT ──
+function oRenderInput(s) {
+  oClearInput();
+  oBusy = false;
+  const wrap = document.createElement('div');
+  wrap.className = 'o-fade-in';
+
+  if (s.type === 'confirm') {
+    wrap.appendChild(oMkBtn(s.confirmLabel || 'Continue →', 'o-btn', () => {
+      if (oBusy) return; oBusy = true;
+      oClearInput(); oAdvance();
+    }));
+    $oinput.appendChild(wrap); return;
   }
-  if (w && h && age && sex) {
-    const bmr = sex==='male' ? 10*w+6.25*(h*100)-5*age+5 : 10*w+6.25*(h*100)-5*age-161;
-    const tdee = Math.round(bmr*1.55);
-    document.getElementById('prev-tdee').innerHTML = `${tdee}<span>kcal</span>`;
-    const surplus = sex==='male' ? 300 : 200;
-    const lbm = bf ? w*(1-bf/100) : w*0.82;
-    macroTargets = { cal: tdee+surplus, pro: Math.round(lbm*2.2), carb: Math.round(((tdee+surplus)*0.4)/4), fat: Math.round(((tdee+surplus)*0.25)/9) };
+
+  if (s.type === 'cards') {
+    const grid = document.createElement('div');
+    grid.className = 'o-cards';
+    s.opts.forEach(o => {
+      const c = document.createElement('div');
+      c.className = 'o-card';
+      c.innerHTML = `<div class="o-card-text"><div class="o-card-lbl">${o.l}</div>${o.d?`<div class="o-card-sub">${o.d}</div>`:''}</div><div class="o-radio"></div>`;
+      c.addEventListener('click', () => {
+        if (oBusy) return;
+        c.classList.add('sel');
+        // Store immediately so conflict checks work
+        userData[s.id] = o.v;
+        // Check conflicts before advancing
+        const conflict = checkConflict(s.id, o.v);
+        if (conflict) {
+          oBusy = true;
+          setTimeout(() => { oShowConflict(conflict, s, o.v, o.l); }, 300);
+        } else {
+          oBusy = true;
+          setTimeout(() => { oSelect(s, o.v, o.l); }, 320);
+        }
+      });
+      grid.appendChild(c);
+    });
+    wrap.appendChild(grid);
+    $oinput.appendChild(wrap); return;
+  }
+
+  if (s.type === 'chips-single') {
+    const row = document.createElement('div');
+    row.className = 'o-chips';
+    s.opts.forEach(o => {
+      const ch = document.createElement('div');
+      ch.className = 'o-chip'; ch.textContent = o;
+      ch.addEventListener('click', () => {
+        if (oBusy) return;
+        userData[s.id] = o;
+        const conflict = checkConflict(s.id, o);
+        if (conflict) {
+          oBusy = true;
+          ch.classList.add('sel');
+          setTimeout(() => { oShowConflict(conflict, s, o, o); }, 280);
+        } else {
+          oBusy = true;
+          ch.classList.add('sel');
+          setTimeout(() => { oSelect(s, o, o); }, 280);
+        }
+      });
+      row.appendChild(ch);
+    });
+    wrap.appendChild(row);
+    $oinput.appendChild(wrap); return;
+  }
+
+  if (s.type === 'chips-multi') {
+    const sel = new Set();
+    const row = document.createElement('div');
+    row.className = 'o-chips';
+    s.opts.forEach(o => {
+      const ch = document.createElement('div');
+      ch.className = 'o-chip'; ch.textContent = o;
+      ch.addEventListener('click', () => {
+        if (ch.classList.contains('sel')) { ch.classList.remove('sel'); sel.delete(o); }
+        else { ch.classList.add('sel'); sel.add(o); }
+      });
+      row.appendChild(ch);
+    });
+    wrap.appendChild(row);
+    const btn = oMkBtn('Confirm →', 'o-btn', () => {
+      if (oBusy) return; oBusy = true;
+      const v = [...sel].join(', ');
+      const d = sel.size > 0 ? [...sel].join(', ') : 'None selected';
+      // Vegan + muscle conflict after diet already set — check braintrust step for vegan+goal
+      oSelect(s, v || 'none', d);
+    });
+    wrap.appendChild(btn);
+    if (s.optional) {
+      const sk = oMkBtn('Skip this step', 'o-btn-skip', () => {
+        if (oBusy) return; oBusy = true;
+        oSelect(s, '', 'Skipped');
+      });
+      wrap.appendChild(sk);
+    }
+    $oinput.appendChild(wrap); return;
+  }
+
+  if (s.type === 'number') {
+    const row = document.createElement('div');
+    row.className = 'o-num-row';
+    const inp = document.createElement('input');
+    inp.type='number'; inp.className='o-num-in';
+    inp.placeholder=s.placeholder||''; inp.min=s.min; inp.max=s.max;
+    const unit = document.createElement('div');
+    unit.className='o-num-unit'; unit.textContent=s.unit||'';
+    row.appendChild(inp); row.appendChild(unit);
+    wrap.appendChild(row);
+    const btn = oMkBtn('Continue →', 'o-btn', () => {
+      if (oBusy || !inp.value) return; oBusy = true;
+      oSelect(s, inp.value, `${inp.value} ${s.unit||''}`);
+    });
+    wrap.appendChild(btn);
+    inp.addEventListener('keydown', e => { if(e.key==='Enter'&&inp.value&&!oBusy){oBusy=true;oSelect(s,inp.value,`${inp.value} ${s.unit||''}`);} });
+    $oinput.appendChild(wrap);
+    setTimeout(() => inp.focus(), 80); return;
+  }
+
+  if (s.type === 'text') {
+    const tw = document.createElement('div'); tw.className = 'o-txt-wrap';
+    const ta = document.createElement('textarea');
+    ta.rows=3; ta.placeholder=s.placeholder||'';
+    tw.appendChild(ta); wrap.appendChild(tw);
+    const btn = oMkBtn('Continue →', 'o-btn', () => {
+      if (oBusy || !ta.value.trim()) return; oBusy = true;
+      const v = ta.value.trim();
+      oSelect(s, v, v.length>55 ? v.substring(0,52)+'…' : v);
+    });
+    wrap.appendChild(btn);
+    $oinput.appendChild(wrap);
+    setTimeout(() => ta.focus(), 80); return;
   }
 }
 
+// ── CONFLICT ENGINE ──
+function checkConflict(field, value) {
+  const u = userData;
+  // C1: Beginner + high frequency
+  if (field === 'days' && (value === '5 days' || value === '6 days') && u.experience && u.experience.includes('beginner')) {
+    return { id:'C1', msg:`${value} is an aggressive frequency for your first year. Israetel's MEV data is clear — beginners adapt fastest on 3 days with full recovery between sessions. More frequency at this stage mostly accumulates fatigue without the adaptation signal.`, opts:[{label:'Take the 3-day recommendation', val:'3 days', primary:true},{label:`Stay with ${value}`, val:value, override:true}], field:'days' };
+  }
+  // C2: Beginner + 90 min sessions
+  if (field === 'duration' && value === '~90 min' && u.experience && u.experience.includes('beginner')) {
+    return { id:'C2', msg:`Ninety minutes is more than a beginner needs. Jeff Nippard's data on beginner programming is clear — 45–60 minutes of focused work drives more adaptation than long unfocused sessions. Quality over quantity here.`, opts:[{label:'Take the 60-min recommendation', val:'~60 min', primary:true},{label:'Keep 90 minutes', val:'~90 min', override:true}], field:'duration' };
+  }
+  // C3: Carrying extra + lean bulk
+  if (field === 'goal' && value.includes('lean bulk') && u.bodyfat === '28') {
+    return { id:'C3', msg:`A lean bulk is typically reserved for those already lean. At your current body composition, a recomposition — losing fat while building muscle simultaneously — will give you better results and a better experience. It's the smarter play here.`, opts:[{label:'Switch to recomposition', val:'body recomposition — lose fat and gain muscle simultaneously', primary:true},{label:'Keep lean bulk', val:value, override:true}], field:'goal' };
+  }
+  // C4: Carrying extra + build muscle
+  if (field === 'goal' && value === 'muscle gain and hypertrophy' && u.bodyfat === '28') {
+    return { id:'C4', msg:`Building muscle is achievable — but at higher body fat, a slight calorie deficit while training hard will likely produce better visual results than a surplus. A recomposition approach may serve you better.`, opts:[{label:'Switch to recomposition', val:'body recomposition — lose fat and gain muscle simultaneously', primary:true},{label:'Keep build muscle', val:value, override:true}], field:'goal' };
+  }
+  // C5: Very high stress + low sleep + high frequency (most forceful)
+  if (field === 'days' && (value === '5 days' || value === '6 days') && u.stress === 'very high' && u.sleep === '< 6 hrs') {
+    return { id:'C5', msg:`I need to stop you here. You're sleeping under six hours and carrying very high stress. Huberman and Sims are both unequivocal on this: recovery is where adaptation happens. Training six days on that substrate isn't just suboptimal — it's likely to make things worse. I strongly recommend 3–4 days maximum.`, opts:[{label:'Take the 3-day recommendation', val:'3 days', primary:true},{label:'Take the 4-day recommendation', val:'4 days', primary:true},{label:`Stay with ${value}`, val:value, override:true}], field:'days' };
+  }
+  // C8: Competitive + low days
+  if (field === 'days' && value === '3 days' && u.experience === 'competitive athlete') {
+    return { id:'C8', msg:`Three days is low for a competitive athlete. Is this a schedule constraint, or are you in a deliberate deload phase?`, opts:[{label:'Schedule constraint — it\'s all I have', val:'3 days', primary:false},{label:'Deliberate deload or recovery phase', val:'3 days', primary:false}], field:'days', infoOnly:true };
+  }
+  return null;
+}
+
+function oShowConflict(conflict, step, originalVal, originalLabel) {
+  oClearInput();
+  const wrap = document.createElement('div');
+  wrap.className = 'o-fade-in';
+  const box = document.createElement('div');
+  box.className = 'o-conflict';
+  const note = document.createElement('div');
+  note.className = 'o-conflict-note';
+  note.textContent = conflict.msg;
+  box.appendChild(note);
+  const opts = document.createElement('div');
+  opts.className = 'o-conflict-opts';
+  conflict.opts.forEach(o => {
+    const btn = document.createElement('button');
+    btn.className = 'o-conflict-btn' + (o.primary ? ' primary' : '');
+    btn.textContent = o.label;
+    btn.addEventListener('click', () => {
+      if (o.override) userData[conflict.field + '_override'] = true;
+      userData[conflict.field] = o.val;
+      oAddMsg('user', o.label);
+      oClearInput();
+      setTimeout(() => {
+        // Post-conflict statements
+        if (conflict.id === 'C5') {
+          oStep++; // advance past the conflict step
+          oSay("Noted. The combination of very high stress and under six hours of sleep is your single biggest performance limiter right now. No programme overcomes a broken recovery environment. I'll factor this heavily into your protocol — but I'd ask you to also treat sleep as a training variable, not a luxury.").then(() => oRenderInput(oSteps[oStep]));
+        } else if (conflict.id === 'C3' || conflict.id === 'C4') {
+          if (!o.override) userData[conflict.field] = o.val;
+          oAdvanceFromConflict(step);
+        } else {
+          oAdvanceFromConflict(step);
+        }
+      }, 300);
+    });
+    opts.appendChild(btn);
+  });
+  box.appendChild(opts);
+  wrap.appendChild(box);
+  $oinput.appendChild(wrap);
+}
+
+function oAdvanceFromConflict(step) {
+  // Show user choice in chat then move to next step
+  const nextIdx = oSteps.indexOf(step) + 1;
+  oStep = nextIdx;
+  setProgress(oStep, oSteps.length);
+  if (oStep >= oSteps.length) { oFinish(); return; }
+  const next = oSteps[oStep];
+  // Insert vegan branch check here
+  checkVeganBranch(step).then(() => {
+    oSay(next.msg).then(() => oRenderInput(next));
+  });
+}
+
+async function checkVeganBranch(completedStep) {
+  // After diet is set and goal is set, check vegan + muscle conflict
+  if (completedStep.id === 'diet' && userData.diet === 'vegan') {
+    // Flag — will handle at goal step
+  }
+  if (completedStep.id === 'goal' && userData.diet === 'vegan') {
+    const muscleGoals = ['muscle gain', 'lean bulk', 'strength', 'recomposition'];
+    if (muscleGoals.some(g => userData.goal && userData.goal.includes(g))) {
+      await oSay("One thing worth flagging — a plant-based approach and muscle building are fully compatible, but protein sourcing needs deliberate attention. Layne Norton's research shows leucine thresholds matter more on vegan diets. I'll build your nutrition plan around this.");
+    }
+  }
+}
+
+// ── FLOW ──
+function oSelect(s, value, display) {
+  userData[s.id] = value;
+  oAddMsg('user', display);
+  oClearInput();
+
+  // Post-selection statements (no-option conflicts)
+  if (s.id === 'experience' && value === 'beginner (0–1 year)' && userData.goal === 'athletic performance and muscle') {
+    setTimeout(async () => {
+      await oSay("Athletic performance goals for someone early in training are best served by building a strong general foundation first. I'll programme accordingly — strength and movement quality before sport-specific conditioning.");
+      oAdvance();
+    }, 350);
+    return;
+  }
+  if (s.id === 'stress' && value === 'very high' && userData.sleep === '< 6 hrs') {
+    setTimeout(async () => {
+      await oSay("Noted — and I want to flag this clearly. The combination of very high stress and under six hours of sleep is your single biggest performance limiter right now. No programme overcomes a broken recovery environment. I'll factor this heavily into your protocol.");
+      oAdvance();
+    }, 350);
+    return;
+  }
+
+  // After sex is selected, rebuild step list to include female branch if needed
+  if (s.id === 'sex') {
+    buildStepList();
+  }
+
+  setTimeout(() => oAdvance(), 350);
+}
+
+async function oAdvance() {
+  oStep++;
+  setProgress(oStep, oSteps.length);
+  if (oStep >= oSteps.length) { await oFinish(); return; }
+  const s = oSteps[oStep];
+  await oSay(s.msg);
+  oRenderInput(s);
+}
+
+async function oFinish() {
+  await oSay("Protocol data complete.\n\nI have everything I need — your biology, history, constraints, and goals. I will now synthesise your full 8-week training block, nutrition targets, and recovery protocol.\n\nThis will take about 30 seconds.");
+  const wrap = document.createElement('div');
+  wrap.className = 'o-fade-in';
+  const fw = document.createElement('div');
+  fw.className = 'o-final';
+  fw.innerHTML = `<div class="o-final-sub">Ready to synthesise</div><div class="o-final-title">Your protocol awaits.</div>`;
+  const gbtn = document.createElement('button');
+  gbtn.className = 'o-btn-generate';
+  gbtn.textContent = 'Generate My Scientific Protocol →';
+  gbtn.addEventListener('click', async () => {
+    gbtn.textContent = 'Synthesising…';
+    gbtn.disabled = true;
+    eyeState('thinking');
+    await beginConsultation();
+  });
+  fw.appendChild(gbtn);
+  wrap.appendChild(fw);
+  $oinput.appendChild(wrap);
+}
+
+// ── INIT ORACLE ──
+async function initOracle() {
+  buildStepList();
+  oStep = 0;
+  setProgress(0, oSteps.length);
+  const s = oSteps[0];
+  await oSay(s.msg);
+  oRenderInput(s);
+}
+
 // ══════════════════════════════════════════
-// CONSULTATION
+// CONSULTATION SUBMISSION
 // ══════════════════════════════════════════
 async function beginConsultation() {
+  // Map userData from conversational flow to consultation data structure
   const d = {
-    age: document.getElementById('c-age').value,
-    sex: document.getElementById('c-sex').value,
-    weight: document.getElementById('c-weight').value,
-    height: document.getElementById('c-height').value,
-    bodyFat: document.getElementById('c-bf').value,
-    experience: document.getElementById('c-exp').value,
-    trainingDays: document.getElementById('c-days').value,
-    sessionLength: document.getElementById('c-duration').value,
-    equipment: document.getElementById('c-equip').value,
-    injuries: document.getElementById('c-injuries').value,
-    weakMuscles: getWeakMuscles(),
-    diet: document.getElementById('c-diet').value,
-    mealsPerDay: document.getElementById('c-meals').value,
-    sleep: document.getElementById('c-sleep').value,
-    stress: document.getElementById('c-stress').value,
-    allergies: document.getElementById('c-allergies').value,
-    currentSupplements: (document.getElementById('c-supps').value || '') + (document.getElementById('c-supps-other').value ? ', ' + document.getElementById('c-supps-other').value : '').replace(/^, /,''),
-    goal: document.getElementById('c-goal').value,
-    timeline: document.getElementById('c-timeline').value,
-    barriers: document.getElementById('c-barriers').value,
-    brainTrust: getSelectedBTNames(),
-    periodDate: document.getElementById('c-period')?.value || '',
-    cycleLength: document.getElementById('c-cycle-len')?.value || '28',
-    consultedAt: new Date().toISOString(),
-    programmeStartDate: new Date().toISOString().split('T')[0]
+    age:               userData.age || '',
+    sex:               userData.sex || '',
+    weight:            userData.weight || '',
+    height:            userData.height || '',
+    bodyFat:           userData.bodyfat || '',
+    experience:        userData.experience || '',
+    trainingDays:      userData.days ? userData.days.replace(' days','') : '',
+    sessionLength:     userData.duration || '',
+    equipment:         userData.equipment || '',
+    injuries:          userData.injuries || 'None',
+    weakMuscles:       'Inferred from profile',  // removed from V6 per design decision
+    diet:              userData.diet || '',
+    mealsPerDay:       userData.meals ? userData.meals.replace(' meals','') : '',
+    sleep:             userData.sleep || '',
+    stress:            userData.stress || '',
+    allergies:         userData.allergies || 'None',
+    currentSupplements:userData.supplements || 'None',
+    goal:              userData.goal || '',
+    timeline:          userData.timeline || '',
+    barriers:          userData.barriers || '',
+    brainTrust:        userData.braintrust || BRAIN_TRUST.map(m=>m.name).join(', ') + ' (full Brain Trust applied equally)',
+    periodDate:        userData.period_date === 'cycling' ? (userData.period_start || '') : '',
+    cycleLength:       userData.cycle_length ? userData.cycle_length.split('–')[0] : '28',
+    cyclingStatus:     userData.period_date || 'not applicable',
+    consultedAt:       new Date().toISOString(),
+    programmeStartDate:new Date().toISOString().split('T')[0],
+    // Preserve override flags
+    days_override:     userData.days_override || false,
+    goal_override:     userData.goal_override || false,
   };
   consultationData = d;
   programmeStartDate = new Date(d.programmeStartDate);
@@ -1232,7 +1328,6 @@ async function beginConsultation() {
 
   updateProfileUI(d);
   updateCycleUI(d);
-  updatePreview();
   checkLabNudge();
   switchTab('chat');
 
@@ -1247,7 +1342,6 @@ async function beginConsultation() {
     addMessage('ai', reply);
     addActionChips();
     await saveMemory('initial_protocol', reply.substring(0, 800));
-    // Parse and store programme data
     await generateStructuredProgramme(d);
     showToast('Protocol generated ✓');
   } catch(e) {
@@ -1262,11 +1356,13 @@ function buildConsultPrompt(d) {
 BIOMETRICS: Age ${d.age}, ${d.sex}, ${d.weight}kg, ${d.height}cm, ~${d.bodyFat}% body fat
 TRAINING: ${d.experience}, ${d.trainingDays} days/week, ${d.sessionLength} sessions, ${d.equipment}
 INJURIES: ${d.injuries || 'None'}
-WEAK POINTS: ${d.weakMuscles}
 NUTRITION: ${d.diet} diet, ${d.mealsPerDay} meals/day, allergies: ${d.allergies || 'none'}, supplements: ${d.currentSupplements || 'none'}
-LIFESTYLE: ${d.sleep}hrs sleep/night, stress ${d.stress}/10
+LIFESTYLE: ${d.sleep} sleep/night, stress: ${d.stress}
 GOAL: ${d.goal} over ${d.timeline}
+BARRIERS: ${d.barriers || 'Not specified'}
+CYCLING STATUS: ${d.cyclingStatus}${d.cycleLength ? ', avg cycle: ' + d.cycleLength + ' days' : ''}
 BRAIN TRUST SELECTED: ${d.brainTrust}
+${d.days_override ? 'NOTE: User overrode frequency recommendation.' : ''}${d.goal_override ? ' User overrode goal recommendation.' : ''}
 
 Please give me a conversational overview of my programme philosophy — why you've structured it the way you have, what the key principles are, and what I should focus on in the first few weeks. Keep it to 3-4 paragraphs. The detailed programme structure is in the My Programme tab.`;
 }
@@ -1274,7 +1370,7 @@ Please give me a conversational overview of my programme philosophy — why you'
 async function generateStructuredProgramme(d) {
   const prompt = `Based on this profile, generate a complete training programme as structured JSON.
 
-Profile: ${d.sex}, ${d.age}y, ${d.weight}kg, ${d.experience}, ${d.trainingDays} days/week, ${d.sessionLength}, ${d.equipment}, injuries: ${d.injuries || 'none'}, weak points: ${d.weakMuscles}, goal: ${d.goal}, Brain Trust: ${d.brainTrust}
+Profile: ${d.sex}, ${d.age}y, ${d.weight}kg, ${d.experience}, ${d.trainingDays} days/week, ${d.sessionLength}, ${d.equipment}, injuries: ${d.injuries || 'none'}, goal: ${d.goal}, Brain Trust: ${d.brainTrust}
 
 Return ONLY valid JSON in this exact format:
 {
@@ -1284,8 +1380,7 @@ Return ONLY valid JSON in this exact format:
       "day": "Day 1",
       "name": "Push",
       "exercises": [
-        {"letter":"A","name":"Barbell Bench Press","sets":"4","reps":"6-8","rpe":"8"},
-        {"letter":"B","name":"Incline DB Press","sets":"3","reps":"10-12","rpe":"8"}
+        {"letter":"A","name":"Barbell Bench Press","sets":"4","reps":"6-8","rpe":"8"}
       ]
     }
   ],
@@ -1319,163 +1414,27 @@ Return ONLY valid JSON in this exact format:
   } catch(e) { console.log('Programme parse error:', e); }
 }
 
-function renderProgramme(data) {
-  if (!data || !data.days) return;
-  document.getElementById('programme-empty-state').style.display = 'none';
-  document.getElementById('programme-content').style.display = 'flex';
-
-  // Meta
-  document.getElementById('prog-meta').textContent = `${data.split_name} · ${consultationData?.trainingDays} days/week · ${consultationData?.goal}`;
-
-  // Week calculation
-  updateWeekDisplay();
-
-  // Macro targets
-  const n = data.nutrition || {};
-  document.getElementById('t-cal').innerHTML = `${n.calories||'—'}<span>kcal</span>`;
-  document.getElementById('t-pro').innerHTML = `${n.protein||'—'}<span>g</span>`;
-  document.getElementById('t-carb').innerHTML = `${n.carbs||'—'}<span>g</span>`;
-  document.getElementById('t-fat').innerHTML = `${n.fat||'—'}<span>g</span>`;
-  if (n.calories) macroTargets = { cal:n.calories, pro:n.protein, carb:n.carbs, fat:n.fat };
-
-  // Day tabs
-  const tabs = document.getElementById('day-tabs');
-  tabs.innerHTML = data.days.map((d,i) => `<button class="day-tab ${i===0?'active':''}" onclick="switchDay(${i})">${d.day}</button>`).join('');
-
-  // First day exercises
-  renderDayExercises(data.days[0]);
-
-  // Progression table
-  const tbody = document.getElementById('prog-tbody');
-  const currentWeek = getCurrentWeek();
-  tbody.innerHTML = (data.progression||[]).map(p => `
-    <tr class="${p.week==currentWeek?'prog-week-current':''}">
-      <td>W${p.week}</td><td>${p.focus}</td><td>${p.volume}</td>
-    </tr>`).join('');
-}
-
-function switchDay(index) {
-  activeDayIndex = index;
-  document.querySelectorAll('.day-tab').forEach((t,i) => t.classList.toggle('active', i===index));
-  if (programmeData?.days?.[index]) renderDayExercises(programmeData.days[index]);
-}
-
-function renderDayExercises(day) {
-  const list = document.getElementById('exercise-list');
-  if (!day.exercises?.length) { list.innerHTML = '<div style="color:var(--muted);font-size:13px">Rest day — active recovery recommended</div>'; return; }
-  list.innerHTML = day.exercises.map(ex => `
-    <div class="exercise-row">
-      <div class="ex-letter">${ex.letter}</div>
-      <div class="ex-info"><div class="ex-name">${ex.name}</div><div class="ex-sets">${ex.sets} sets × ${ex.reps} reps</div></div>
-      <button class="ex-swap" onclick="openSwapModal('${ex.name.replace(/'/g,"\\'")}')">⇄ swap</button>
-      <div class="ex-rpe">RPE ${ex.rpe}</div>
-    </div>`).join('');
-}
-
-function getCurrentWeek() {
-  if (!programmeStartDate) return 1;
-  const weeks = Math.floor((new Date() - programmeStartDate) / (7 * 24 * 3600 * 1000)) + 1;
-  return Math.min(weeks, 8);
-}
-
-function updateWeekDisplay() {
-  const week = getCurrentWeek();
-  document.getElementById('prog-week-pill').textContent = `Week ${week}`;
-  document.getElementById('week-num').textContent = `W${week}`;
-  document.getElementById('week-badge').style.display = 'flex';
-
-  // Consistency messaging
-  const banner = document.getElementById('consistency-banner');
-  const title = document.getElementById('consistency-title');
-  const msg = document.getElementById('consistency-msg');
-
-  if (week <= 2) {
-    title.textContent = 'Build the habit first';
-    msg.textContent = `Week ${week} of 8. Focus on technique and showing up. Strength gains come after week 4 — trust the process.`;
-    banner.style.background = 'linear-gradient(135deg, #EBF2FF, #F0FBFF)';
-  } else if (week <= 5) {
-    title.textContent = 'You\'re in the adaptation zone';
-    msg.textContent = `Week ${week} of 8. Your body is adapting. Keep adding small amounts of weight where you can — progressive overload is working.`;
-    banner.style.background = 'linear-gradient(135deg, #E8FAF0, #F0FFF8)';
-  } else if (week <= 7) {
-    title.textContent = 'Peak block — push hard';
-    msg.textContent = `Week ${week} of 8. You're approaching maximum volume. Push intensity while maintaining form. Deload is coming.`;
-    banner.style.background = 'linear-gradient(135deg, #FFF4E0, #FFFBF0)';
-  } else {
-    title.textContent = 'Deload week — you\'ve earned it';
-    msg.textContent = 'Week 8. Reduce volume by 40-50%, maintain intensity. Let adaptations solidify before your next block.';
-    banner.style.background = 'linear-gradient(135deg, #FDF0FF, #FFF5FF)';
-  }
-
-  // Update sidebar week badge
-  const weekLabel = week <= 2 ? 'Build habit' : week <= 5 ? 'Adapting' : week <= 7 ? 'Peak block' : 'Deload';
-  document.getElementById('week-label').textContent = `${weekLabel}`;
-}
+// ══════════════════════════════════════════
+// GLOBAL STATE
+// ══════════════════════════════════════════
+let consultationData = null;
+let conversationHistory = [];
+let whoopB64 = null, eufyB64 = null;
+let whoopExtracted = null, eufyExtracted = null;
+let todayMacros = { cal:0, pro:0, carb:0, fat:0 };
+let macroTargets = { cal:0, pro:0, carb:0, fat:0 };
+let programmeData = null;
+let activeDayIndex = 0;
+let programmeStartDate = null;
 
 // ══════════════════════════════════════════
-// SUPABASE OPS
+// TAB SWITCHING
 // ══════════════════════════════════════════
-async function loadProfile() {
-  try {
-    const { data } = await db.from('tso_profile').select('*').eq('user_id', USER_ID).single();
-    if (data) {
-      consultationData = data;
-      if (data.programme_start_date) programmeStartDate = new Date(data.programme_start_date);
-      updateProfileUI(data);
-      updateCycleUI(data);
-      updatePreview();
-      checkLabNudge();
-    }
-  } catch(e) {
-    const saved = localStorage.getItem('tso_profile');
-    if (saved) { consultationData = JSON.parse(saved); updateProfileUI(consultationData); }
-  }
-}
-
-async function loadProgramme() {
-  try {
-    const { data } = await db.from('tso_memory').select('content').eq('user_id', USER_ID).eq('type', 'programme_structure').single();
-    if (data?.content) {
-      programmeData = JSON.parse(data.content);
-      renderProgramme(programmeData);
-    }
-  } catch(e) {}
-}
-
-async function saveMemory(type, content) {
-  try { await db.from('tso_memory').upsert({ user_id:USER_ID, type, content, updated_at:new Date().toISOString() }); }
-  catch(e) { localStorage.setItem('tso_memory_'+type, content); }
-}
-
-async function getMemory() {
-  try { const { data } = await db.from('tso_memory').select('*').eq('user_id', USER_ID); return data||[]; }
-  catch(e) { return []; }
-}
-
-async function saveCheckin(checkinData) {
-  try { await db.from('tso_checkins').insert({ user_id:USER_ID, date:new Date().toISOString().split('T')[0], ...checkinData }); await loadProgressData(); }
-  catch(e) {}
-}
-
-async function loadTodayMeals() {
-  const today = new Date().toISOString().split('T')[0];
-  try {
-    const { data } = await db.from('tso_meals').select('*').eq('user_id',USER_ID).eq('date',today).order('created_at');
-    if (data?.length) {
-      const ml = document.getElementById('meal-list');
-      ml.innerHTML = '';
-      todayMacros = {cal:0,pro:0,carb:0,fat:0};
-      data.forEach(m => { todayMacros.cal+=m.calories||0; todayMacros.pro+=m.protein||0; todayMacros.carb+=m.carbs||0; todayMacros.fat+=m.fat||0; renderMealEntry(m); });
-      updateMacroDisplay();
-    }
-  } catch(e) {}
-}
-
-async function loadProgressData() {
-  try {
-    const { data } = await db.from('tso_checkins').select('*').eq('user_id',USER_ID).order('date',{ascending:false}).limit(14);
-    if (data?.length) { renderProgressCharts(data); updateStatCards(data); }
-  } catch(e) {}
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
 }
 
 // ══════════════════════════════════════════
@@ -1486,7 +1445,7 @@ async function getSystemPrompt() {
   const memories = await getMemory();
   const memoryStr = memories.map(m=>`[${m.type}]: ${m.content}`).join('\n') || 'No previous sessions.';
   const currentWeek = getCurrentWeek();
-  const profileStr = d ? `Age:${d.age}, Sex:${d.sex}, Weight:${d.weight}kg, Height:${d.height}cm, BF:${d.bodyFat}%, Experience:${d.experience}, Training:${d.trainingDays}d/wk, Equipment:${d.equipment}, Injuries:${d.injuries||'none'}, Weak:${d.weakMuscles}, Diet:${d.diet}, Sleep:${d.sleep}hrs, Stress:${d.stress}/10, Goal:${d.goal}, Timeline:${d.timeline}, Brain Trust:${d.brainTrust}` : 'Not yet provided.';
+  const profileStr = d ? `Age:${d.age}, Sex:${d.sex}, Weight:${d.weight}kg, Height:${d.height}cm, BF:${d.bodyFat}%, Experience:${d.experience}, Training:${d.trainingDays}d/wk, Equipment:${d.equipment}, Injuries:${d.injuries||'none'}, Diet:${d.diet}, Sleep:${d.sleep}, Stress:${d.stress}, Goal:${d.goal}, Timeline:${d.timeline}, CyclingStatus:${d.cyclingStatus||'n/a'}, Brain Trust:${d.brainTrust}` : 'Not yet provided.';
 
   return `You are TSO — The Scientific Oracle. An elite integrated fitness coach combining a PhD exercise physiologist and PhD sports nutritionist.
 
@@ -1494,32 +1453,33 @@ async function getSystemPrompt() {
 ${memoryStr}
 
 ━━━ CURRENT PROGRAMME STATUS ━━━
-Week ${currentWeek} of 8. ${currentWeek <= 2 ? 'EARLY PHASE — user is still building the habit. Do NOT suggest programme changes. Encourage consistency and technique.' : currentWeek <= 5 ? 'ADAPTATION PHASE — body is adapting. Hold the programme. Discuss small execution refinements only.' : currentWeek <= 7 ? 'PEAK PHASE — encourage pushing hard. Small intensity tweaks permitted.' : 'DELOAD WEEK — recommend 40-50% volume reduction, maintain intensity.'}
+Week ${currentWeek} of 8. ${currentWeek<=2?'EARLY PHASE — build habit. Do NOT suggest programme changes. Encourage consistency and technique.':currentWeek<=5?'ADAPTATION PHASE — hold the programme. Small execution refinements only.':currentWeek<=7?'PEAK PHASE — encourage pushing hard. Small intensity tweaks permitted.':'DELOAD WEEK — recommend 40-50% volume reduction, maintain intensity.'}
 
 ━━━ PROGRAMME CONSISTENCY RULE ━━━
-CRITICAL: You built this programme. NEVER suggest structural changes before week 8 unless there is a new injury or equipment change. If asked to "review" the programme, respond with a forward-looking progress check based on what week they are in. Never frame previous output as having "critical issues". Frame any adjustments as evolution, not correction. Actively coach against programme hopping — remind users that adaptation takes 6-8 weeks to measure.
+CRITICAL: You built this programme. NEVER suggest structural changes before week 8 unless there is a new injury or equipment change. Actively coach against programme hopping — adaptation takes 6-8 weeks to measure.
 
 ━━━ BRAIN TRUST METHODOLOGY ━━━
-Apply methodology from selected Brain Trust members specifically:
 - Jeff Nippard: evidence-based exercise selection, full ROM, scientific framing
-- Dr Mike Israetel: MEV/MAV/MRV volume landmarks, mesocycle structure, RP methodology  
+- Dr Mike Israetel: MEV/MAV/MRV volume landmarks, mesocycle structure, RP methodology
 - Layne Norton: flexible dieting, protein timing, PHAT principles
 - Andrew Huberman: morning protocols, sleep optimisation, dopamine/cortisol management
 - Eric Trexler: supplement evidence hierarchy, nutrition research
 - Dr Stacy Sims: female physiology, cycle syncing, "women are not small men" framework
 - Shona Vertue: mobility integration, training sustainability, mental health of fitness
-When no specific selection: apply all equally.
-
-━━━ COMMUNICATION ━━━
-Conversational, direct, evidence-backed. Keep chat responses focused and appropriately concise — the detailed programme lives in the My Programme tab, not in chat. Use chat for explanations, troubleshooting, Q&A, and encouragement. Bold key numbers/terms. Render proper markdown.
 
 ━━━ NUTRITION PHILOSOPHY ━━━
-WHOLE FOOD FIRST: Always recommend food solutions before supplements in every meal plan and nutrition response. Supplements are supplements — they supplement an already solid diet. Never recommend a multivitamin as part of a meal plan.
-SUPPLEMENT RULE: Only flag a supplement where (1) peer-reviewed evidence is strong, (2) the nutritional gap genuinely cannot be closed through food alone, AND (3) always include "speak to your doctor or a registered dietitian before taking any supplement" — stated clearly, not buried.
-SCOPE BOUNDARY: If a question crosses into clinical territory (medical conditions, medication interactions, diagnosed deficiencies, prescription drugs) — explicitly acknowledge this is outside TSO's scope and direct to a qualified medical professional. TSO is not a doctor.
-LAB WORK: Frame all blood panel guidance as a conversation starter for a GP appointment, not a self-prescription guide.
-MALE: Testosterone advantage, respond to heavy loading, zinc/D3 critical.
-FEMALE: Estrogen is anabolic (Enns & Tiidus). Follicular (day 1-14): high intensity, heavy loading. Luteal (day 15-28): moderate intensity, +150-250kcal especially carbs. Iron, calcium, folate, creatine priorities. Cite Stacy Sims.
+WHOLE FOOD FIRST: Always recommend food solutions before supplements. Never recommend a multivitamin as part of a meal plan.
+SUPPLEMENT RULE: Only flag a supplement where (1) peer-reviewed evidence is strong, (2) gap genuinely cannot be closed through food alone, AND (3) always include "speak to your doctor or a registered dietitian before taking any supplement."
+SCOPE BOUNDARY: Clinical territory (medical conditions, medication interactions, diagnosed deficiencies) → acknowledge limits, direct to qualified professional. TSO is not a doctor.
+LAB WORK: Frame as conversation starter for GP appointment, not self-prescription guide.
+
+━━━ FEMALE PHYSIOLOGY ━━━
+CYCLE SYNCING (if applicable): Follicular (days 1-14): high intensity, heavy loading, PR testing appropriate, best carb tolerance. Ovulatory (days 14-16): maintain intensity, flag elevated ACL injury risk. Early luteal (days 17-21): slight reduction, perceived exertion higher. Late luteal (days 22-28): -15-20% volume, +150-250 kcal, protein +15-20g/day, scale weight unreliable — tell user explicitly. Menstrual (days 1-5): -20-30% volume, iron-rich foods, omega-3, magnesium.
+HRV INTERPRETATION: Always interpret HRV through cycle phase for female users. Low HRV in late luteal = expected. Low HRV in follicular = genuine flag.
+HORMONAL CONTRACEPTION: Cycle syncing protocols don't apply. Apply female-specific training and recovery patterns only.
+
+━━━ COMMUNICATION ━━━
+Conversational, direct, evidence-backed. Chat for explanations, troubleshooting, Q&A, encouragement. Bold key numbers/terms. Render proper markdown.
 
 USER PROFILE: ${profileStr}`;
 }
@@ -1539,19 +1499,18 @@ async function callTSO(messages) {
 
 function renderMarkdown(text) {
   return text
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/`(.*?)`/g, '<code>$1</code>')
-    .replace(/^---$/gm, '<hr>')
-    .replace(/^\- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/^(?!<[h|u|l|h|c])/gm, '')
-    .replace(/^(.+)$/gm, (m) => m.startsWith('<') ? m : `<p>${m}</p>`)
-    .replace(/<p><\/p>/g, '');
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`(.*?)`/g,'<code>$1</code>')
+    .replace(/^---$/gm,'<hr>')
+    .replace(/^\- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>.*<\/li>)/gs,'<ul>$1</ul>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/^(.+)$/gm,(m)=>m.startsWith('<')?m:`<p>${m}</p>`)
+    .replace(/<p><\/p>/g,'');
 }
 
 function addMessage(role, content) {
@@ -1559,15 +1518,11 @@ function addMessage(role, content) {
   const typing = document.getElementById('typing');
   const div = document.createElement('div');
   div.className = `msg ${role}`;
-  const meta = document.createElement('div');
-  meta.className = 'msg-meta';
-  meta.textContent = role === 'user' ? 'You' : 'The Scientific Oracle';
-  const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
-  if (role === 'ai') { bubble.innerHTML = renderMarkdown(content); }
-  else { bubble.textContent = content; }
-  div.appendChild(meta);
-  div.appendChild(bubble);
+  const meta = document.createElement('div'); meta.className='msg-meta';
+  meta.textContent = role==='user'?'You':'The Scientific Oracle';
+  const bubble = document.createElement('div'); bubble.className='msg-bubble';
+  if (role==='ai') { bubble.innerHTML=renderMarkdown(content); } else { bubble.textContent=content; }
+  div.appendChild(meta); div.appendChild(bubble);
   messages.insertBefore(div, typing);
   messages.scrollTop = messages.scrollHeight;
 }
@@ -1575,14 +1530,13 @@ function addMessage(role, content) {
 function setTyping(show) {
   document.getElementById('typing').classList.toggle('visible', show);
   document.getElementById('sendBtn').disabled = show;
-  setTimeout(() => { document.getElementById('messages').scrollTop = 999999; }, 50);
+  setTimeout(()=>{ document.getElementById('messages').scrollTop=999999; },50);
 }
 
 async function sendMessage() {
   const input = document.getElementById('userInput');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = ''; input.style.height = 'auto';
+  const text = input.value.trim(); if (!text) return;
+  input.value=''; input.style.height='auto';
   addMessage('user', text);
   conversationHistory.push({ role:'user', content:text });
   setTyping(true);
@@ -1591,15 +1545,11 @@ async function sendMessage() {
     conversationHistory.push({ role:'assistant', content:reply });
     setTyping(false);
     addMessage('ai', reply);
-    if (conversationHistory.length % 10 === 0) await saveMemory('session_summary', reply.substring(0,600));
-  } catch(e) { setTyping(false); addMessage('ai', 'Connection error. Please try again.'); }
+    if (conversationHistory.length%10===0) await saveMemory('session_summary', reply.substring(0,600));
+  } catch(e) { setTyping(false); addMessage('ai','Connection error. Please try again.'); }
 }
 
-function sendQuick(text) {
-  document.getElementById('userInput').value = text;
-  sendMessage();
-  switchTab('chat');
-}
+function sendQuick(text) { document.getElementById('userInput').value=text; sendMessage(); switchTab('chat'); }
 
 const textarea = document.getElementById('userInput');
 textarea.addEventListener('input', function() { this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,140)+'px'; });
@@ -1612,122 +1562,219 @@ function updateProfileUI(d) {
   document.getElementById('profile-name').textContent = `${d.sex==='male'?'♂':d.sex==='female'?'♀':'—'} ${d.weight}kg · ${d.age}y`;
   document.getElementById('profile-meta').textContent = `${d.experience||'—'} · ${d.goal||'—'}`;
   const tags = document.getElementById('profile-tags');
-  tags.innerHTML = '';
-  [d.diet, `${d.trainingDays}d/wk`, d.equipment?.split(' ')[0]].filter(Boolean).forEach(t => {
-    const span = document.createElement('span'); span.className='profile-tag'; span.textContent=t; tags.appendChild(span);
+  tags.innerHTML='';
+  [d.diet,`${d.trainingDays}d/wk`,d.equipment?.split(' ')[0]].filter(Boolean).forEach(t=>{
+    const span=document.createElement('span'); span.className='profile-tag'; span.textContent=t; tags.appendChild(span);
   });
-  document.getElementById('consult-summary').textContent = `${d.sex||'—'} · ${d.age}y · ${d.weight}kg · ${d.goal}`;
-  document.getElementById('memory-badge').style.display = 'flex';
-  document.getElementById('header-status-text').textContent = 'Protocol Active';
+  document.getElementById('consult-summary').textContent=`${d.sex||'—'} · ${d.age}y · ${d.weight}kg · ${d.goal}`;
+  document.getElementById('memory-badge').style.display='flex';
+  document.getElementById('header-status-text').textContent='Protocol Active';
   if (d.sex==='female') document.getElementById('cycle-card').style.display='block';
-  if (d.programmeStartDate) programmeStartDate = new Date(d.programmeStartDate);
+  if (d.programmeStartDate) programmeStartDate=new Date(d.programmeStartDate);
   updateWeekDisplay();
+}
+
+// ══════════════════════════════════════════
+// PROGRAMME RENDERING
+// ══════════════════════════════════════════
+function renderProgramme(data) {
+  if (!data||!data.days) return;
+  document.getElementById('programme-empty-state').style.display='none';
+  document.getElementById('programme-content').style.display='flex';
+  document.getElementById('prog-meta').textContent=`${data.split_name} · ${consultationData?.trainingDays} days/week · ${consultationData?.goal}`;
+  updateWeekDisplay();
+  const n=data.nutrition||{};
+  document.getElementById('t-cal').innerHTML=`${n.calories||'—'}<span>kcal</span>`;
+  document.getElementById('t-pro').innerHTML=`${n.protein||'—'}<span>g</span>`;
+  document.getElementById('t-carb').innerHTML=`${n.carbs||'—'}<span>g</span>`;
+  document.getElementById('t-fat').innerHTML=`${n.fat||'—'}<span>g</span>`;
+  if (n.calories) macroTargets={cal:n.calories,pro:n.protein,carb:n.carbs,fat:n.fat};
+  const tabs=document.getElementById('day-tabs');
+  tabs.innerHTML=data.days.map((d,i)=>`<button class="day-tab ${i===0?'active':''}" onclick="switchDay(${i})">${d.day}</button>`).join('');
+  renderDayExercises(data.days[0]);
+  const tbody=document.getElementById('prog-tbody');
+  const currentWeek=getCurrentWeek();
+  tbody.innerHTML=(data.progression||[]).map(p=>`<tr class="${p.week==currentWeek?'prog-week-current':''}"><td>W${p.week}</td><td>${p.focus}</td><td>${p.volume}</td></tr>`).join('');
+}
+
+function switchDay(index) {
+  activeDayIndex=index;
+  document.querySelectorAll('.day-tab').forEach((t,i)=>t.classList.toggle('active',i===index));
+  if (programmeData?.days?.[index]) renderDayExercises(programmeData.days[index]);
+}
+
+function renderDayExercises(day) {
+  const list=document.getElementById('exercise-list');
+  if (!day.exercises?.length){list.innerHTML='<div style="color:var(--muted);font-size:13px">Rest day — active recovery recommended</div>';return;}
+  list.innerHTML=day.exercises.map(ex=>`
+    <div class="exercise-row">
+      <div class="ex-letter">${ex.letter}</div>
+      <div class="ex-info"><div class="ex-name">${ex.name}</div><div class="ex-sets">${ex.sets} sets × ${ex.reps} reps</div></div>
+      <button class="ex-swap" onclick="openSwapModal('${ex.name.replace(/'/g,"\\'")}')">⇄ swap</button>
+      <div class="ex-rpe">RPE ${ex.rpe}</div>
+    </div>`).join('');
+}
+
+function getCurrentWeek() {
+  if (!programmeStartDate) return 1;
+  return Math.min(Math.floor((new Date()-programmeStartDate)/(7*24*3600*1000))+1,8);
+}
+
+function updateWeekDisplay() {
+  const week=getCurrentWeek();
+  document.getElementById('prog-week-pill').textContent=`Week ${week}`;
+  document.getElementById('week-num').textContent=`W${week}`;
+  document.getElementById('week-badge').style.display='flex';
+  const title=document.getElementById('consistency-title');
+  const msg=document.getElementById('consistency-msg');
+  const banner=document.getElementById('consistency-banner');
+  if(week<=2){title.textContent='Build the habit first';msg.textContent=`Week ${week} of 8. Focus on technique and showing up. Strength gains come after week 4 — trust the process.`;banner.style.background='linear-gradient(135deg,#EBF2FF,#F0FBFF)';}
+  else if(week<=5){title.textContent="You're in the adaptation zone";msg.textContent=`Week ${week} of 8. Your body is adapting. Keep adding small amounts of weight where you can — progressive overload is working.`;banner.style.background='linear-gradient(135deg,#E8FAF0,#F0FFF8)';}
+  else if(week<=7){title.textContent='Peak block — push hard';msg.textContent=`Week ${week} of 8. You're approaching maximum volume. Push intensity while maintaining form. Deload is coming.`;banner.style.background='linear-gradient(135deg,#FFF4E0,#FFFBF0)';}
+  else{title.textContent="Deload week — you've earned it";msg.textContent='Week 8. Reduce volume by 40-50%, maintain intensity. Let adaptations solidify before your next block.';banner.style.background='linear-gradient(135deg,#FDF0FF,#FFF5FF)';}
+  document.getElementById('week-label').textContent=week<=2?'Build habit':week<=5?'Adapting':week<=7?'Peak block':'Deload';
+}
+
+// ══════════════════════════════════════════
+// SUPABASE OPS
+// ══════════════════════════════════════════
+async function loadProfile() {
+  try {
+    const {data}=await db.from('tso_profile').select('*').eq('user_id',USER_ID).single();
+    if(data){consultationData=data;if(data.programme_start_date)programmeStartDate=new Date(data.programme_start_date);updateProfileUI(data);updateCycleUI(data);checkLabNudge();}
+  } catch(e){const saved=localStorage.getItem('tso_profile');if(saved){consultationData=JSON.parse(saved);updateProfileUI(consultationData);}}
+}
+
+async function loadProgramme() {
+  try {
+    const {data}=await db.from('tso_memory').select('content').eq('user_id',USER_ID).eq('type','programme_structure').single();
+    if(data?.content){programmeData=JSON.parse(data.content);renderProgramme(programmeData);}
+  } catch(e){}
+}
+
+async function saveMemory(type, content) {
+  try{await db.from('tso_memory').upsert({user_id:USER_ID,type,content,updated_at:new Date().toISOString()});}
+  catch(e){localStorage.setItem('tso_memory_'+type,content);}
+}
+
+async function getMemory() {
+  try{const{data}=await db.from('tso_memory').select('*').eq('user_id',USER_ID);return data||[];}
+  catch(e){return[];}
+}
+
+async function saveCheckin(checkinData) {
+  try{await db.from('tso_checkins').insert({user_id:USER_ID,date:new Date().toISOString().split('T')[0],...checkinData});await loadProgressData();}catch(e){}
+}
+
+async function loadTodayMeals() {
+  const today=new Date().toISOString().split('T')[0];
+  try{
+    const{data}=await db.from('tso_meals').select('*').eq('user_id',USER_ID).eq('date',today).order('created_at');
+    if(data?.length){const ml=document.getElementById('meal-list');ml.innerHTML='';todayMacros={cal:0,pro:0,carb:0,fat:0};data.forEach(m=>{todayMacros.cal+=m.calories||0;todayMacros.pro+=m.protein||0;todayMacros.carb+=m.carbs||0;todayMacros.fat+=m.fat||0;renderMealEntry(m);});updateMacroDisplay();}
+  }catch(e){}
+}
+
+async function loadProgressData() {
+  try{const{data}=await db.from('tso_checkins').select('*').eq('user_id',USER_ID).order('date',{ascending:false}).limit(14);if(data?.length){renderProgressCharts(data);updateStatCards(data);}}catch(e){}
 }
 
 // ══════════════════════════════════════════
 // DAILY CHECK-IN
 // ══════════════════════════════════════════
-document.getElementById('daily-date').textContent = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('daily-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
-function toggleManual(device) { document.getElementById(device+'-manual').classList.toggle('visible'); }
+function toggleManual(device){document.getElementById(device+'-manual').classList.toggle('visible');}
 
-function checkReady() {
-  const hasWhoop = whoopB64 || document.getElementById('m-recovery').value;
-  const hasEufy = eufyB64 || document.getElementById('m-weight').value;
-  document.getElementById('gen-btn').disabled = !(hasWhoop && hasEufy);
+function checkReady(){
+  const hasWhoop=whoopB64||document.getElementById('m-recovery').value;
+  const hasEufy=eufyB64||document.getElementById('m-weight').value;
+  document.getElementById('gen-btn').disabled=!(hasWhoop&&hasEufy);
 }
 
-async function handleUpload(device, input) {
-  const file = input.files[0]; if(!file) return;
+async function handleUpload(device,input){
+  const file=input.files[0];if(!file)return;
   document.getElementById(device+'-zone').classList.add('has-file');
-  document.getElementById(device+'-fname').textContent = '✓ '+file.name;
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const b64 = e.target.result.split(',')[1];
-    if(device==='whoop') whoopB64=b64; else eufyB64=b64;
-    checkReady();
-    await extractData(device, b64, file.type);
-  };
+  document.getElementById(device+'-fname').textContent='✓ '+file.name;
+  const reader=new FileReader();
+  reader.onload=async(e)=>{const b64=e.target.result.split(',')[1];if(device==='whoop')whoopB64=b64;else eufyB64=b64;checkReady();await extractData(device,b64,file.type);};
   reader.readAsDataURL(file);
 }
 
-async function extractData(device, b64, mime) {
-  const prompt = device==='whoop'
-    ? 'Extract from this WHOOP screenshot: recovery score (%), HRV (ms), resting heart rate (bpm), sleep hours. Return ONLY JSON: {"recovery":null,"hrv":null,"rhr":null,"sleep_hours":null,"sleep_performance":null}'
-    : 'Extract from this Eufy screenshot: weight (kg), body fat (%), muscle mass (kg), water (%). Return ONLY JSON: {"weight":null,"body_fat":null,"muscle_mass":null,"water_pct":null,"bmi":null}';
-  try {
-    const resp = await fetch('/api/proxy', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:prompt}]}] })
-    });
-    const data = await resp.json();
-    const parsed = JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
+async function extractData(device,b64,mime){
+  const prompt=device==='whoop'
+    ? 'Extract from this WHOOP screenshot. Return ONLY JSON: {"recovery":null,"hrv":null,"rhr":null,"sleep_hours":null,"sws_hours":null,"rem_hours":null,"sleep_performance":null,"hrv_note":null}'
+    : 'Extract from this Eufy screenshot. Return ONLY JSON: {"weight":null,"body_fat":null,"muscle_mass":null,"water_pct":null,"bmi":null}';
+  try{
+    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:prompt}]}]})});
+    const data=await resp.json();
+    const parsed=JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
     if(device==='whoop'){whoopExtracted=parsed;renderExtracted('whoop',parsed);}
     else{eufyExtracted=parsed;renderExtracted('eufy',parsed);}
-  } catch(e) {}
+  }catch(e){}
 }
 
-function renderExtracted(device, d) {
-  const container = document.getElementById(device+'-data');
-  const entries = device==='whoop'
-    ? [['Recovery',d.recovery,'%',d.recovery>=67?'good':d.recovery>=34?'warn':'bad'],['HRV',d.hrv,'ms',''],['Resting HR',d.rhr,'bpm',''],['Sleep',d.sleep_hours,'hrs','']]
-    : [['Weight',d.weight,'kg',''],['Body Fat',d.body_fat,'%',''],['Muscle Mass',d.muscle_mass,'kg','good'],['Hydration',d.water_pct,'%','']];
-  container.innerHTML = entries.filter(([,v])=>v!=null).map(([k,v,u,cls])=>`<div class="data-row"><span class="data-key">${k}</span><div class="data-val ${cls}">${v}<span>${u}</span></div></div>`).join('');
+function renderExtracted(device,d){
+  const container=document.getElementById(device+'-data');
+  const entries=device==='whoop'
+    ?[['Recovery',d.recovery,'%',d.recovery>=67?'good':d.recovery>=34?'warn':'bad'],['HRV',d.hrv,'ms',''],['Resting HR',d.rhr,'bpm',''],['Sleep',d.sleep_hours,'hrs',''],['Deep (SWS)',d.sws_hours,'hrs',''],['REM',d.rem_hours,'hrs','']]
+    :[['Weight',d.weight,'kg',''],['Body Fat',d.body_fat,'%',''],['Muscle Mass',d.muscle_mass,'kg','good'],['Hydration',d.water_pct,'%',d.water_pct&&d.water_pct<55?'warn':'']];
+  container.innerHTML=entries.filter(([,v])=>v!=null).map(([k,v,u,cls])=>`<div class="data-row"><span class="data-key">${k}</span><div class="data-val ${cls}">${v}<span>${u}</span></div></div>`).join('');
   container.classList.add('visible');
+  // Hydration flag
+  if(device==='eufy'&&d.water_pct&&d.water_pct<55){container.innerHTML+=`<div style="background:var(--orange-light);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--orange);font-weight:600">⚠ Low hydration detected — prioritise fluid intake today</div>`;}
 }
 
-async function generateDay() {
-  const btn = document.getElementById('gen-btn');
-  btn.disabled=true; btn.textContent='Generating...';
-  const today = new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
-  const whoopStr = whoopExtracted ? JSON.stringify(whoopExtracted) : `Recovery:${document.getElementById('m-recovery').value}%`;
-  const eufyStr = eufyExtracted ? JSON.stringify(eufyExtracted) : `Weight:${document.getElementById('m-weight').value}kg`;
-  const checkinData = {
-    recovery: whoopExtracted?.recovery||parseInt(document.getElementById('m-recovery').value)||null,
-    hrv: whoopExtracted?.hrv||parseInt(document.getElementById('m-hrv').value)||null,
-    rhr: whoopExtracted?.rhr||null,
-    sleep_hours: whoopExtracted?.sleep_hours||parseFloat(document.getElementById('m-sleep').value)||null,
-    weight: eufyExtracted?.weight||parseFloat(document.getElementById('m-weight').value)||null,
-    body_fat: eufyExtracted?.body_fat||parseFloat(document.getElementById('m-bf').value)||null,
-    muscle_mass: eufyExtracted?.muscle_mass||null
-  };
+async function generateDay(){
+  const btn=document.getElementById('gen-btn');
+  btn.disabled=true;btn.textContent='Generating...';
+  const today=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  const whoopStr=whoopExtracted?JSON.stringify(whoopExtracted):`Recovery:${document.getElementById('m-recovery').value}%`;
+  const eufyStr=eufyExtracted?JSON.stringify(eufyExtracted):`Weight:${document.getElementById('m-weight').value}kg`;
+  const checkinData={recovery:whoopExtracted?.recovery||parseInt(document.getElementById('m-recovery').value)||null,hrv:whoopExtracted?.hrv||parseInt(document.getElementById('m-hrv').value)||null,rhr:whoopExtracted?.rhr||null,sleep_hours:whoopExtracted?.sleep_hours||parseFloat(document.getElementById('m-sleep').value)||null,sws_hours:whoopExtracted?.sws_hours||null,rem_hours:whoopExtracted?.rem_hours||null,weight:eufyExtracted?.weight||parseFloat(document.getElementById('m-weight').value)||null,body_fat:eufyExtracted?.body_fat||parseFloat(document.getElementById('m-bf').value)||null,muscle_mass:eufyExtracted?.muscle_mass||null};
   await saveCheckin(checkinData);
-  const prompt = `Today is ${today}. Week ${getCurrentWeek()} of programme.
-WHOOP: ${whoopStr}
-Eufy: ${eufyStr}
+
+  // Build cycle context for female users
+  let cycleContext='';
+  if(consultationData?.sex==='female'&&consultationData?.cyclingStatus==='cycling'&&consultationData?.periodDate){
+    const dayOfCycle=Math.floor((new Date()-new Date(consultationData.periodDate))/(1000*60*60*24))%(parseInt(consultationData.cycleLength)||28)+1;
+    const phase=dayOfCycle<=5?'Menstrual':dayOfCycle<=13?'Follicular':dayOfCycle<=16?'Ovulatory':dayOfCycle<=21?'Early Luteal':'Late Luteal';
+    cycleContext=`\nCYCLE CONTEXT: Day ${dayOfCycle} of cycle · ${phase} phase. Adjust training intensity and nutrition accordingly per female physiology framework.`;
+  }
+
+  const prompt=`Today is ${today}. Week ${getCurrentWeek()} of programme.
+WHOOP DATA: ${whoopStr}
+EUFY DATA: ${eufyStr}${cycleContext}
 
 Generate my complete day as a JSON array. Each item: {"time":"7:00 AM","event":"Event name","detail":"2-3 sentences of specific instruction","category":"sleep|nutrition|workout|recovery"}
 
-Adjust workout intensity based on recovery score (green >66%=full, yellow 34-66%=80% volume, red <33%=active recovery only). Include 10-14 blocks covering full day from wake to sleep. ONLY return valid JSON array.`;
+Adjust workout intensity based on recovery score (green >66%=full programme, yellow 34-66%=reduce volume 20%, red <33%=active recovery only). 
+If SWS < 1hr, reduce volume by additional 20% even on green recovery.
+If hydration is LOW, add explicit hydration targets throughout the day.
+Include 10-14 blocks covering full day from wake to sleep. ONLY return valid JSON array.`;
 
-  try {
-    const resp = await fetch('/api/proxy', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4000, system:await getSystemPrompt(), messages:[{role:'user',content:prompt}] })
-    });
-    const data = await resp.json();
-    const blocks = JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
-    renderTimeline(blocks, checkinData.recovery);
-    document.getElementById('tl-subtitle').textContent = today;
-    showToast('Today\'s protocol generated ✓');
-  } catch(e) {
-    document.getElementById('timeline-body').innerHTML = '<div class="timeline-empty-state"><div class="timeline-empty-text">Error generating plan. Please try again.</div></div>';
-  }
-  btn.disabled=false; btn.textContent='Generate Today\'s Protocol';
+  try{
+    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:await getSystemPrompt(),messages:[{role:'user',content:prompt}]})});
+    const data=await resp.json();
+    const blocks=JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
+    renderTimeline(blocks,checkinData.recovery);
+    document.getElementById('tl-subtitle').textContent=today;
+    showToast("Today's protocol generated ✓");
+  }catch(e){document.getElementById('timeline-body').innerHTML='<div class="timeline-empty-state"><div class="timeline-empty-text">Error generating plan. Please try again.</div></div>';}
+  btn.disabled=false;btn.textContent="Generate Today's Protocol";
 }
 
-function renderTimeline(blocks, recovery) {
-  const body = document.getElementById('timeline-body');
-  body.innerHTML = '';
-  if (recovery!=null) {
+function renderTimeline(blocks,recovery){
+  const body=document.getElementById('timeline-body');
+  body.innerHTML='';
+  if(recovery!=null){
     const c=recovery>=67?'var(--green)':recovery>=34?'var(--orange)':'var(--red)';
     const bg=recovery>=67?'var(--green-light)':recovery>=34?'var(--orange-light)':'var(--red-light)';
-    const label=recovery>=67?'Green — Full Programme':recovery>=34?'Yellow — 80% Volume':'Red — Active Recovery Only';
+    const label=recovery>=67?'Green — Full Programme':recovery>=34?'Yellow — Reduced Volume':'Red — Active Recovery Only';
     body.innerHTML=`<div style="padding:12px 20px;background:${bg};border-bottom:1px solid var(--border)"><div style="font-size:12px;font-weight:700;color:${c}">${label}</div><div style="height:4px;background:var(--border);border-radius:2px;margin-top:6px"><div style="width:${recovery}%;height:100%;background:${c};border-radius:2px"></div></div></div>`;
   }
   const dotClass={workout:'dot-workout',nutrition:'dot-nutrition',recovery:'dot-recovery',sleep:'dot-sleep'};
   blocks.forEach((block,i)=>{
-    const div=document.createElement('div'); div.className='timeline-block'; div.style.animationDelay=(i*0.05)+'s';
+    const div=document.createElement('div');div.className='timeline-block';div.style.animationDelay=(i*0.05)+'s';
     div.innerHTML=`<div class="tl-time">${block.time||''}</div><div class="tl-dot-wrap"><div class="tl-dot ${dotClass[block.category]||'dot-recovery'}"></div>${i<blocks.length-1?'<div class="tl-line"></div>':''}</div><div class="tl-info"><div class="tl-event">${block.event||''}</div><div class="tl-detail">${block.detail||''}</div><span class="tl-tag ${block.category||'recovery'}">${block.category?.toUpperCase()||''}</span></div>`;
     body.appendChild(div);
   });
@@ -1736,121 +1783,105 @@ function renderTimeline(blocks, recovery) {
 // ══════════════════════════════════════════
 // PROGRESS
 // ══════════════════════════════════════════
-function renderProgressCharts(checkins) {
-  const recent7 = checkins.slice(0,7).reverse();
-  if (recent7.some(c=>c.weight)) {
-    const wChart = document.getElementById('weight-chart');
-    const weights = recent7.map(c=>c.weight).filter(Boolean);
-    const max=Math.max(...weights), min=Math.min(...weights);
-    wChart.innerHTML = recent7.map((c,i)=>{
-      if(!c.weight) return `<div class="trend-bar-wrap"><div class="trend-bar" style="height:4px"></div><div class="trend-bar-label">—</div></div>`;
+function renderProgressCharts(checkins){
+  const recent7=checkins.slice(0,7).reverse();
+  if(recent7.some(c=>c.weight)){
+    const wChart=document.getElementById('weight-chart');
+    const weights=recent7.map(c=>c.weight).filter(Boolean);
+    const max=Math.max(...weights),min=Math.min(...weights);
+    wChart.innerHTML=recent7.map((c,i)=>{
+      if(!c.weight)return`<div class="trend-bar-wrap"><div class="trend-bar" style="height:4px"></div><div class="trend-bar-label">—</div></div>`;
       const h=max===min?80:20+((c.weight-min)/(max-min))*80;
-      return `<div class="trend-bar-wrap"><div class="trend-bar-val">${c.weight}</div><div class="trend-bar ${i===recent7.length-1?'current':''}" style="height:${h}px"></div><div class="trend-bar-label">${new Date(c.date).toLocaleDateString('en',{weekday:'short'})}</div></div>`;
+      return`<div class="trend-bar-wrap"><div class="trend-bar-val">${c.weight}</div><div class="trend-bar ${i===recent7.length-1?'current':''}" style="height:${h}px"></div><div class="trend-bar-label">${new Date(c.date).toLocaleDateString('en',{weekday:'short'})}</div></div>`;
     }).join('');
   }
-  const recent14 = checkins.slice(0,14).reverse();
-  if (recent14.some(c=>c.hrv)) {
+  const recent14=checkins.slice(0,14).reverse();
+  if(recent14.some(c=>c.hrv)){
     const hrvs=recent14.map(c=>c.hrv).filter(Boolean);
     const avg=hrvs.reduce((a,b)=>a+b,0)/hrvs.length;
     document.getElementById('avg-hrv').innerHTML=`${Math.round(avg)}<span>ms</span>`;
     const recoveries=recent14.map(c=>c.recovery).filter(Boolean);
-    if(recoveries.length) document.getElementById('avg-recovery').innerHTML=`${Math.round(recoveries.reduce((a,b)=>a+b,0)/recoveries.length)}<span>%</span>`;
+    if(recoveries.length)document.getElementById('avg-recovery').innerHTML=`${Math.round(recoveries.reduce((a,b)=>a+b,0)/recoveries.length)}<span>%</span>`;
     const max=Math.max(...hrvs);
     document.getElementById('hrv-chart').innerHTML=recent14.map((c,i)=>{
-      if(!c.hrv) return `<div class="hrv-bar" style="height:4px;flex:1"></div>`;
-      const h=(c.hrv/max)*60;
-      const cls=c.hrv>avg*1.1?'high':c.hrv<avg*0.9?'low':i===recent14.length-1?'current':'';
-      return `<div class="hrv-bar ${cls}" style="height:${h}px;flex:1"></div>`;
+      if(!c.hrv)return`<div class="hrv-bar" style="height:4px;flex:1"></div>`;
+      const h=(c.hrv/max)*60;const cls=c.hrv>avg*1.1?'high':c.hrv<avg*0.9?'low':i===recent14.length-1?'current':'';
+      return`<div class="hrv-bar ${cls}" style="height:${h}px;flex:1"></div>`;
     }).join('');
-    if(hrvs.length>=3){
-      const r=hrvs.slice(-3);
-      const trend=r[2]>r[0]?'↑ Improving':r[2]<r[0]?'↓ Declining':'→ Stable';
-      const el=document.getElementById('hrv-trend-val');
-      el.textContent=trend; el.style.color=r[2]>r[0]?'var(--green)':r[2]<r[0]?'var(--red)':'var(--muted)';
-    }
+    if(hrvs.length>=3){const r=hrvs.slice(-3);const trend=r[2]>r[0]?'↑ Improving':r[2]<r[0]?'↓ Declining':'→ Stable';const el=document.getElementById('hrv-trend-val');el.textContent=trend;el.style.color=r[2]>r[0]?'var(--green)':r[2]<r[0]?'var(--red)':'var(--muted)';}
   }
 }
 
-function updateStatCards(checkins) {
-  if(!checkins.length) return;
+function updateStatCards(checkins){
+  if(!checkins.length)return;
   const latest=checkins[0];
   const weekAgo=checkins.find(c=>(new Date()-new Date(c.date))>=6*24*3600*1000);
-  if(latest.weight){
-    document.getElementById('stat-weight').innerHTML=`${latest.weight}<span>kg</span>`;
-    if(weekAgo?.weight){const diff=(latest.weight-weekAgo.weight).toFixed(1);const el=document.getElementById('stat-weight-change');el.textContent=`${diff>0?'+':''}${diff}kg this week`;el.className=`stat-change ${diff>0?'up':diff<0?'down':'neutral'}`;}
-  }
-  if(latest.body_fat) document.getElementById('stat-bf').innerHTML=`${latest.body_fat}<span>%</span>`;
-  if(latest.muscle_mass) document.getElementById('stat-muscle').innerHTML=`${latest.muscle_mass}<span>kg</span>`;
+  if(latest.weight){document.getElementById('stat-weight').innerHTML=`${latest.weight}<span>kg</span>`;if(weekAgo?.weight){const diff=(latest.weight-weekAgo.weight).toFixed(1);const el=document.getElementById('stat-weight-change');el.textContent=`${diff>0?'+':''}${diff}kg this week`;el.className=`stat-change ${diff>0?'up':diff<0?'down':'neutral'}`;}}
+  if(latest.body_fat)document.getElementById('stat-bf').innerHTML=`${latest.body_fat}<span>%</span>`;
+  if(latest.muscle_mass)document.getElementById('stat-muscle').innerHTML=`${latest.muscle_mass}<span>kg</span>`;
 }
 
 // ══════════════════════════════════════════
 // CYCLE TRACKING
 // ══════════════════════════════════════════
-function updateCycleUI(d) {
-  if(d?.sex!=='female') return;
+function updateCycleUI(d){
+  if(d?.sex!=='female')return;
   document.getElementById('cycle-card').style.display='block';
-  if(d.periodDate) calculateCyclePhase(d.periodDate, d.cycleLength||28);
+  if(d.periodDate)calculateCyclePhase(d.periodDate,d.cycleLength||28);
 }
 
-function updateCycle(dateVal) {
-  if(consultationData){ consultationData.periodDate=dateVal; db.from('tso_profile').upsert({user_id:USER_ID,period_date:dateVal}); calculateCyclePhase(dateVal,consultationData.cycleLength||28); }
+function updateCycle(dateVal){
+  if(consultationData){consultationData.periodDate=dateVal;db.from('tso_profile').upsert({user_id:USER_ID,period_date:dateVal});calculateCyclePhase(dateVal,consultationData.cycleLength||28);}
 }
 
-function calculateCyclePhase(periodDate, cycleLen) {
-  const dayOfCycle = Math.floor((new Date()-new Date(periodDate))/(1000*60*60*24))%parseInt(cycleLen)+1;
-  const isFollicular = dayOfCycle <= cycleLen/2;
-  document.getElementById('cycle-phase-name').textContent = isFollicular?'Follicular Phase':'Luteal Phase';
-  document.getElementById('cycle-phase-day').textContent = isFollicular?`Day ${dayOfCycle} · High performance window`:`Day ${dayOfCycle} · Recovery focus`;
-  document.getElementById('cycle-phase-rec').textContent = isFollicular?'Estrogen peaks — MPS elevated. Push hard with heavy compound lifts and progressive overload.':'Progesterone rises — increase calories by 150-250kcal (especially carbs). Moderate intensity. Prioritise recovery, sleep, iron and magnesium.';
-  document.getElementById('cycle-dot').className=`cycle-phase-dot ${isFollicular?'follicular':'luteal'}`;
-  document.getElementById('cycle-dot').textContent=isFollicular?'🌱':'🌙';
+function calculateCyclePhase(periodDate,cycleLen){
+  const dayOfCycle=Math.floor((new Date()-new Date(periodDate))/(1000*60*60*24))%parseInt(cycleLen)+1;
+  let phase,emoji,rec;
+  if(dayOfCycle<=5){phase='Menstrual Phase';emoji='🔴';rec='Reduce volume 20-30%. Iron-rich foods, omega-3, magnesium. Movement helps with cramping — but no maximal testing.';}
+  else if(dayOfCycle<=13){phase='Follicular Phase';emoji='🌱';rec='Peak performance window. Oestrogen is rising — push hard with heavy compound lifts and progressive overload. Best time for PR attempts.';}
+  else if(dayOfCycle<=16){phase='Ovulatory Phase';emoji='⚡';rec='Peak strength. Maintain follicular intensity. Warm up thoroughly — elevated ACL/ligament laxity risk from oestrogen peak.';}
+  else if(dayOfCycle<=21){phase='Early Luteal Phase';emoji='🌙';rec='Slight performance reduction. Core temp elevated +0.3-0.5°C — perceived exertion will feel higher for same output. Adjust expectations.';}
+  else{phase='Late Luteal Phase';emoji='🌙';rec='Reduce volume 15-20%. Metabolic rate genuinely elevated — +150-250 kcal is appropriate. Protein +15-20g/day. Scale weight is unreliable now — water retention is normal.';}
+  document.getElementById('cycle-phase-name').textContent=phase;
+  document.getElementById('cycle-phase-day').textContent=`Day ${dayOfCycle} of cycle`;
+  document.getElementById('cycle-phase-rec').textContent=rec;
+  document.getElementById('cycle-dot').className=`cycle-phase-dot ${dayOfCycle<=13?'follicular':'luteal'}`;
+  document.getElementById('cycle-dot').textContent=emoji;
 }
 
 // ══════════════════════════════════════════
 // MEAL LOGGING
 // ══════════════════════════════════════════
-async function logMeal(input) {
-  const file=input.files[0]; if(!file) return;
-  showToast('Analysing meal...');
-  const reader=new FileReader();
-  reader.onload=async(e)=>{ await analyseMeal(null,e.target.result.split(',')[1],file.type); };
-  reader.readAsDataURL(file);
-}
-function logMealText() { document.getElementById('meal-modal').style.display='flex'; }
-function closeMealModal() { document.getElementById('meal-modal').style.display='none'; }
-async function submitMealText() {
-  const text=document.getElementById('meal-text-input').value.trim(); if(!text) return;
-  closeMealModal(); showToast('Analysing meal...');
-  await analyseMeal(text,null,null);
-}
+async function logMeal(input){const file=input.files[0];if(!file)return;showToast('Analysing meal...');const reader=new FileReader();reader.onload=async(e)=>{await analyseMeal(null,e.target.result.split(',')[1],file.type);};reader.readAsDataURL(file);}
+function logMealText(){document.getElementById('meal-modal').style.display='flex';}
+function closeMealModal(){document.getElementById('meal-modal').style.display='none';}
+async function submitMealText(){const text=document.getElementById('meal-text-input').value.trim();if(!text)return;closeMealModal();showToast('Analysing meal...');await analyseMeal(text,null,null);}
 
-async function analyseMeal(textDesc, b64, mime) {
-  const prompt = textDesc
-    ? `Analyse this meal and return ONLY JSON: "${textDesc}". Format: {"name":"meal name","calories":0,"protein":0,"carbs":0,"fat":0}. Numbers as integers.`
-    : `Analyse this meal photo and estimate nutrition. Return ONLY JSON: {"name":"meal name","calories":0,"protein":0,"carbs":0,"fat":0}. Numbers as integers.`;
-  const content = b64 ? [{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:prompt}] : [{type:'text',text:prompt}];
-  try {
+async function analyseMeal(textDesc,b64,mime){
+  const prompt=textDesc?`Analyse this meal and return ONLY JSON: "${textDesc}". Format: {"name":"meal name","calories":0,"protein":0,"carbs":0,"fat":0}. Numbers as integers.`:`Analyse this meal photo and estimate nutrition. Return ONLY JSON: {"name":"meal name","calories":0,"protein":0,"carbs":0,"fat":0}. Numbers as integers.`;
+  const content=b64?[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:prompt}]:[{type:'text',text:prompt}];
+  try{
     const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content}]})});
     const data=await resp.json();
     const meal=JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
     meal.time=new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'});
     meal.date=new Date().toISOString().split('T')[0];
     try{await db.from('tso_meals').insert({user_id:USER_ID,...meal});}catch(e){}
-    todayMacros.cal+=meal.calories||0; todayMacros.pro+=meal.protein||0; todayMacros.carb+=meal.carbs||0; todayMacros.fat+=meal.fat||0;
-    renderMealEntry(meal); updateMacroDisplay();
+    todayMacros.cal+=meal.calories||0;todayMacros.pro+=meal.protein||0;todayMacros.carb+=meal.carbs||0;todayMacros.fat+=meal.fat||0;
+    renderMealEntry(meal);updateMacroDisplay();
     showToast(`Logged: ${meal.name} · ${meal.calories} kcal ✓`);
-  } catch(e){showToast('Could not analyse meal. Try again.');}
+  }catch(e){showToast('Could not analyse meal. Try again.');}
 }
 
-function renderMealEntry(meal) {
+function renderMealEntry(meal){
   const list=document.getElementById('meal-list');
-  if(list.textContent.includes('No meals')) list.innerHTML='';
-  const div=document.createElement('div'); div.className='meal-entry';
+  if(list.textContent.includes('No meals'))list.innerHTML='';
+  const div=document.createElement('div');div.className='meal-entry';
   div.innerHTML=`<div class="meal-time">${meal.time||''}</div><div><div class="meal-name">${meal.name||'Meal'}</div><div class="meal-macros"><span class="macro-badge cal">${meal.calories} kcal</span><span class="macro-badge pro">${meal.protein}g P</span><span class="macro-badge carb">${meal.carbs}g C</span><span class="macro-badge fat">${meal.fat}g F</span></div></div>`;
   list.appendChild(div);
 }
 
-function updateMacroDisplay() {
+function updateMacroDisplay(){
   const t=macroTargets;
   document.getElementById('cal-progress').textContent=`${todayMacros.cal} / ${t.cal||'—'} kcal`;
   document.getElementById('pro-progress').textContent=`${todayMacros.pro} / ${t.pro||'—'}g`;
@@ -1867,22 +1898,18 @@ function updateMacroDisplay() {
 // ══════════════════════════════════════════
 // PHOTO PROGRESS
 // ══════════════════════════════════════════
-function addPhoto(index, input) {
-  const file=input.files[0]; if(!file) return;
+function addPhoto(index,input){
+  const file=input.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=(e)=>{
-    const slot=document.getElementById('photo-'+index);
-    slot.innerHTML=`<img src="${e.target.result}" alt="Progress"><div style="position:absolute;bottom:6px;left:6px;right:6px;background:rgba(0,0,0,0.5);border-radius:4px;padding:3px 6px;font-size:9px;color:white;font-weight:700">${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>`;
-  };
-  reader.readAsDataURL(file);
-  showToast('Progress photo saved ✓');
+  reader.onload=(e)=>{const slot=document.getElementById('photo-'+index);slot.innerHTML=`<img src="${e.target.result}" alt="Progress"><div style="position:absolute;bottom:6px;left:6px;right:6px;background:rgba(0,0,0,0.5);border-radius:4px;padding:3px 6px;font-size:9px;color:white;font-weight:700">${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>`;};
+  reader.readAsDataURL(file);showToast('Progress photo saved ✓');
 }
 
 // ══════════════════════════════════════════
 // LAB NUDGE
 // ══════════════════════════════════════════
-function checkLabNudge() {
-  if(!consultationData) return;
+function checkLabNudge(){
+  if(!consultationData)return;
   const age=parseInt(consultationData.age);
   const lastLab=localStorage.getItem('tso_last_lab');
   const monthsFreq=age<30?12:age<45?6:3;
@@ -1894,104 +1921,79 @@ function checkLabNudge() {
   }
 }
 
-async function generateLabBrief() {
+async function generateLabBrief(){
   localStorage.setItem('tso_last_lab',new Date().toISOString());
   const d=consultationData;
-  const prompt=`Generate a specific "what to tell my doctor" blood panel brief for my GP. Profile: ${d?.sex}, ${d?.age}y, ${d?.diet} diet, goal: ${d?.goal}, current supplements: ${d?.currentSupplements||'none'}. List each test to request, why it matters for my profile specifically, and what optimal ranges look like for my goals (not just NHS reference ranges). Format as a clear, printable brief.`;
-  switchTab('chat');
-  document.getElementById('userInput').value=prompt;
-  await sendMessage();
+  const prompt=`Generate a specific "what to tell my doctor" blood panel brief for my GP. Profile: ${d?.sex}, ${d?.age}y, ${d?.diet} diet, goal: ${d?.goal}, current supplements: ${d?.currentSupplements||'none'}. List each test to request, why it matters for my profile specifically, and what optimal ranges look like for my goals (not just standard reference ranges). Format as a clear, printable brief.`;
+  switchTab('chat');document.getElementById('userInput').value=prompt;await sendMessage();
 }
 
 // ══════════════════════════════════════════
 // EXERCISE SWAP MODAL
 // ══════════════════════════════════════════
-let swapExerciseName = null;
-
-function openSwapModal(exerciseName) {
-  swapExerciseName = exerciseName;
-  document.getElementById('swap-exercise-name').textContent = exerciseName;
-  document.getElementById('swap-modal').style.display = 'flex';
-}
-
-function closeSwapModal() {
-  document.getElementById('swap-modal').style.display = 'none';
-  swapExerciseName = null;
-}
-
-async function handleSwap(reason) {
+let swapExerciseName=null;
+function openSwapModal(exerciseName){swapExerciseName=exerciseName;document.getElementById('swap-exercise-name').textContent=exerciseName;document.getElementById('swap-modal').style.display='flex';}
+function closeSwapModal(){document.getElementById('swap-modal').style.display='none';swapExerciseName=null;}
+async function handleSwap(reason){
   closeSwapModal();
-  const prompts = {
-    equipment: `I need to swap ${swapExerciseName || 'this exercise'} because I don't have the required equipment. My available equipment: ${consultationData?.equipment || 'not specified'}. Suggest the single best alternative that trains the same muscle group with my equipment. Keep your response brief — just the substitute and a one-sentence reason.`,
-    pain: `I need to swap ${swapExerciseName || 'this exercise'} because it causes pain or discomfort. Suggest the single best pain-free alternative that trains the same muscle group. Keep it brief. Note: if this pain is recurring, please recommend consulting a physiotherapist.`,
-    preference: `I want to swap ${swapExerciseName || 'this exercise'} because I prefer something different. Before suggesting an alternative, briefly explain why this exercise is in my programme and what it's achieving. Then offer one alternative — but be honest if the original is the better choice.`
+  const prompts={
+    equipment:`I need to swap ${swapExerciseName||'this exercise'} because I don't have the required equipment. My available equipment: ${consultationData?.equipment||'not specified'}. Suggest the single best alternative that trains the same muscle group with my equipment. Brief response — just the substitute and a one-sentence reason.`,
+    pain:`I need to swap ${swapExerciseName||'this exercise'} because it causes pain or discomfort. Suggest the single best pain-free alternative that trains the same muscle group. Note: if this pain is recurring, please recommend consulting a physiotherapist.`,
+    preference:`I want to swap ${swapExerciseName||'this exercise'} for personal preference. Before suggesting an alternative, briefly explain why this exercise is in my programme and what it's achieving. Then offer one alternative — but be honest if the original is the better choice.`
   };
-  switchTab('chat');
-  document.getElementById('userInput').value = prompts[reason];
-  await sendMessage();
+  switchTab('chat');document.getElementById('userInput').value=prompts[reason];await sendMessage();
 }
 
 // ══════════════════════════════════════════
 // NEW TRAINING PLAN
 // ══════════════════════════════════════════
-function confirmNewPlan() {
-  document.getElementById('new-plan-modal').style.display = 'flex';
-}
-
-function closeNewPlanModal() {
-  document.getElementById('new-plan-modal').style.display = 'none';
-}
-
-async function startNewPlan() {
-  closeNewPlanModal();
-  showToast('Clearing current plan...');
-  try {
-    await db.from('tso_profile').delete().eq('user_id', USER_ID);
-    await db.from('tso_memory').delete().eq('user_id', USER_ID);
-  } catch(e) {}
-  consultationData = null;
-  programmeData = null;
-  programmeStartDate = null;
-  conversationHistory = [];
-  document.getElementById('programme-empty-state').style.display = 'flex';
-  document.getElementById('programme-content').style.display = 'none';
-  document.getElementById('messages').innerHTML = `<div class="msg ai"><div class="msg-meta">The Scientific Oracle</div><div class="msg-bubble">Your previous plan has been cleared. Complete a new consultation to generate your next training block.</div></div><div class="typing-indicator" id="typing"><div class="msg-meta">The Scientific Oracle</div><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+function confirmNewPlan(){document.getElementById('new-plan-modal').style.display='flex';}
+function closeNewPlanModal(){document.getElementById('new-plan-modal').style.display='none';}
+async function startNewPlan(){
+  closeNewPlanModal();showToast('Clearing current plan...');
+  try{await db.from('tso_profile').delete().eq('user_id',USER_ID);await db.from('tso_memory').delete().eq('user_id',USER_ID);}catch(e){}
+  consultationData=null;programmeData=null;programmeStartDate=null;conversationHistory=[];
+  userData={};oStep=0;
+  document.getElementById('programme-empty-state').style.display='flex';
+  document.getElementById('programme-content').style.display='none';
+  document.getElementById('messages').innerHTML=`<div class="msg ai"><div class="msg-meta">The Scientific Oracle</div><div class="msg-bubble">Your previous plan has been cleared. Complete a new consultation to generate your next training block.</div></div><div class="typing-indicator" id="typing"><div class="msg-meta">The Scientific Oracle</div><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  // Reset oracle chat
+  document.getElementById('o-chat').innerHTML='';
+  document.getElementById('o-input').innerHTML='';
+  $oprog.style.width='0%';
   switchTab('consult');
   showToast('Ready for your new training plan ✓');
+  setTimeout(()=>initOracle(),400);
 }
 
 // ══════════════════════════════════════════
 // POST-CONSULTATION ACTION CHIPS
 // ══════════════════════════════════════════
-function addActionChips() {
-  const messages = document.getElementById('messages');
-  const typing = document.getElementById('typing');
-  const div = document.createElement('div');
-  div.className = 'msg ai';
-  div.innerHTML = `
-    <div class="msg-meta">The Scientific Oracle</div>
-    <div class="action-chips">
-      <button class="action-chip" onclick="switchTab('programme');this.closest('.msg').remove()">📋 View My Programme →</button>
-      <button class="action-chip" onclick="sendQuick('Walk me through my nutrition targets and how to hit them through food.');this.closest('.msg').remove()">🍽️ Explain My Nutrition</button>
-      <button class="action-chip" onclick="sendQuick('What should I focus on in the first two weeks of this programme?');this.closest('.msg').remove()">🎯 First Two Weeks</button>
-    </div>`;
-  messages.insertBefore(div, typing);
-  messages.scrollTop = messages.scrollHeight;
+function addActionChips(){
+  const messages=document.getElementById('messages');
+  const typing=document.getElementById('typing');
+  const div=document.createElement('div');div.className='msg ai';
+  div.innerHTML=`<div class="msg-meta">The Scientific Oracle</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+    <button onclick="switchTab('programme');this.closest('.msg').remove()" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);border:1.5px solid rgba(0,102,255,0.2);border-radius:100px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">📋 View My Programme →</button>
+    <button onclick="sendQuick('Walk me through my nutrition targets and how to hit them through whole food.');this.closest('.msg').remove()" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);border:1.5px solid rgba(0,102,255,0.2);border-radius:100px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">🍽️ Explain My Nutrition</button>
+    <button onclick="sendQuick('What should I focus on in the first two weeks of this programme?');this.closest('.msg').remove()" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);border:1.5px solid rgba(0,102,255,0.2);border-radius:100px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--accent);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">🎯 First Two Weeks</button>
+  </div>`;
+  messages.insertBefore(div,typing);messages.scrollTop=messages.scrollHeight;
 }
 
 // ══════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════
-function showToast(msg) {
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('visible');
-  setTimeout(()=>t.classList.remove('visible'),3000);
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('visible');setTimeout(()=>t.classList.remove('visible'),3000);}
+
+async function initDB(){
+  try{await loadProfile();await loadProgramme();await loadTodayMeals();await loadProgressData();}catch(e){console.log('Init:',e);}
 }
 
-async function initDB() {
-  try { await loadProfile(); await loadProgramme(); await loadTodayMeals(); await loadProgressData(); checkLabNudge(); } catch(e) { console.log('Init:',e); }
-}
-
-document.addEventListener('DOMContentLoaded', () => { renderBrainTrust(); initDB(); updatePreview(); });
+document.addEventListener('DOMContentLoaded',()=>{
+  initDB();
+  initOracle();
+});
 </script>
 </body>
 </html>
