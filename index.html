@@ -1561,7 +1561,7 @@ Return ONLY valid JSON in this exact format:
 
   try {
     const resp = await fetch('/api/proxy', {
-      method:'POST', headers:{'Content-Type':'application/json'},
+      method:'POST', headers:{'Content-Type':'application/json','x-proxy-secret':'%pBH$n5FJD8+Yk#'},
       body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4000, messages:[{role:'user',content:prompt}] })
     });
     const data = await resp.json();
@@ -1660,7 +1660,7 @@ USER PROFILE: ${profileStr}`;
 async function callTSO(messages) {
   const system = await getSystemPrompt();
   const resp = await fetch('/api/proxy', {
-    method:'POST', headers:{'Content-Type':'application/json'},
+    method:'POST', headers:{'Content-Type':'application/json','x-proxy-secret':'%pBH$n5FJD8+Yk#'},
     body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:4000, system, messages })
   });
   const data = await resp.json();
@@ -1884,7 +1884,7 @@ async function extractData(device,b64,mime){
     ? 'Extract from this WHOOP screenshot. Return ONLY JSON: {"recovery":null,"hrv":null,"rhr":null,"sleep_hours":null,"sws_hours":null,"rem_hours":null,"sleep_performance":null,"hrv_note":null}'
     : 'Extract from this Eufy screenshot. Return ONLY JSON: {"weight":null,"body_fat":null,"muscle_mass":null,"water_pct":null,"bmi":null}';
   try{
-    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:prompt}]}]})});
+    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json','x-proxy-secret':'%pBH$n5FJD8+Yk#'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:prompt}]}]})});
     const data=await resp.json();
     const parsed=JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
     if(device==='whoop'){whoopExtracted=parsed;renderExtracted('whoop',parsed);}
@@ -1932,7 +1932,7 @@ If hydration is LOW, add explicit hydration targets throughout the day.
 Include 10-14 blocks covering full day from wake to sleep. ONLY return valid JSON array.`;
 
   try{
-    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:await getSystemPrompt(),messages:[{role:'user',content:prompt}]})});
+    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json','x-proxy-secret':'%pBH$n5FJD8+Yk#'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4000,system:await getSystemPrompt(),messages:[{role:'user',content:prompt}]})});
     const data=await resp.json();
     const blocks=JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
     renderTimeline(blocks,checkinData.recovery);
@@ -2040,7 +2040,7 @@ async function analyseMeal(textDesc,b64,mime){
   const prompt=textDesc?`Analyse this meal and return ONLY JSON: "${textDesc}". Format: {"name":"meal name","calories":0,"protein":0,"carbs":0,"fat":0}. Numbers as integers.`:`Analyse this meal photo and estimate nutrition. Return ONLY JSON: {"name":"meal name","calories":0,"protein":0,"carbs":0,"fat":0}. Numbers as integers.`;
   const content=b64?[{type:'image',source:{type:'base64',media_type:mime,data:b64}},{type:'text',text:prompt}]:[{type:'text',text:prompt}];
   try{
-    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content}]})});
+    const resp=await fetch('/api/proxy',{method:'POST',headers:{'Content-Type':'application/json','x-proxy-secret':'%pBH$n5FJD8+Yk#'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content}]})});
     const data=await resp.json();
     const meal=JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());
     meal.time=new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'});
@@ -2252,7 +2252,7 @@ async function generateBriefing() {
 Write a 2-3 sentence daily briefing. Warm, direct, and specific to today — week in the block, training relevance, key focus. Then on a new line output JSON: {"pills":[{"label":"Week X","type":"blue"},{"label":"training phase","type":"gold"},{"label":"key metric","type":"green"}]} — 2-3 pills maximum. Return briefing text FIRST, then the JSON block.`;
 
   try {
-    const resp = await fetch('/api/proxy', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:500, messages:[{role:'user',content:prompt}] }) });
+    const resp = await fetch('/api/proxy', { method:'POST', headers:{'Content-Type':'application/json','x-proxy-secret':'%pBH$n5FJD8+Yk#'}, body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:500, messages:[{role:'user',content:prompt}] }) });
     const data = await resp.json();
     const text = data.content?.map(b => b.text||'').join('') || '';
     const jsonMatch = text.match(/\{[\s\S]*"pills"[\s\S]*\}/);
