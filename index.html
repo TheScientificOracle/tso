@@ -8,41 +8,29 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
-  --bg: #F5F5F7;
+  --bg: #FAFAFA;
   --surface: #FFFFFF;
-  --surface2: #F5F5F7;
-  --border: #E5E5EA;
-  --border2: #D1D1D6;
+  --surface2: #F5F5F5;
+  --border: #EBEBEB;
+  --border2: #D8D8D8;
+  --text: #0A0A0A;
+  --text2: #3C3C3C;
+  --muted: #6E6E73;
+  --muted2: #B8B8BC;
   --accent: #0066FF;
   --accent-light: #EBF2FF;
-  --accent-dim: rgba(0,102,255,0.08);
-  --text: #1C1C1E;
-  --text2: #48484A;
-  --muted: #8E8E93;
-  --muted2: #C7C7CC;
-  --green: #30D158;
-  --green-light: #E8FAF0;
-  --orange: #FF9F0A;
-  --orange-light: #FFF4E0;
-  --red: #FF3B30;
-  --red-light: #FFEBEA;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 4px 16px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  --accent-dim: rgba(0,102,255,0.07);
+  --green: #22C55E;
+  --green-light: #F0FDF4;
+  --orange: #F97316;
+  --orange-light: #FFF7ED;
+  --red: #EF4444;
+  --red-light: #FEF2F2;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.08);
   --radius: 16px;
   --radius-sm: 10px;
-  /* Oracle dark palette */
-  --o-bg: #06060a;
-  --o-bg2: #0c0c12;
-  --o-border: rgba(255,255,255,0.06);
-  --o-border2: rgba(255,255,255,0.10);
-  --gold: #c8a96e;
-  --gold-bright: #e8c98e;
-  --gold-dim: rgba(200,169,110,0.35);
-  --gold-glow: rgba(200,169,110,0.12);
-  --o-text: #e8e4dc;
-  --o-muted: #a09a90;
-  --o-dim: #54504a;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
 body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
@@ -68,135 +56,76 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 .page.active { display: flex; }
 
 /* ══════════════════════════
-   ORACLE CONSULTATION PAGE
+   ORACLE PAGE (LIGHT)
 ══════════════════════════ */
-#page-consult {
-  flex-direction: column;
-  background: var(--o-bg);
-  overflow: hidden;
-}
+#page-oracle { flex-direction: column; background: var(--bg); overflow: hidden; }
 
-/* Progress bar */
-#o-progress-bar { height: 2px; background: rgba(255,255,255,0.05); flex-shrink: 0; position: relative; }
-#o-progress-fill { height: 100%; background: linear-gradient(90deg, rgba(200,169,110,0.4), var(--gold)); transition: width 0.7s cubic-bezier(0.4,0,0.2,1); width: 0%; }
+#o-header { flex-shrink: 0; display: flex; flex-direction: row; align-items: center; padding: 14px 20px; border-bottom: 1px solid var(--border); background: var(--surface); gap: 12px; }
+.o-header-text { display: flex; flex-direction: column; }
+.o-name { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.o-status { font-size: 11px; color: var(--muted2); font-family: 'Cormorant Garamond', serif; font-style: italic; min-height: 16px; }
 
-/* Oracle header */
-#o-header { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding: 18px 0 12px; border-bottom: 1px solid var(--o-border); background: var(--o-bg); position: relative; z-index: 5; }
-
-/* ── Atomic Orbit Avatar ── */
+/* Atom (light version) */
 .atom-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
-.atom-nucleus {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 32%, #f0d898, #c8a96e 45%, #7a5018);
-  box-shadow: 0 0 14px rgba(200,169,110,0.8), 0 0 35px rgba(200,169,110,0.3);
-  z-index: 4;
-  animation: atom-nucleus-pulse 2.8s ease-in-out infinite;
-}
-@keyframes atom-nucleus-pulse {
-  0%,100% { box-shadow:0 0 12px rgba(200,169,110,0.7),0 0 30px rgba(200,169,110,0.2); transform:translate(-50%,-50%) scale(1); }
-  50%      { box-shadow:0 0 22px rgba(200,169,110,1),0 0 55px rgba(200,169,110,0.4); transform:translate(-50%,-50%) scale(1.15); }
-}
+.atom-nucleus { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle at 38% 32%, #555, #111); box-shadow: 0 0 8px rgba(0,0,0,0.2); z-index: 4; }
 .atom-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .orb-a { animation: orb-cw  2.6s linear infinite; }
 .orb-b { animation: orb-ccw 4.0s linear infinite; }
 .orb-c { animation: orb-cw  3.3s linear infinite; }
 @keyframes orb-cw  { to { transform: rotate(360deg);  } }
 @keyframes orb-ccw { to { transform: rotate(-360deg); } }
-/* sizes */
 .atom-lg { width: 72px; height: 72px; }
 .atom-lg .atom-nucleus { width: 18px; height: 18px; }
 .atom-sm { width: 32px; height: 32px; }
 .atom-sm .atom-nucleus { width: 7px; height: 7px; }
 
-@keyframes o-spin    { to { transform: translate(-50%,-50%) rotate(360deg); } }
-@keyframes o-spin-r  { to { transform: translate(-50%,-50%) rotate(-360deg); } }
+#o-chat { flex: 1; overflow-y: auto; padding: 20px 20px 8px; scroll-behavior: smooth; overscroll-behavior: contain; }
+#o-chat::-webkit-scrollbar { width: 3px; }
+#o-chat::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
 
-.o-name   { margin-top: 9px; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--o-dim); font-weight: 600; }
-.o-status { margin-top: 2px; font-size: 10px; letter-spacing: 0.08em; color: rgba(200,169,110,0.45); font-family: 'Cormorant Garamond', serif; font-style: italic; min-height: 14px; }
-
-
-/* Chat scroll area */
-#o-chat { flex: 1; overflow-y: auto; padding: 12px 0 4px; scroll-behavior: smooth; overscroll-behavior: contain; }
-#o-chat::-webkit-scrollbar { width: 2px; }
-#o-chat::-webkit-scrollbar-thumb { background: var(--o-border2); }
-
-.o-msg-row { display: flex; padding: 3px 16px; animation: o-msg-in 0.38s cubic-bezier(0.18,0.89,0.32,1.1) both; }
+.o-msg-row { display: flex; padding: 4px 0; animation: o-msg-in 0.35s cubic-bezier(0.18,0.89,0.32,1.05) both; }
 .o-msg-row.oracle { justify-content: flex-start; }
-.o-msg-row.user   { justify-content: flex-end; margin-top: 2px; }
-@keyframes o-msg-in { from{opacity:0;transform:translateY(12px) scale(0.97)}to{opacity:1;transform:none} }
+.o-msg-row.user { justify-content: flex-end; }
+@keyframes o-msg-in { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none} }
 
-.o-bubble { max-width: 82%; padding: 11px 15px; border-radius: 16px; line-height: 1.65; }
-.oracle .o-bubble { background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 3px 16px 16px 16px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 400; color: var(--o-text); letter-spacing: 0.012em; }
-.user .o-bubble { background: #141420; border: 1px solid rgba(200,169,110,0.28); border-radius: 16px 3px 16px 16px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 600; color: rgba(232,228,220,0.82); letter-spacing: 0.03em; }
+.o-bubble { max-width: 84%; padding: 13px 17px; line-height: 1.7; border-radius: 16px; }
+.oracle .o-bubble { background: var(--surface); border: 1px solid var(--border); border-radius: 3px 18px 18px 18px; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 400; color: var(--text); letter-spacing: 0.01em; box-shadow: var(--shadow-sm); }
+.user .o-bubble { background: #0A0A0A; border-radius: 18px 3px 18px 18px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; color: #FFFFFF; letter-spacing: 0.02em; }
 
-/* Typing dots */
 .o-typing { display: flex; gap: 5px; padding: 4px 0; align-items: center; }
-.o-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-dim); animation: o-bounce 1.3s ease-in-out infinite; }
+.o-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border2); animation: o-bounce 1.3s ease-in-out infinite; }
 .o-dot:nth-child(2){animation-delay:.18s} .o-dot:nth-child(3){animation-delay:.36s}
-@keyframes o-bounce{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-5px);opacity:1}}
+@keyframes o-bounce{0%,60%,100%{transform:translateY(0);opacity:0.5}30%{transform:translateY(-5px);opacity:1}}
 
-/* Input area */
-#o-input { flex-shrink: 0; background: var(--o-bg); border-top: 1px solid var(--o-border); padding: 10px 16px 16px; max-height: 56vh; overflow-y: auto; overflow-x: hidden; }
-#o-input::-webkit-scrollbar { width: 2px; }
+#o-input { flex-shrink: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 12px 20px 20px; }
+.o-fade-in { animation: o-fade-up 0.28s cubic-bezier(0.2,0,0,1) both; }
+@keyframes o-fade-up { from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none} }
 
-.o-fade-in { animation: o-fade-up 0.3s cubic-bezier(0.2,0,0,1) both; }
-@keyframes o-fade-up { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none} }
+.o-opening-chips { display: flex; flex-direction: column; gap: 8px; }
+.o-opening-chip { width: 100%; text-align: left; background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 16px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--text2); cursor: pointer; transition: all .18s; }
+.o-opening-chip:hover { border-color: var(--text); color: var(--text); background: var(--surface2); }
 
-/* Option cards */
-.o-cards { display: flex; flex-direction: column; gap: 6px; }
-.o-card { background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 10px; padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: border-color .18s, background .18s; -webkit-tap-highlight-color: transparent; }
-.o-card:hover { border-color: var(--gold-dim); background: var(--gold-glow); }
-.o-card.sel   { border-color: var(--gold); background: rgba(200,169,110,0.07); }
-.o-card-text { flex: 1; }
-.o-card-lbl  { font-size: 13px; font-weight: 600; color: var(--o-text); }
-.o-card-sub  { font-size: 11px; color: var(--o-dim); margin-top: 2px; line-height: 1.4; }
-.o-radio { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--o-border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .18s; }
-.o-card.sel .o-radio { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 8px rgba(200,169,110,0.4); }
-.o-radio::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--o-bg); opacity: 0; transition: opacity .18s; }
-.o-card.sel .o-radio::after { opacity: 1; }
+.o-text-area-wrap { display: flex; flex-direction: column; gap: 0; }
+.o-input-row { display: flex; gap: 10px; align-items: flex-end; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 14px; padding: 10px 12px; transition: border-color .15s; }
+.o-input-row:focus-within { border-color: var(--text2); }
+#oracleInput { flex: 1; background: none; border: none; color: var(--text); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; outline: none; resize: none; min-height: 22px; max-height: 120px; line-height: 1.5; }
+#oracleInput::placeholder { color: var(--muted); }
+.o-input-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+.o-send-btn { width: 32px; height: 32px; border-radius: 8px; background: #0A0A0A; color: white; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: opacity .15s; }
+.o-send-btn:hover { opacity: .8; }
+.o-upload-btn { height: 32px; padding: 0 12px; border-radius: 8px; background: none; border: 1.5px solid var(--border); color: var(--muted); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.o-upload-btn:hover { border-color: var(--text2); color: var(--text); }
 
-/* Chips */
-.o-chips { display: flex; flex-wrap: wrap; gap: 7px; padding: 2px 0; }
-.o-chip { padding: 7px 13px; border-radius: 20px; border: 1px solid var(--o-border2); background: var(--o-bg2); font-size: 12px; font-weight: 600; color: var(--o-muted); cursor: pointer; transition: all .18s; letter-spacing: 0.025em; -webkit-tap-highlight-color: transparent; }
-.o-chip:hover { border-color: var(--gold-dim); color: var(--o-text); }
-.o-chip.sel   { border-color: var(--gold); background: rgba(200,169,110,0.1); color: var(--gold); }
+.o-plan-offer { display: flex; flex-direction: column; gap: 12px; }
+.o-plan-offer-text { font-size: 17px; }
+.o-plan-offer-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.o-plan-btn { padding: 10px 18px; border-radius: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .18s; border: 1.5px solid var(--border); background: var(--surface); color: var(--text2); }
+.o-plan-btn:hover { border-color: var(--text); color: var(--text); }
+.o-plan-btn-primary { background: #0A0A0A; color: white; border-color: #0A0A0A; }
+.o-plan-btn-primary:hover { opacity: .85; }
 
-/* Conflict cards */
-.o-conflict { background: rgba(200,169,110,0.06); border: 1px solid rgba(200,169,110,0.25); border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; }
-.o-conflict-note { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: rgba(200,169,110,0.9); line-height: 1.55; margin-bottom: 10px; font-style: italic; }
-.o-conflict-opts { display: flex; flex-direction: column; gap: 6px; }
-.o-conflict-btn { background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 8px; padding: 9px 13px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--o-text); cursor: pointer; text-align: left; transition: all .18s; }
-.o-conflict-btn:hover { border-color: var(--gold-dim); }
-.o-conflict-btn.primary { border-color: var(--gold-dim); color: var(--gold); }
-.o-conflict-btn.primary:hover { background: rgba(200,169,110,0.08); border-color: var(--gold); }
-
-/* Number input */
-.o-num-row { display: flex; align-items: center; gap: 10px; }
-.o-num-in { flex: 1; background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 10px; padding: 13px 16px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--o-text); text-align: center; outline: none; transition: border-color .2s; -webkit-appearance: none; }
-.o-num-in:focus { border-color: var(--gold-dim); }
-.o-num-unit { font-size: 13px; color: var(--o-dim); min-width: 28px; }
-
-/* Text area */
-.o-txt-wrap textarea { width: 100%; background: var(--o-bg2); border: 1px solid var(--o-border2); border-radius: 10px; padding: 12px 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; color: var(--o-text); outline: none; resize: none; line-height: 1.55; transition: border-color .2s; }
-.o-txt-wrap textarea::placeholder { color: var(--o-dim); }
-.o-txt-wrap textarea:focus { border-color: var(--gold-dim); }
-
-/* Buttons */
-.o-btn { width: 100%; margin-top: 8px; padding: 13px 16px; background: transparent; border: 1px solid var(--gold-dim); border-radius: 10px; color: var(--gold); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; cursor: pointer; transition: all .2s; }
-.o-btn:hover:not(:disabled) { background: rgba(200,169,110,0.08); border-color: var(--gold); }
-.o-btn:disabled { opacity: 0.25; cursor: not-allowed; }
-.o-btn-skip { display: block; text-align: center; margin-top: 7px; font-size: 10px; color: var(--o-dim); letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: color .2s; background: none; border: none; width: 100%; padding: 4px; }
-.o-btn-skip:hover { color: var(--o-muted); }
-.o-btn-generate { width: 100%; margin-top: 10px; padding: 15px; background: var(--gold); border: none; border-radius: 12px; color: #06060a; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; transition: all .22s; box-shadow: 0 4px 20px rgba(200,169,110,0.25); }
-.o-btn-generate:hover:not(:disabled) { background: var(--gold-bright); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(200,169,110,0.35); }
-.o-btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-/* Final screen */
-.o-final { display: flex; flex-direction: column; align-items: center; padding: 14px 4px 4px; text-align: center; gap: 5px; }
-.o-final-sub   { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--o-dim); }
-.o-final-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--o-text); line-height: 1.3; font-style: italic; }
+.o-action-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 100px; padding: 7px 14px; font-size: 12px; font-weight: 600; color: var(--text2); cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif; transition: all .15s; }
+.o-action-chip:hover { border-color: var(--text); color: var(--text); }
 
 /* ══════════════════════════
    CHAT PAGE
@@ -508,11 +437,11 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
     <span class="logo-sep">·</span>
     <span class="logo-name">The Scientific Oracle</span>
   </div>
-  <div class="tab-nav">
-    <button class="tab-btn" onclick="switchTab('today')" id="tab-today">Today</button>
-    <button class="tab-btn" onclick="switchTab('programme')" id="tab-programme">Programme</button>
-    <button class="tab-btn" onclick="switchTab('progress')" id="tab-progress">Progress</button>
-    <button class="tab-btn active" onclick="switchTab('consult')" id="tab-consult" style="display:none">Consult</button>
+  <div class="tab-nav" id="tab-nav" style="opacity:0;pointer-events:none;transition:opacity 0.4s ease">
+    <button class="tab-btn active" onclick="switchTab('oracle')" id="tab-oracle">Oracle</button>
+    <button class="tab-btn" onclick="switchTab('today')" id="tab-today" style="display:none">Today</button>
+    <button class="tab-btn" onclick="switchTab('programme')" id="tab-programme" style="display:none">Programme</button>
+    <button class="tab-btn" onclick="switchTab('progress')" id="tab-progress" style="display:none">Progress</button>
   </div>
   <div class="header-status">
     <div class="status-dot"></div>
@@ -522,34 +451,35 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
 
 <div class="main">
 
-<!-- ═══ CONSULTATION — Oracle Conversational Flow ═══ -->
-<div class="page active" id="page-consult">
-  <div id="o-progress-bar"><div id="o-progress-fill"></div></div>
-
+<!-- ═══ ORACLE ═══ -->
+<div class="page active" id="page-oracle">
   <div id="o-header">
-    <div class="atom-wrap atom-lg" id="eyeSystem">
-      <svg viewBox="0 0 72 72">
-        <g class="orb-a" style="transform-origin:36px 36px">
-          <ellipse cx="36" cy="36" rx="34" ry="13" fill="none" stroke="rgba(200,169,110,0.55)" stroke-width="1.2"/>
-          <circle cx="70" cy="36" r="4" fill="#c8a96e" style="filter:drop-shadow(0 0 4px rgba(200,169,110,0.8))"/>
+    <div class="atom-wrap atom-sm" id="eyeSystem">
+      <svg viewBox="0 0 32 32">
+        <g class="orb-a" style="transform-origin:16px 16px">
+          <ellipse cx="16" cy="16" rx="14" ry="5.5" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+          <circle cx="30" cy="16" r="2" fill="#0A0A0A"/>
         </g>
-        <g class="orb-b" style="transform-origin:36px 36px;transform:rotate(60deg)">
-          <ellipse cx="36" cy="36" rx="34" ry="13" fill="none" stroke="rgba(200,169,110,0.38)" stroke-width="1.2"/>
-          <circle cx="70" cy="36" r="3.5" fill="#c8a96e" opacity="0.85" style="filter:drop-shadow(0 0 3px rgba(200,169,110,0.7))"/>
+        <g class="orb-b" style="transform-origin:16px 16px;transform:rotate(60deg)">
+          <ellipse cx="16" cy="16" rx="14" ry="5.5" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="1"/>
+          <circle cx="30" cy="16" r="1.8" fill="#0A0A0A" opacity="0.7"/>
         </g>
-        <g class="orb-c" style="transform-origin:36px 36px;transform:rotate(120deg)">
-          <ellipse cx="36" cy="36" rx="34" ry="13" fill="none" stroke="rgba(200,169,110,0.22)" stroke-width="1.2"/>
-          <circle cx="70" cy="36" r="3" fill="#c8a96e" opacity="0.7"/>
+        <g class="orb-c" style="transform-origin:16px 16px;transform:rotate(120deg)">
+          <ellipse cx="16" cy="16" rx="14" ry="5.5" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+          <circle cx="30" cy="16" r="1.5" fill="#0A0A0A" opacity="0.5"/>
         </g>
       </svg>
       <div class="atom-nucleus"></div>
     </div>
-    <div class="o-name">The Scientific Oracle</div>
-    <div class="o-status" id="oracleStatus"></div>
+    <div class="o-header-text">
+      <div class="o-name">The Scientific Oracle</div>
+      <div class="o-status" id="oracleStatus"></div>
+    </div>
   </div>
-
   <div id="o-chat"></div>
   <div id="o-input"></div>
+  <!-- Plan upload (hidden file input) -->
+  <input type="file" id="plan-upload-input" accept="image/*,.pdf,.txt" style="display:none" onchange="handlePlanUpload(this)">
 </div>
 
 <!-- ═══ TODAY ═══ -->
@@ -645,14 +575,14 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
     <div class="chat-topbar">
       <div class="chat-topbar-left">
         <div class="chat-topbar-title">Chat with TSO</div>
-        <div class="chat-topbar-sub" id="consult-summary">Complete your consultation to activate your protocol</div>
+        <div class="chat-topbar-sub" id="consult-summary">Active</div>
       </div>
       <div class="memory-badge" id="memory-badge" style="display:none">● Memory Active</div>
     </div>
     <div class="messages" id="messages">
       <div class="msg ai">
         <div class="msg-meta">The Scientific Oracle</div>
-        <div class="msg-bubble">Welcome. I am <strong>The Scientific Oracle</strong> — your integrated PhD-level physiologist and sports nutritionist.<br><br>Navigate to the <strong>Consult</strong> tab to complete your initial consultation. Once complete, I'll generate your full personalised programme and daily briefings.</div>
+        <div class="msg-bubble">Your Oracle is active. Ask me anything about your training, nutrition, or recovery.</div>
       </div>
       <div class="typing-indicator" id="typing">
         <div class="msg-meta">The Scientific Oracle</div>
@@ -681,8 +611,8 @@ header { height: 56px; background: rgba(255,255,255,0.9); backdrop-filter: blur(
   <div id="programme-empty-state" style="display:flex;flex:1;flex-direction:column;align-items:center;justify-content:center;padding:80px 40px;text-align:center">
     <div style="font-size:48px;margin-bottom:16px;opacity:.3">📋</div>
     <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px">No programme yet</div>
-    <div style="font-size:14px;color:var(--muted);line-height:1.6;max-width:360px">Complete your consultation and TSO will generate your full training programme here.</div>
-    <button onclick="switchTab('consult')" style="margin-top:24px;background:var(--accent);color:white;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;padding:12px 24px;border-radius:12px;cursor:pointer">Start Consultation →</button>
+    <div style="font-size:14px;color:var(--muted);line-height:1.6;max-width:360px">Talk to the Oracle and TSO will generate your programme once it knows enough about you — or upload an existing plan for a gap analysis.</div>
+    <button onclick="switchTab('oracle')" style="margin-top:24px;background:#0A0A0A;color:white;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:14px;padding:12px 24px;border-radius:12px;cursor:pointer">Talk to Oracle →</button>
   </div>
   <div id="programme-content" style="display:none;flex-direction:column;flex:1;overflow-y:auto">
     <div class="programme-hero">
@@ -983,106 +913,51 @@ const BRAIN_TRUST = [
 ];
 
 // ══════════════════════════════════════════
-// ORACLE CONSULTATION — QUESTION FLOW
+// ORACLE CONVERSATION SYSTEM
 // ══════════════════════════════════════════
-const STEPS = [
-  { id:'intro', type:'confirm', confirmLabel:"I'm ready →",
-    msg:"Welcome.\n\nI am The Scientific Oracle — your integrated PhD-level physiologist and sports nutritionist.\n\nI will build your complete 8-week protocol: training, nutrition, and recovery, calibrated precisely to your biology.\n\nThis will take about four minutes. Answer honestly — precision now means better results." },
-  { id:'sex', type:'cards',
-    msg:"First — your biological sex. This determines hormonal context, recovery patterns, and how I structure your entire programme.",
-    opts:[{v:'male',l:'Male',d:'Standard male physiology & hormonal context'},{v:'female',l:'Female',d:'Female physiology · cycle syncing available'}] },
-  { id:'age', type:'number', unit:'years', placeholder:'28', min:15, max:80, msg:"Your age." },
-  { id:'weight', type:'number', unit:'kg', placeholder:'80', min:40, max:200, msg:"Your current bodyweight." },
-  { id:'height', type:'number', unit:'cm', placeholder:'178', min:140, max:220, msg:"Your height." },
-  // Female branch 5a + 5b inserted dynamically after height if sex=female
-  { id:'bodyfat', type:'cards',
-    msg:"Where are you with body composition right now? Be honest — this calibrates your entire nutrition protocol.",
-    opts:[{v:'10',l:'Very lean',d:'Visible abs, clear definition · ~8–12% M / ~15–19% F'},{v:'15',l:'Lean',d:'Some definition, modest body fat · ~13–17% M / ~20–24% F'},{v:'20',l:'Average',d:'Soft but not overweight · ~18–24% M / ~25–31% F'},{v:'28',l:'Carrying extra',d:'Fat loss is a priority · 25%+ M / 32%+ F'}] },
-  { id:'experience', type:'cards',
-    msg:"How long have you been training seriously?",
-    opts:[{v:'beginner (0–1 year)',l:'Just starting out',d:'0–1 year · Learning the fundamentals'},{v:'intermediate (1–3 years)',l:'Getting serious',d:'1–3 years · Building real consistency'},{v:'advanced (3+ years)',l:'Experienced lifter',d:'3+ years · You know the science'},{v:'competitive athlete',l:'Competitive athlete',d:'Competing or elite-level performance'}] },
-  { id:'days', type:'chips-single', msg:"How many days per week can you realistically train? Build around your actual life — not the ideal version.",
-    opts:['3 days','4 days','5 days','6 days'] },
-  { id:'workout_time', type:'chips-single', msg:"What time of day do you typically train? I'll build your nutrition and recovery schedule around this.",
-    opts:['Early morning (5–7am)','Morning (7–9am)','Lunchtime (12–2pm)','After work (5–7pm)','Evening (7–9pm)','Varies / no fixed time'] },
-  { id:'duration', type:'chips-single', msg:"Session length?",
-    opts:['~45 min','~60 min','~75 min','~90 min'] },
-  { id:'equipment', type:'cards', msg:"What equipment do you have access to?",
-    opts:[{v:'full commercial gym',l:'Full Commercial Gym',d:'Cables, machines, barbells — everything'},{v:'home gym with free weights',l:'Home Gym (weights)',d:'Dumbbells, barbell, rack'},{v:'barbell and rack only',l:'Barbell + Rack Only',d:'Strength-focused home setup'},{v:'bands and bodyweight only',l:'Bands & Bodyweight',d:'Minimal equipment'}] },
-  { id:'injuries', type:'text', msg:"Any injuries, pain points, or physical limitations I need to programme around?",
-    placeholder:"e.g. lower back tightness, left shoulder impingement...\nType 'none' if not applicable." },
-  { id:'diet', type:'cards', msg:"How do you eat?",
-    opts:[{v:'omnivore',l:'Everything',d:'Meat, fish, dairy — no restrictions'},{v:'vegetarian',l:'Vegetarian',d:'No meat or fish'},{v:'vegan',l:'Vegan',d:'No animal products'},{v:'keto / low carb',l:'Low carb / Keto',d:'Fat-adapted approach'},{v:'mediterranean',l:'Mediterranean',d:'Whole foods, olive oil, fish'}] },
-  { id:'meals', type:'chips-single', msg:"How many times do you eat per day?",
-    opts:['2 meals','3 meals','4 meals','5+ meals'] },
-  { id:'sleep', type:'chips-single', msg:"Average sleep per night?",
-    opts:['< 6 hrs','6–7 hrs','7–8 hrs','8+ hrs'] },
-  { id:'stress', type:'cards', msg:"Current stress load. This directly impacts your recovery capacity and cortisol — I need an honest answer.",
-    opts:[{v:'low',l:'Low',d:'Work is manageable, life feels steady'},{v:'moderate',l:'Moderate',d:'Some pressure but coping well'},{v:'high',l:'High',d:'Consistently overwhelmed, sleep affected'},{v:'very high',l:'Very high',d:'Major life stressor ongoing'}] },
-  { id:'allergies', type:'text', msg:"Any food allergies or intolerances?",
-    placeholder:"e.g. lactose, gluten, tree nuts...\nType 'none' if not applicable." },
-  { id:'supplements', type:'chips-multi', optional:true, msg:"Supplements you already take. Disclosure only — I won't recommend duplicates, and whole food solutions always come first.",
-    opts:['Creatine','Whey Protein','Vitamin D','Omega-3','Magnesium','Zinc','Caffeine / Pre-workout','Melatonin','Ashwagandha','Collagen','B12','Iron','Greens Powder','Electrolytes','None'] },
-  { id:'goal', type:'cards', msg:"Primary goal for this 8-week block?",
-    opts:[{v:'muscle gain and hypertrophy',l:'Build muscle',d:'Get bigger, fuller, stronger'},{v:'lean bulk — muscle gain with minimal fat',l:'Lean bulk',d:'Build muscle while staying lean'},{v:'body recomposition — lose fat and gain muscle simultaneously',l:'Body recomposition',d:'Lose fat and gain muscle at the same time'},{v:'strength and muscle',l:'Get stronger',d:'Strength first, muscle second'},{v:'athletic performance and muscle',l:'Athletic performance',d:'Train for sport and conditioning'},{v:'general health and longevity',l:'Health & longevity',d:'Look, feel, and move better long-term'}] },
-  { id:'timeline', type:'cards', msg:"How long are you committing?",
-    opts:[{v:'3 months',l:'3 months',d:'Short-term push'},{v:'6 months',l:'6 months',d:'Serious transformation'},{v:'12 months',l:'12 months',d:'Full year commitment'},{v:'ongoing lifestyle',l:'Lifestyle',d:'This is how I live now'}] },
-  { id:'barriers', type:'text', msg:"What has held you back before? What typically derails your training?",
-    placeholder:"e.g. work travel, motivation dips, no structure, injuries..." },
-  { id:'braintrust', type:'chips-multi', optional:true,
-    msg:"Finally — your Brain Trust. The world's leading evidence-based practitioners. Select any you follow and I will weight their specific methodology in your programme.\n\nNot sure who they are? Skip — I apply the full Brain Trust equally.",
-    opts: BRAIN_TRUST.map(m => m.name) }
-];
 
-// Dynamic female cycle steps (inserted after height)
-const FEMALE_STEPS = [
-  { id:'period_date', type:'cards', msg:"A few more questions specific to female physiology — these let me apply cycle syncing to your programme and daily check-ins.\n\nWhat's your cycling status right now?",
-    opts:[{v:'cycling',l:'Currently cycling',d:'I have a natural menstrual cycle'},{v:'hormonal_contraception',l:'On hormonal contraception',d:'Pill, IUD, implant etc.'},{v:'not_cycling',l:'Not currently cycling',d:'Pregnant, postpartum, or other reason'}] },
-  { id:'cycle_length', type:'chips-single', msg:"Average cycle length?",
-    opts:['24–26 days','27–29 days','30–32 days','Irregular'] }
-];
+// Oracle state
+const $ochat   = () => document.getElementById('o-chat');
+const $oinput  = () => document.getElementById('o-input');
+const $eye     = () => document.getElementById('eyeSystem');
+const $ostatus = () => document.getElementById('oracleStatus');
 
-// ── ORACLE STATE ──
-let oStep = 0;
-let oSteps = [];  // built dynamically with female branch
-let userData = {};
-let oBusy = false;
-let oConflictPending = null;  // holds conflict data if mid-conflict
+let oracleBusy = false;
+let oracleExchanges = 0;
+let coachingContext = {};  // built through conversation
+let planOffered = false;
 
-const $ochat   = document.getElementById('o-chat');
-const $oinput  = document.getElementById('o-input');
-const $oprog   = document.getElementById('o-progress-fill');
-const $eye     = document.getElementById('eyeSystem');
-const $ostatus = document.getElementById('oracleStatus');
+// Tab unlock state
+let tabsVisible = { oracle: true, today: false, programme: false, progress: false };
 
-// ── EYE STATES ──
 function eyeState(s) {
-  $eye.classList.remove('thinking','speaking');
-  if (s) $eye.classList.add(s);
-  $ostatus.textContent = s==='thinking' ? 'Processing…' : s==='speaking' ? 'The Oracle speaks' : '';
+  const eye = $eye(); if (!eye) return;
+  eye.classList.remove('thinking','speaking');
+  if (s) eye.classList.add(s);
+  const st = $ostatus(); if (!st) return;
+  st.textContent = s==='thinking' ? 'Processing…' : s==='speaking' ? 'Listening' : '';
 }
 
-function setProgress(n, total) {
-  $oprog.style.width = Math.round((n / total) * 100) + '%';
+function oScrollDown() {
+  requestAnimationFrame(() => { const c=$ochat(); if(c) c.scrollTop=c.scrollHeight; });
 }
-
-// ── CHAT UTILS ──
-function oScrollDown() { requestAnimationFrame(() => { $ochat.scrollTop = $ochat.scrollHeight; }); }
 
 function oAddMsg(who, html) {
+  const chat = $ochat(); if (!chat) return;
   const row = document.createElement('div');
   row.className = `o-msg-row ${who}`;
   row.innerHTML = `<div class="o-bubble">${html}</div>`;
-  $ochat.appendChild(row);
+  chat.appendChild(row);
   oScrollDown();
 }
 
 function oShowTyping() {
+  const chat = $ochat(); if (!chat) return null;
   const row = document.createElement('div');
   row.id = 'o-typing-row';
   row.className = 'o-msg-row oracle';
   row.innerHTML = `<div class="o-bubble"><div class="o-typing"><div class="o-dot"></div><div class="o-dot"></div><div class="o-dot"></div></div></div>`;
-  $ochat.appendChild(row);
+  chat.appendChild(row);
   oScrollDown();
   return row;
 }
@@ -1091,444 +966,285 @@ function oSay(text) {
   return new Promise(resolve => {
     eyeState('thinking');
     const tr = oShowTyping();
-    const delay = Math.min(600 + text.length * 6, 2200);
+    const delay = Math.min(500 + text.length * 5, 2000);
     setTimeout(() => {
-      tr.remove();
+      if (tr) tr.remove();
       eyeState('speaking');
-      const formatted = text.replace(/\n/g, '<br>');
-      oAddMsg('oracle', formatted);
-      setTimeout(() => { eyeState(null); resolve(); }, 250);
+      oAddMsg('oracle', text.replace(/\n/g, '<br>'));
+      setTimeout(() => { eyeState(null); resolve(); }, 300);
     }, delay);
   });
 }
 
-function oClearInput() { $oinput.innerHTML = ''; }
+function clearOInput() { const i=$oinput(); if(i) i.innerHTML=''; }
 
-function oMkBtn(label, cls, onClick) {
-  const b = document.createElement('button');
-  b.className = cls; b.textContent = label;
-  b.addEventListener('click', onClick);
-  return b;
-}
-
-// ── BUILD STEP LIST ──
-function buildStepList() {
-  oSteps = [];
-  STEPS.forEach((s, i) => {
-    oSteps.push(s);
-    // Insert female branch after height (index 4 = height step)
-    if (s.id === 'height' && userData.sex === 'female') {
-      FEMALE_STEPS.forEach(fs => oSteps.push({...fs, _female: true}));
-    }
-  });
-}
-
-// ── RENDER INPUT ──
-function oRenderInput(s) {
-  oClearInput();
-  oBusy = false;
+function showOpeningChips() {
+  const input = $oinput(); if (!input) return;
+  clearOInput();
+  const options = [
+    "My effort isn't matching my results",
+    "I don't know if my current plan is working",
+    "I want to reach the next level",
+    "My nutrition feels like the weak link",
+    "I'm returning from injury",
+    "Let's just talk"
+  ];
   const wrap = document.createElement('div');
-  wrap.className = 'o-fade-in';
-
-  if (s.type === 'confirm') {
-    wrap.appendChild(oMkBtn(s.confirmLabel || 'Continue →', 'o-btn', () => {
-      if (oBusy) return; oBusy = true;
-      oClearInput(); oAdvance();
-    }));
-    $oinput.appendChild(wrap); return;
-  }
-
-  if (s.type === 'cards') {
-    const grid = document.createElement('div');
-    grid.className = 'o-cards';
-    s.opts.forEach(o => {
-      const c = document.createElement('div');
-      c.className = 'o-card';
-      c.innerHTML = `<div class="o-card-text"><div class="o-card-lbl">${o.l}</div>${o.d?`<div class="o-card-sub">${o.d}</div>`:''}</div><div class="o-radio"></div>`;
-      c.addEventListener('click', () => {
-        if (oBusy) return;
-        c.classList.add('sel');
-        // Store immediately so conflict checks work
-        userData[s.id] = o.v;
-        // Check conflicts before advancing
-        const conflict = checkConflict(s.id, o.v);
-        if (conflict) {
-          oBusy = true;
-          setTimeout(() => { oShowConflict(conflict, s, o.v, o.l); }, 300);
-        } else {
-          oBusy = true;
-          setTimeout(() => { oSelect(s, o.v, o.l); }, 320);
-        }
-      });
-      grid.appendChild(c);
-    });
-    wrap.appendChild(grid);
-    $oinput.appendChild(wrap);
-    scrollOracleToBottom(); return;
-  }
-
-  if (s.type === 'chips-single') {
-    const row = document.createElement('div');
-    row.className = 'o-chips';
-    s.opts.forEach(o => {
-      const ch = document.createElement('div');
-      ch.className = 'o-chip'; ch.textContent = o;
-      ch.addEventListener('click', () => {
-        if (oBusy) return;
-        userData[s.id] = o;
-        const conflict = checkConflict(s.id, o);
-        if (conflict) {
-          oBusy = true;
-          ch.classList.add('sel');
-          setTimeout(() => { oShowConflict(conflict, s, o, o); }, 280);
-        } else {
-          oBusy = true;
-          ch.classList.add('sel');
-          setTimeout(() => { oSelect(s, o, o); }, 280);
-        }
-      });
-      row.appendChild(ch);
-    });
-    wrap.appendChild(row);
-    $oinput.appendChild(wrap);
-    scrollOracleToBottom(); return;
-  }
-
-  if (s.type === 'chips-multi') {
-    const sel = new Set();
-    const row = document.createElement('div');
-    row.className = 'o-chips';
-    s.opts.forEach(o => {
-      const ch = document.createElement('div');
-      ch.className = 'o-chip'; ch.textContent = o;
-      ch.addEventListener('click', () => {
-        if (ch.classList.contains('sel')) { ch.classList.remove('sel'); sel.delete(o); }
-        else { ch.classList.add('sel'); sel.add(o); }
-      });
-      row.appendChild(ch);
-    });
-    wrap.appendChild(row);
-    const btn = oMkBtn('Confirm →', 'o-btn', () => {
-      if (oBusy) return; oBusy = true;
-      const v = [...sel].join(', ');
-      const d = sel.size > 0 ? [...sel].join(', ') : 'None selected';
-      // Vegan + muscle conflict after diet already set — check braintrust step for vegan+goal
-      oSelect(s, v || 'none', d);
-    });
-    wrap.appendChild(btn);
-    if (s.optional) {
-      const sk = oMkBtn('Skip this step', 'o-btn-skip', () => {
-        if (oBusy) return; oBusy = true;
-        oSelect(s, '', 'Skipped');
-      });
-      wrap.appendChild(sk);
-    }
-    $oinput.appendChild(wrap);
-    scrollOracleToBottom(); return;
-  }
-
-  if (s.type === 'number') {
-    const row = document.createElement('div');
-    row.className = 'o-num-row';
-    const inp = document.createElement('input');
-    inp.type='number'; inp.className='o-num-in';
-    inp.placeholder=s.placeholder||''; inp.min=s.min; inp.max=s.max;
-    const unit = document.createElement('div');
-    unit.className='o-num-unit'; unit.textContent=s.unit||'';
-    row.appendChild(inp); row.appendChild(unit);
-    wrap.appendChild(row);
-    const btn = oMkBtn('Continue →', 'o-btn', () => {
-      if (oBusy || !inp.value) return; oBusy = true;
-      oSelect(s, inp.value, `${inp.value} ${s.unit||''}`);
-    });
-    wrap.appendChild(btn);
-    inp.addEventListener('keydown', e => { if(e.key==='Enter'&&inp.value&&!oBusy){oBusy=true;oSelect(s,inp.value,`${inp.value} ${s.unit||''}`);} });
-    $oinput.appendChild(wrap);
-    setTimeout(() => inp.focus(), 80);
-    scrollOracleToBottom(); return;
-  }
-
-  if (s.type === 'text') {
-    const tw = document.createElement('div'); tw.className = 'o-txt-wrap';
-    const ta = document.createElement('textarea');
-    ta.rows=3; ta.placeholder=s.placeholder||'';
-    tw.appendChild(ta); wrap.appendChild(tw);
-    const btn = oMkBtn('Continue →', 'o-btn', () => {
-      if (oBusy || !ta.value.trim()) return; oBusy = true;
-      const v = ta.value.trim();
-      oSelect(s, v, v.length>55 ? v.substring(0,52)+'…' : v);
-    });
-    wrap.appendChild(btn);
-    $oinput.appendChild(wrap);
-    setTimeout(() => ta.focus(), 80);
-    scrollOracleToBottom(); return;
-  }
-}
-
-function scrollOracleToBottom() {
-  setTimeout(() => {
-    const pc = document.getElementById('page-consult');
-    if (pc) pc.scrollTo({ top: pc.scrollHeight, behavior: 'smooth' });
-    $ochat.scrollTop = $ochat.scrollHeight;
-  }, 80);
-}
-
-// ── CONFLICT ENGINE ──
-function checkConflict(field, value) {
-  const u = userData;
-  // C1: Beginner + high frequency
-  if (field === 'days' && (value === '5 days' || value === '6 days') && u.experience && u.experience.includes('beginner')) {
-    return { id:'C1', msg:`${value} is an aggressive frequency for your first year. Israetel's MEV data is clear — beginners adapt fastest on 3 days with full recovery between sessions. More frequency at this stage mostly accumulates fatigue without the adaptation signal.`, opts:[{label:'Take the 3-day recommendation', val:'3 days', primary:true},{label:`Stay with ${value}`, val:value, override:true}], field:'days' };
-  }
-  // C2: Beginner + 90 min sessions
-  if (field === 'duration' && value === '~90 min' && u.experience && u.experience.includes('beginner')) {
-    return { id:'C2', msg:`Ninety minutes is more than a beginner needs. Jeff Nippard's data on beginner programming is clear — 45–60 minutes of focused work drives more adaptation than long unfocused sessions. Quality over quantity here.`, opts:[{label:'Take the 60-min recommendation', val:'~60 min', primary:true},{label:'Keep 90 minutes', val:'~90 min', override:true}], field:'duration' };
-  }
-  // C3: Carrying extra + lean bulk
-  if (field === 'goal' && value.includes('lean bulk') && u.bodyfat === '28') {
-    return { id:'C3', msg:`A lean bulk is typically reserved for those already lean. At your current body composition, a recomposition — losing fat while building muscle simultaneously — will give you better results and a better experience. It's the smarter play here.`, opts:[{label:'Switch to recomposition', val:'body recomposition — lose fat and gain muscle simultaneously', primary:true},{label:'Keep lean bulk', val:value, override:true}], field:'goal' };
-  }
-  // C4: Carrying extra + build muscle
-  if (field === 'goal' && value === 'muscle gain and hypertrophy' && u.bodyfat === '28') {
-    return { id:'C4', msg:`Building muscle is achievable — but at higher body fat, a slight calorie deficit while training hard will likely produce better visual results than a surplus. A recomposition approach may serve you better.`, opts:[{label:'Switch to recomposition', val:'body recomposition — lose fat and gain muscle simultaneously', primary:true},{label:'Keep build muscle', val:value, override:true}], field:'goal' };
-  }
-  // C5: Very high stress + low sleep + high frequency (most forceful)
-  if (field === 'days' && (value === '5 days' || value === '6 days') && u.stress === 'very high' && u.sleep === '< 6 hrs') {
-    return { id:'C5', msg:`I need to stop you here. You're sleeping under six hours and carrying very high stress. Huberman and Sims are both unequivocal on this: recovery is where adaptation happens. Training six days on that substrate isn't just suboptimal — it's likely to make things worse. I strongly recommend 3–4 days maximum.`, opts:[{label:'Take the 3-day recommendation', val:'3 days', primary:true},{label:'Take the 4-day recommendation', val:'4 days', primary:true},{label:`Stay with ${value}`, val:value, override:true}], field:'days' };
-  }
-  // C8: Competitive + low days
-  if (field === 'days' && value === '3 days' && u.experience === 'competitive athlete') {
-    return { id:'C8', msg:`Three days is low for a competitive athlete. Is this a schedule constraint, or are you in a deliberate deload phase?`, opts:[{label:'Schedule constraint — it\'s all I have', val:'3 days', primary:false},{label:'Deliberate deload or recovery phase', val:'3 days', primary:false}], field:'days', infoOnly:true };
-  }
-  return null;
-}
-
-function oShowConflict(conflict, step, originalVal, originalLabel) {
-  oClearInput();
-  const wrap = document.createElement('div');
-  wrap.className = 'o-fade-in';
-  const box = document.createElement('div');
-  box.className = 'o-conflict';
-  const note = document.createElement('div');
-  note.className = 'o-conflict-note';
-  note.textContent = conflict.msg;
-  box.appendChild(note);
-  const opts = document.createElement('div');
-  opts.className = 'o-conflict-opts';
-  conflict.opts.forEach(o => {
+  wrap.className = 'o-fade-in o-opening-chips';
+  options.forEach(opt => {
     const btn = document.createElement('button');
-    btn.className = 'o-conflict-btn' + (o.primary ? ' primary' : '');
-    btn.textContent = o.label;
+    btn.className = 'o-opening-chip';
+    btn.textContent = opt;
     btn.addEventListener('click', () => {
-      if (o.override) userData[conflict.field + '_override'] = true;
-      userData[conflict.field] = o.val;
-      oAddMsg('user', o.label);
-      oClearInput();
-      setTimeout(() => {
-        // Post-conflict statements
-        if (conflict.id === 'C5') {
-          oStep++; // advance past the conflict step
-          oSay("Noted. The combination of very high stress and under six hours of sleep is your single biggest performance limiter right now. No programme overcomes a broken recovery environment. I'll factor this heavily into your protocol — but I'd ask you to also treat sleep as a training variable, not a luxury.").then(() => oRenderInput(oSteps[oStep]));
-        } else if (conflict.id === 'C3' || conflict.id === 'C4') {
-          if (!o.override) userData[conflict.field] = o.val;
-          oAdvanceFromConflict(step);
-        } else {
-          oAdvanceFromConflict(step);
-        }
-      }, 300);
+      if (oracleBusy) return;
+      oracleBusy = true;
+      clearOInput();
+      oAddMsg('user', opt);
+      conversationHistory.push({ role: 'user', content: opt });
+      oracleExchanges++;
+      afterFirstExchange();
+      showFreeTextInput();
+      handleOpeningChipResponse(opt);
     });
-    opts.appendChild(btn);
+    wrap.appendChild(btn);
   });
-  box.appendChild(opts);
-  wrap.appendChild(box);
-  $oinput.appendChild(wrap);
+  input.appendChild(wrap);
 }
 
-function oAdvanceFromConflict(step) {
-  // Show user choice in chat then move to next step
-  const nextIdx = oSteps.indexOf(step) + 1;
-  oStep = nextIdx;
-  setProgress(oStep, oSteps.length);
-  if (oStep >= oSteps.length) { oFinish(); return; }
-  const next = oSteps[oStep];
-  // Insert vegan branch check here
-  checkVeganBranch(step).then(() => {
-    oSay(next.msg).then(() => oRenderInput(next));
-  });
-}
-
-async function checkVeganBranch(completedStep) {
-  // After diet is set and goal is set, check vegan + muscle conflict
-  if (completedStep.id === 'diet' && userData.diet === 'vegan') {
-    // Flag — will handle at goal step
-  }
-  if (completedStep.id === 'goal' && userData.diet === 'vegan') {
-    const muscleGoals = ['muscle gain', 'lean bulk', 'strength', 'recomposition'];
-    if (muscleGoals.some(g => userData.goal && userData.goal.includes(g))) {
-      await oSay("One thing worth flagging — a plant-based approach and muscle building are fully compatible, but protein sourcing needs deliberate attention. Layne Norton's research shows leucine thresholds matter more on vegan diets. I'll build your nutrition plan around this.");
-    }
-  }
-}
-
-// ── FLOW ──
-function oSelect(s, value, display) {
-  userData[s.id] = value;
-  oAddMsg('user', display);
-  oClearInput();
-
-  // Post-selection statements (no-option conflicts)
-  if (s.id === 'experience' && value === 'beginner (0–1 year)' && userData.goal === 'athletic performance and muscle') {
-    setTimeout(async () => {
-      await oSay("Athletic performance goals for someone early in training are best served by building a strong general foundation first. I'll programme accordingly — strength and movement quality before sport-specific conditioning.");
-      oAdvance();
-    }, 350);
-    return;
-  }
-  if (s.id === 'stress' && value === 'very high' && userData.sleep === '< 6 hrs') {
-    setTimeout(async () => {
-      await oSay("Noted — and I want to flag this clearly. The combination of very high stress and under six hours of sleep is your single biggest performance limiter right now. No programme overcomes a broken recovery environment. I'll factor this heavily into your protocol.");
-      oAdvance();
-    }, 350);
-    return;
-  }
-
-  // After sex is selected, rebuild step list to include female branch if needed
-  if (s.id === 'sex') {
-    buildStepList();
-  }
-
-  setTimeout(() => oAdvance(), 350);
-}
-
-async function oAdvance() {
-  oStep++;
-  setProgress(oStep, oSteps.length);
-  if (oStep >= oSteps.length) { await oFinish(); return; }
-  const s = oSteps[oStep];
-  await oSay(s.msg);
-  oRenderInput(s);
-}
-
-async function oFinish() {
-  await oSay("Protocol data complete.\n\nI have everything I need — your biology, history, constraints, and goals. I will now synthesise your full 8-week training block, nutrition targets, and recovery protocol.\n\nThis will take about 30 seconds.");
+function showFreeTextInput() {
+  const input = $oinput(); if (!input) return;
+  clearOInput();
   const wrap = document.createElement('div');
-  wrap.className = 'o-fade-in';
-  const fw = document.createElement('div');
-  fw.className = 'o-final';
-  fw.innerHTML = `<div class="o-final-sub">Ready to synthesise</div><div class="o-final-title">Your protocol awaits.</div>`;
-  const gbtn = document.createElement('button');
-  gbtn.className = 'o-btn-generate';
-  gbtn.textContent = 'Generate My Scientific Protocol →';
-  gbtn.addEventListener('click', async () => {
-    gbtn.textContent = 'Synthesising…';
-    gbtn.disabled = true;
-    eyeState('thinking');
-    await beginConsultation();
-  });
-  fw.appendChild(gbtn);
-  wrap.appendChild(fw);
-  $oinput.appendChild(wrap);
+  wrap.className = 'o-text-area-wrap o-fade-in';
+  wrap.innerHTML = `
+    <div class="o-input-row">
+      <textarea id="oracleInput" placeholder="Tell me more…" rows="1"></textarea>
+      <div class="o-input-actions">
+        <button class="o-upload-btn" onclick="document.getElementById('plan-upload-input').click()" title="Upload your training plan">↑ Plan</button>
+        <button class="o-send-btn" id="oracleSendBtn" onclick="sendOracleMessage()">→</button>
+      </div>
+    </div>
+  `;
+  input.appendChild(wrap);
+  const ta = document.getElementById('oracleInput');
+  if (ta) {
+    ta.addEventListener('input', function() { this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,120)+'px'; });
+    ta.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendOracleMessage();} });
+    setTimeout(() => ta.focus(), 100);
+  }
 }
 
-// ── INIT ORACLE ──
-async function initOracle() {
-  buildStepList();
-  oStep = 0;
-  setProgress(0, oSteps.length);
-  const s = oSteps[0];
-  await oSay(s.msg);
-  oRenderInput(s);
-}
-
-// ══════════════════════════════════════════
-// CONSULTATION SUBMISSION
-// ══════════════════════════════════════════
-async function beginConsultation() {
-  // Map userData from conversational flow to consultation data structure
-  const d = {
-    age:               userData.age || '',
-    sex:               userData.sex || '',
-    weight:            userData.weight || '',
-    height:            userData.height || '',
-    bodyFat:           userData.bodyfat || '',
-    experience:        userData.experience || '',
-    trainingDays:      userData.days ? userData.days.replace(' days','') : '',
-    workoutTime:       userData.workout_time || '',
-    sessionLength:     userData.duration || '',
-    equipment:         userData.equipment || '',
-    injuries:          userData.injuries || 'None',
-    weakMuscles:       'Inferred from profile',  // removed from V6 per design decision
-    diet:              userData.diet || '',
-    mealsPerDay:       userData.meals ? userData.meals.replace(' meals','') : '',
-    sleep:             userData.sleep || '',
-    stress:            userData.stress || '',
-    allergies:         userData.allergies || 'None',
-    currentSupplements:userData.supplements || 'None',
-    goal:              userData.goal || '',
-    timeline:          userData.timeline || '',
-    barriers:          userData.barriers || '',
-    brainTrust:        userData.braintrust || BRAIN_TRUST.map(m=>m.name).join(', ') + ' (full Brain Trust applied equally)',
-    periodDate:        userData.period_date === 'cycling' ? (userData.period_start || '') : '',
-    cycleLength:       userData.cycle_length ? userData.cycle_length.split('–')[0] : '28',
-    cyclingStatus:     userData.period_date || 'not applicable',
-    consultedAt:       new Date().toISOString(),
-    programmeStartDate:new Date().toISOString().split('T')[0],
-    // Preserve override flags
-    days_override:     userData.days_override || false,
-    goal_override:     userData.goal_override || false,
+async function handleOpeningChipResponse(option) {
+  const responses = {
+    "My effort isn't matching my results": "That's one of the most common things I hear — and one of the most solvable. The gap between input and output is almost never about working harder. It's usually hiding in one of three places: recovery, nutrition timing, or a training structure that's accumulating fatigue faster than it's building adaptation.\n\nTell me about a typical week. How are you training, and how are you feeling by the end of it?",
+    "I don't know if my current plan is working": "Good instinct to question it. Most plans work on paper. Fewer work for the specific person following them.\n\nAre you following something you wrote yourself, something a coach gave you, or a template you picked up somewhere? And how long have you been on it?",
+    "I want to reach the next level": "That means something different for everyone. For some it's an aesthetic goal. For others it's a performance ceiling they keep hitting. For others it's the feeling that they're training without really understanding why.\n\nWhat does the next level look like for you specifically?",
+    "My nutrition feels like the weak link": "It usually is. Training is visible — you can see the sessions, count the sets, feel the fatigue. Nutrition is invisible until something goes wrong.\n\nWhere do you feel it most? Energy in sessions, recovery between them, body composition not shifting, or something else?",
+    "I'm returning from injury": "Returning from injury is one of the highest-leverage moments in an athlete's development — and one of the most mishandled. The temptation is to get back to where you were. The opportunity is to come back better structured than before.\n\nWhat are you coming back from, and how far into the return are you?",
+    "Let's just talk": "That works for me. No agenda.\n\nWhat's on your mind?"
   };
-  consultationData = d;
-  programmeStartDate = new Date(d.programmeStartDate);
+  const reply = responses[option] || "Tell me more about what's brought you here.";
+  await oSay(reply);
+  conversationHistory.push({ role: 'assistant', content: reply });
+  oracleBusy = false;
+  checkPlanOffer();
+}
 
-  try { await db.from('tso_profile').upsert({ user_id: USER_ID, ...d }); }
-  catch(e) { localStorage.setItem('tso_profile', JSON.stringify(d)); }
-
-  updateProfileUI(d);
-  updateCycleUI(d);
-  checkLabNudge();
-  // Show Today tab and hide Consult tab after consultation completes
-  document.getElementById('tab-today').style.display = '';
-  document.getElementById('tab-consult').style.display = 'none';
-  switchTab('today');
-  // Show quick replies in Today chat
-  document.getElementById('today-quick-replies').style.display = 'flex';
-
-  addMessage('user', 'I have completed my consultation. Please generate my full personalised training and nutrition programme.');
-  conversationHistory = [{ role: 'user', content: buildConsultPrompt(d) }];
-  setTyping(true);
-
+async function sendOracleMessage() {
+  if (oracleBusy) return;
+  const ta = document.getElementById('oracleInput');
+  if (!ta) return;
+  const text = ta.value.trim();
+  if (!text) return;
+  ta.value = ''; ta.style.height = 'auto';
+  oAddMsg('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  oracleExchanges++;
+  oracleBusy = true;
+  eyeState('thinking');
+  const tr = oShowTyping();
   try {
     const reply = await callTSO(conversationHistory);
+    if (tr) tr.remove();
+    eyeState('speaking');
+    oAddMsg('oracle', renderMarkdown(reply).replace(/<[^>]*>/g, s => s));
     conversationHistory.push({ role: 'assistant', content: reply });
-    setTyping(false);
-    addMessage('ai', reply);
-    addActionChips();
-    await saveMemory('initial_protocol', reply.substring(0, 800));
-    await generateStructuredProgramme(d);
-    showToast('Protocol generated ✓');
+    setTimeout(() => eyeState(null), 300);
+    if (oracleExchanges % 8 === 0) await saveMemory('coaching_session', reply.substring(0, 600));
+    checkPlanOffer();
   } catch(e) {
-    setTyping(false);
-    addMessage('ai', 'Connection error. Please try again.');
+    if (tr) tr.remove();
+    eyeState(null);
+    oAddMsg('oracle', 'Connection error — please try again.');
+  }
+  oracleBusy = false;
+}
+
+function afterFirstExchange() {
+  const nav = document.getElementById('tab-nav');
+  if (nav) { nav.style.opacity = '1'; nav.style.pointerEvents = 'auto'; }
+  setTimeout(() => unlockTab('today'), 800);
+}
+
+function unlockTab(tabId) {
+  if (tabsVisible[tabId]) return;
+  tabsVisible[tabId] = true;
+  const btn = document.getElementById('tab-' + tabId);
+  if (btn) btn.style.display = '';
+}
+
+function checkPlanOffer() {
+  if (planOffered || oracleExchanges < 5) return;
+  const history = conversationHistory.map(m => m.content).join(' ').toLowerCase();
+  const hasGoal = history.includes('muscle') || history.includes('lean') || history.includes('fat') || history.includes('strength') || history.includes('level') || history.includes('recomp') || history.includes('performance');
+  const hasTraining = history.includes('train') || history.includes('gym') || history.includes('session') || history.includes('workout') || history.includes('week');
+  if (hasGoal && hasTraining) {
+    offerPlan();
   }
 }
 
-function buildConsultPrompt(d) {
-  return `I have completed my TSO consultation. Full profile:
-
-BIOMETRICS: Age ${d.age}, ${d.sex}, ${d.weight}kg, ${d.height}cm, ~${d.bodyFat}% body fat
-TRAINING: ${d.experience}, ${d.trainingDays} days/week, ${d.sessionLength} sessions, ${d.equipment}, preferred workout time: ${d.workoutTime || 'not specified'}
-INJURIES: ${d.injuries || 'None'}
-NUTRITION: ${d.diet} diet, ${d.mealsPerDay} meals/day, allergies: ${d.allergies || 'none'}, supplements: ${d.currentSupplements || 'none'}
-LIFESTYLE: ${d.sleep} sleep/night, stress: ${d.stress}
-GOAL: ${d.goal} over ${d.timeline}
-BARRIERS: ${d.barriers || 'Not specified'}
-CYCLING STATUS: ${d.cyclingStatus}${d.cycleLength ? ', avg cycle: ' + d.cycleLength + ' days' : ''}
-BRAIN TRUST SELECTED: ${d.brainTrust}
-${d.days_override ? 'NOTE: User overrode frequency recommendation.' : ''}${d.goal_override ? ' User overrode goal recommendation.' : ''}
-
-Please give me a conversational overview of my programme philosophy — why you've structured it the way you have, what the key principles are, and what I should focus on in the first few weeks. Keep it to 3-4 paragraphs. The detailed programme structure is in the My Programme tab.`;
+function offerPlan() {
+  if (planOffered) return;
+  planOffered = true;
+  const chat = $ochat(); if (!chat) return;
+  const row = document.createElement('div');
+  row.className = 'o-msg-row oracle o-fade-in';
+  row.innerHTML = `<div class="o-bubble o-plan-offer">
+    <div class="o-plan-offer-text">I have enough context now to build your programme. Ready when you are.</div>
+    <div class="o-plan-offer-actions">
+      <button class="o-plan-btn o-plan-btn-primary" onclick="generatePlanFromConversation()">Build My Programme →</button>
+      <button class="o-plan-btn" onclick="document.getElementById('plan-upload-input').click()">Upload My Existing Plan</button>
+    </div>
+  </div>`;
+  chat.appendChild(row);
+  oScrollDown();
 }
 
+async function generatePlanFromConversation() {
+  const offerRows = document.querySelectorAll('.o-plan-offer');
+  offerRows.forEach(r => r.closest('.o-msg-row')?.remove());
+
+  oAddMsg('user', 'Please build my programme.');
+  conversationHistory.push({ role: 'user', content: 'Please build my programme based on everything we have discussed.' });
+
+  const tr = oShowTyping();
+  oracleBusy = true;
+  eyeState('thinking');
+
+  try {
+    const summary = conversationHistory.map(m => `${m.role}: ${m.content}`).join('\n').substring(0, 3000);
+
+    const d = {
+      age: coachingContext.age || '',
+      sex: coachingContext.sex || '',
+      weight: coachingContext.weight || '',
+      height: coachingContext.height || '',
+      bodyFat: coachingContext.bodyFat || '',
+      experience: coachingContext.experience || '',
+      trainingDays: coachingContext.trainingDays || '4',
+      sessionLength: coachingContext.sessionLength || '60 min',
+      equipment: coachingContext.equipment || 'full commercial gym',
+      injuries: coachingContext.injuries || 'None',
+      diet: coachingContext.diet || '',
+      sleep: coachingContext.sleep || '',
+      goal: coachingContext.goal || 'general fitness',
+      barriers: coachingContext.barriers || '',
+      brainTrust: BRAIN_TRUST.map(m=>m.name).join(', ') + ' (full Brain Trust applied equally)',
+      programmeStartDate: new Date().toISOString().split('T')[0],
+      consultedAt: new Date().toISOString(),
+    };
+    consultationData = d;
+
+    const reply = await callTSO(conversationHistory);
+    if (tr) tr.remove();
+    eyeState('speaking');
+    oAddMsg('oracle', renderMarkdown(reply));
+    conversationHistory.push({ role: 'assistant', content: reply });
+    setTimeout(() => eyeState(null), 300);
+    await saveMemory('initial_protocol', reply.substring(0, 800));
+    await generateStructuredProgramme(d);
+    unlockTab('programme');
+    showPostPlanChips();
+  } catch(e) {
+    if (tr) tr.remove();
+    eyeState(null);
+    oAddMsg('oracle', 'There was an error generating your programme. Please try again.');
+  }
+  oracleBusy = false;
+}
+
+function showPostPlanChips() {
+  const chat = $ochat(); if (!chat) return;
+  const row = document.createElement('div');
+  row.className = 'o-msg-row oracle o-fade-in';
+  row.innerHTML = `<div class="o-bubble" style="background:transparent;border:none;padding:4px 0"><div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button onclick="switchTab('programme')" class="o-action-chip">📋 View Programme →</button>
+    <button onclick="sendOracleQuick('Walk me through my nutrition targets.')" class="o-action-chip">🍽️ Nutrition Targets</button>
+    <button onclick="sendOracleQuick('What should I focus on in week one?')" class="o-action-chip">🎯 Week One Focus</button>
+  </div></div>`;
+  chat.appendChild(row);
+  oScrollDown();
+}
+
+async function sendOracleQuick(text) {
+  const ta = document.getElementById('oracleInput');
+  if (ta) ta.value = text;
+  await sendOracleMessage();
+}
+
+async function handlePlanUpload(input) {
+  const file = input.files[0]; if (!file) return;
+  input.value = '';
+  oAddMsg('user', `Uploading plan: ${file.name}`);
+  const tr = oShowTyping();
+  oracleBusy = true;
+  eyeState('thinking');
+
+  try {
+    let content;
+    if (file.type.startsWith('image/')) {
+      const b64 = await new Promise(res => { const r=new FileReader(); r.onload=e=>res(e.target.result.split(',')[1]); r.readAsDataURL(file); });
+      const prompt = `This is an image of a training programme or plan. Please extract all information you can see: exercises, sets, reps, days, any structure. Describe it fully.`;
+      const resp = await fetch('/api/proxy', {
+        method:'POST', headers:{'Content-Type':'application/json','x-proxy-secret':'%pBH$n5FJD8+Yk#'},
+        body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:2000, messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:file.type,data:b64}},{type:'text',text:prompt}]}] })
+      });
+      const data = await resp.json();
+      content = data.content?.map(b=>b.text||'').join('') || '';
+    } else {
+      content = await file.text();
+    }
+
+    const analysisPrompt = `The user has uploaded their training plan. Here is what it contains:\n\n${content}\n\nBased on everything we have discussed in this conversation about their goals and situation, give an honest expert review. Score it out of 100. Identify what it does well, what gaps exist, and what questions I should ask their coach or PT. Be direct but constructive. If the plan fundamentally misaligns with their stated goals, say so clearly.`;
+    conversationHistory.push({ role: 'user', content: analysisPrompt });
+    const reply = await callTSO(conversationHistory);
+    if (tr) tr.remove();
+    eyeState('speaking');
+    oAddMsg('oracle', renderMarkdown(reply));
+    conversationHistory.push({ role: 'assistant', content: reply });
+    setTimeout(() => eyeState(null), 300);
+    unlockTab('programme');
+    planOffered = true;
+  } catch(e) {
+    if (tr) tr.remove();
+    eyeState(null);
+    oAddMsg('oracle', 'I had trouble reading that file. Try uploading an image screenshot instead.');
+  }
+  oracleBusy = false;
+}
+
+async function initNewUser() {
+  conversationHistory = [];
+  oracleExchanges = 0;
+  planOffered = false;
+  await oSay("I work at the intersection of sports science and nutrition research. PhD level. Evidence-based. I don't follow trends — I follow data.\n\nI help athletes like you bring the best out of their daily routine by optimising their training, nutrition and recovery.\n\nMost people training seriously are doing more right than they realise — and leaving more on the table than they know. The gap is rarely effort. It's usually one or two things working quietly against everything else.\n\nWhat brought you here?");
+  showOpeningChips();
+}
+
+
+// ══════════════════════════════════════════
+// PROGRAMME GENERATION
+// ══════════════════════════════════════════
 async function generateStructuredProgramme(d) {
   const prompt = `Based on this profile, generate a complete training programme as structured JSON.
 
@@ -1608,7 +1324,7 @@ async function getSystemPrompt() {
   const memories = await getMemory();
   const memoryStr = memories.map(m=>`[${m.type}]: ${m.content}`).join('\n') || 'No previous sessions.';
   const currentWeek = getCurrentWeek();
-  const profileStr = d ? `Age:${d.age}, Sex:${d.sex}, Weight:${d.weight}kg, Height:${d.height}cm, BF:${d.bodyFat}%, Experience:${d.experience}, Training:${d.trainingDays}d/wk, WorkoutTime:${d.workoutTime||'not specified'}, Equipment:${d.equipment}, Injuries:${d.injuries||'none'}, Diet:${d.diet}, Sleep:${d.sleep}, Stress:${d.stress}, Goal:${d.goal}, Timeline:${d.timeline}, CyclingStatus:${d.cyclingStatus||'n/a'}, Brain Trust:${d.brainTrust}` : 'Not yet provided.';
+  const profileStr = d ? `Age:${d.age||'unknown'}, Sex:${d.sex||'unknown'}, Weight:${d.weight||'unknown'}kg, Goal:${d.goal||'discussed in conversation'}, Training:${d.trainingDays||'discussed'}d/wk, Equipment:${d.equipment||'discussed'}, Diet:${d.diet||'discussed'}, Sleep:${d.sleep||'discussed'}` : 'Profile emerging through coaching conversation — refer to conversation history for context.';
 
   const progStr = programmeData ? `
 
@@ -1637,7 +1353,7 @@ CRITICAL: You built this programme. NEVER suggest structural changes before week
 - Shona Vertue: mobility integration, training sustainability, mental health of fitness
 
 ━━━ NUTRITION PHILOSOPHY ━━━
-MEAL TIMING: User's preferred workout time is ${d?.workoutTime||'not specified'}. All meal plans, pre/post-workout nutrition, supplement timing, and daily schedules MUST be built around this window. Never suggest 11am gym sessions or meal times that conflict with their actual training schedule.
+MEAL TIMING: All meal plans, pre/post-workout nutrition, supplement timing, and daily schedules MUST be built around user's actual training schedule. Never suggest arbitrary meal times.
 WHOLE FOOD FIRST: Always recommend food solutions before supplements. Never recommend a multivitamin as part of a meal plan.
 SUPPLEMENT RULE: Only flag a supplement where (1) peer-reviewed evidence is strong, (2) gap genuinely cannot be closed through food alone, AND (3) always include "speak to your doctor or a registered dietitian before taking any supplement."
 SCOPE BOUNDARY: Clinical territory (medical conditions, medication interactions, diagnosed deficiencies) → acknowledge limits, direct to qualified professional. TSO is not a doctor.
@@ -1814,14 +1530,30 @@ async function loadProfile() {
       consultationData=data;
       if(data.programme_start_date)programmeStartDate=new Date(data.programme_start_date);
       updateProfileUI(data);updateCycleUI(data);checkLabNudge();
-      // Show Today tab, hide Consult
-      document.getElementById('tab-today').style.display = '';
-      document.getElementById('tab-consult').style.display = 'none';
+      // Show all tabs for returning user
+      const nav = document.getElementById('tab-nav');
+      if (nav) { nav.style.opacity='1'; nav.style.pointerEvents='auto'; }
+      ['today','programme','progress'].forEach(t => {
+        const btn = document.getElementById('tab-'+t);
+        if (btn) btn.style.display='';
+        tabsVisible[t] = true;
+      });
       document.getElementById('today-quick-replies').style.display = 'flex';
       switchTab('today');
       setTimeout(()=>generateBriefing(), 600);
+    } else {
+      initNewUser();
     }
-  } catch(e){const saved=localStorage.getItem('tso_profile');if(saved){consultationData=JSON.parse(saved);updateProfileUI(consultationData);}}
+  } catch(e){
+    const saved=localStorage.getItem('tso_profile');
+    if(saved){
+      consultationData=JSON.parse(saved);
+      updateProfileUI(consultationData);
+      switchTab('today');
+    } else {
+      initNewUser();
+    }
+  }
 }
 
 async function loadProgramme() {
@@ -1842,7 +1574,7 @@ async function getMemory() {
 }
 
 async function saveCheckin(checkinData) {
-  try{await db.from('tso_checkins').insert({user_id:USER_ID,date:new Date().toISOString().split('T')[0],...checkinData});await loadProgressData();}catch(e){}
+  try{await db.from('tso_checkins').insert({user_id:USER_ID,date:new Date().toISOString().split('T')[0],...checkinData});await loadProgressData();unlockTab('progress');}catch(e){}
 }
 
 async function loadTodayMeals() {
@@ -2165,21 +1897,25 @@ async function startNewPlan(){
   closeNewPlanModal();showToast('Clearing current plan...');
   try{await db.from('tso_profile').delete().eq('user_id',USER_ID);await db.from('tso_memory').delete().eq('user_id',USER_ID);}catch(e){}
   consultationData=null;programmeData=null;programmeStartDate=null;conversationHistory=[];
-  userData={};oStep=0;
+  coachingContext={};
   document.getElementById('programme-empty-state').style.display='flex';
   document.getElementById('programme-content').style.display='none';
-  document.getElementById('messages').innerHTML=`<div class="msg ai"><div class="msg-meta">The Scientific Oracle</div><div class="msg-bubble">Your previous plan has been cleared. Complete a new consultation to generate your next training block.</div></div><div class="typing-indicator" id="typing"><div class="msg-meta">The Scientific Oracle</div><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
-  // Restore consult tab
-  document.getElementById('tab-consult').style.display = '';
-  document.getElementById('tab-today').style.display = 'none';
+  document.getElementById('messages').innerHTML=`<div class="msg ai"><div class="msg-meta">The Scientific Oracle</div><div class="msg-bubble">Your previous plan has been cleared. Return to the Oracle tab to build your next training block.</div></div><div class="typing-indicator" id="typing"><div class="msg-meta">The Scientific Oracle</div><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  // Reset tab visibility
+  tabsVisible = { oracle: true, today: false, programme: false, progress: false };
+  const nav = document.getElementById('tab-nav');
+  if (nav) { nav.style.opacity = '0'; nav.style.pointerEvents = 'none'; }
+  ['today','programme','progress'].forEach(t => {
+    const btn = document.getElementById('tab-'+t);
+    if (btn) btn.style.display='none';
+  });
   document.getElementById('today-quick-replies').style.display = 'none';
   // Reset oracle chat
   document.getElementById('o-chat').innerHTML='';
   document.getElementById('o-input').innerHTML='';
-  $oprog.style.width='0%';
-  switchTab('consult');
+  switchTab('oracle');
   showToast('Ready for your new training plan ✓');
-  setTimeout(()=>initOracle(),400);
+  setTimeout(()=>initNewUser(),400);
 }
 
 // ══════════════════════════════════════════
@@ -2280,14 +2016,13 @@ async function initDB(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  // Today tab starts hidden — only shown after consultation
-  document.getElementById('tab-today').style.display = 'none';
-  // Consult page starts active
-  document.getElementById('page-consult').classList.add('active');
-  document.getElementById('tab-consult').classList.add('active');
-  document.getElementById('tab-consult').style.display = '';
+  // Oracle page starts active, other tabs start hidden
+  document.getElementById('page-oracle').classList.add('active');
+  document.getElementById('tab-oracle').classList.add('active');
+  ['today','programme','progress'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = 'none';
+  });
   initDB();
-  initOracle();
 });
 </script>
 </body>
